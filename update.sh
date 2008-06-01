@@ -7,13 +7,16 @@ cd ~/.profile-repo
 svn up
 
 install -v -m 0700 -d ~/.ssh
-install -v -m 0600 dot.ssh/authorized_keys ~/.ssh/authorized_keys
+install -v -m 0700 -d ~/bin
 
 rm -rf ~/.vim 2>/dev/null
 cp -r dot.vim ~/.vim
 find ~/.vim -type d -name ".svn" -exec rm -rf {} \; 2>/dev/null
 
 
+install -v -m 0600 dot.ssh/authorized_keys ~/.ssh/authorized_keys
+install -v bin/screen-wrapper.sh ~/bin/screen-wrapper.sh
+install -v bin/start-screen ~/bin/start-screen
 install -v dot.vimrc ~/.vimrc
 install -v dot.screenrc ~/.screenrc
 install -v dot.bashrc ~/.bashrc

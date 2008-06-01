@@ -1,0 +1,4 @@
+#!/bin/sh
+# $Id$
+
+exec screen -U -xRR -m -c ~/.screen/$1 -S $1
