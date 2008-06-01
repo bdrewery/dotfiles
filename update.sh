@@ -8,6 +8,7 @@ svn up
 
 install -v -m 0700 -d ~/.ssh
 install -v -m 0700 -d ~/bin
+install -v -m 0700 -d ~/.screen
 
 rm -rf ~/.vim 2>/dev/null
 cp -r dot.vim ~/.vim
@@ -18,7 +19,6 @@ install -v -m 0600 dot.ssh/authorized_keys ~/.ssh/authorized_keys
 install -v bin/screen-wrapper.sh ~/bin/screen-wrapper.sh
 install -v bin/start-screen ~/bin/start-screen
 install -v dot.vimrc ~/.vimrc
-install -v dot.screenrc ~/.screenrc
 install -v dot.bashrc ~/.bashrc
 install -v dot.nanorc ~/.nanorc
 
