@@ -17,6 +17,10 @@ if [ -f /etc/bashrc ]; then
         . /etc/bashrc
 fi
 
+if [ -f ~/.bash_completion ]; then
+		. ~/.bash_completion
+fi
+
 alias monitor_server='tail -n 400 -F /usr/local/aolserver/log/server.log | grep -v nsopenssl'
 alias grep='grep --color=auto'
 

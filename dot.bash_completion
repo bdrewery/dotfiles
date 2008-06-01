@@ -1,0 +1,15 @@
+#! /bin/sh
+
+_start-screen() {
+        local cur
+
+        COMPREPLY=()
+        cur=${COMP_WORDS[COMP_CWORD]}
+
+        if [ $COMP_CWORD = 2 ]; then
+            return 0
+        fi
+        COMPREPLY=( $(compgen -W "$(command ls -1 ~/.screen 2>/dev/null)" -- $cur ) )
+}
+
+complete -o filenames -F _start-screen start-screen
