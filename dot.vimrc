@@ -19,6 +19,10 @@ map <F1> :tabn<ENTER>
 map <F2> 0i### <ESC>j
 map <F3> i#######################################################################<ESC>ji
 
+" Restore last line
+set viminfo='10,\"100,:20,%,n~/.viminfo
+au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif 
+
 " Check if the buffer is a tcl file
 au BufRead,BufNewFile *.tcl set filetype=tcl
 au BufRead,BufNewFile *.tcl set cinkeys=0{,0},0),:,!^F,o,O,e
@@ -29,6 +33,17 @@ au BufRead,BufNewFile *.tcl set cinkeys=0{,0},0),:,!^F,o,O,e
 " inoremap {{             {
 " inoremap {}             {}
 
+
+" smarty
+au BufRead,BufNewFile *.tpl set filetype=smarty
+
+" php
+au BufRead,BufNewFile *.php set filetype=php
+" au BufRead,BufNewFile *.php colorscheme ir_black
+au BufRead,BufNewFile *.php set foldmethod=syntax
+
+let php_sql_query = 1
+let php_folding = 3
 
 " Recommended by http://wiki.tcl.tk/4049
 au BufRead,BufNewFile *.tcl set sts=4 sw=4 ts=4 noet
