@@ -44,6 +44,9 @@ au BufRead,BufNewFile *.php set filetype=php
 " au BufRead,BufNewFile *.php colorscheme ir_black
 au BufRead,BufNewFile *.php set foldmethod=syntax
 
+" Fix highlighting breaking when closing buffers
+let g:miniBufExplForceSyntaxEnable = 1
+
 let php_sql_query = 1
 let php_folding = 3
 let tcl_sql_active = 1
