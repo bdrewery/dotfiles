@@ -23,6 +23,9 @@ set laststatus=2
 set wildmenu
 filetype plugin indent on
 
+" Disable previewing as it can be very slow
+set completeopt-=preview
+
 " Standard mappings -Eric Peterson
 map <F1> :tabn<ENTER>
 map <F2> 0i### <ESC>j
@@ -86,4 +89,6 @@ au BufRead,BufNewFile *.tcl set foldmethod=syntax
 " au BufRead,BufNewFile *.tcl syn match   tclStatement        "proc" contained
 " au BufRead,BufNewFile *.tcl syntax region tclFunc start="^\z(\s*\)proc.*{$" end="^\z1}$" transparent fold contains=ALL
 
+" let b:unaryTagsStack="area base br dd dt hr img input link meta param"
+let b:closetag_html_style=1
 au Filetype html,xml,xsl,tcl,smarty,php source ~/.vim/scripts/closetag.vim
