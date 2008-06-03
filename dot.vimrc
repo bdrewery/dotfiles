@@ -90,5 +90,5 @@ au BufRead,BufNewFile *.tcl set foldmethod=syntax
 " au BufRead,BufNewFile *.tcl syntax region tclFunc start="^\z(\s*\)proc.*{$" end="^\z1}$" transparent fold contains=ALL
 
 " let b:unaryTagsStack="area base br dd dt hr img input link meta param"
-let b:closetag_html_style=1
+au Filetype html,tcl,smarty,php let b:closetag_html_style=1
 au Filetype html,xml,xsl,tcl,smarty,php source ~/.vim/scripts/closetag.vim
