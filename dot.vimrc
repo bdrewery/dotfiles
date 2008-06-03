@@ -24,7 +24,9 @@ set wildmenu
 filetype plugin indent on
 
 " Disable previewing as it can be very slow
-set completeopt-=preview
+if version >= 700
+  set completeopt-=preview
+endif
 
 " Standard mappings -Eric Peterson
 map <F1> :tabn<ENTER>
