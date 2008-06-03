@@ -33,8 +33,9 @@ map <F1> :tabn<ENTER>
 map <F2> 0i### <ESC>j
 map <F3> i#######################################################################<ESC>ji
 
+" Save marks for 100 files, and global marks
+set viminfo='100,fl,\"100,:20,%,n~/.viminfo
 " Restore last line
-set viminfo='10,\"100,:20,%,n~/.viminfo
 au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif 
 
 
