@@ -21,7 +21,7 @@ set hlsearch history=50 incsearch
 set bs=2
 set laststatus=2
 set wildmenu
-filetype plugin ident on
+filetype plugin indent on
 
 " Standard mappings -Eric Peterson
 map <F1> :tabn<ENTER>
