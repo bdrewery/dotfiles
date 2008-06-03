@@ -43,6 +43,8 @@ au BufRead,BufNewFile *.tcl set cinkeys=0{,0},0),:,!^F,o,O,e
 " inoremap {{             {
 " inoremap {}             {}
 
+" Subversion commit file
+au BufNewFile,BufRead svn-commit*.tmp           setf svn
 
 " smarty
 au BufRead,BufNewFile *.tpl set filetype=smarty
