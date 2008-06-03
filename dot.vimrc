@@ -46,6 +46,8 @@ au BufRead,BufNewFile *.php set foldmethod=syntax
 
 let php_sql_query = 1
 let php_folding = 3
+let tcl_sql_active = 1
+let tcl_html_active = 1
 
 " Recommended by http://wiki.tcl.tk/4049
 au BufRead,BufNewFile *.tcl set sts=4 sw=4 ts=4 noet

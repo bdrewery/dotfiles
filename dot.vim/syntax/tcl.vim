@@ -34,7 +34,10 @@ let s:tcl_highlight_all = 1
 " let s:tcl_critcl_active = 1
 " let s:tcl_togl_active = 1
 " let s:tcl_itcl_active = 1
+" let tcl_html_active = 1
+" let tcl_sql_active = 1
 let s:tcl_ttk_active = 1
+
 
 " one more highlight than the law allows
 if exists("s:tcl_highlight_bookends")
@@ -59,7 +62,7 @@ syn region tclWord1      contained start=+[^\[#{}"\]]\&\S+ skip=+\\$+ end=+}\|]\
 syn region tclWord0      contained start=+[^#]\&\S+ end=+\s\|$+ contains=@tclWord0Cluster skipwhite nextgroup=@tclWord1Cluster
 syn region tclQuotes     contained extend keepend matchgroup=tclQuotes start=+\(\\\)\@<!"+ end=+"+ skip=+\(\\\)\@<!\\"\|\(\\\\\\\)\@<!\\"\|\\\\+ contains=@tclQuotesCluster
 syn region tclBrackets   contained extend keepend matchgroup=Bold start=+\(\\\)\@<!\[+ end=+]\|$+ skip=+\\\s*$\|\(\\\)\@<!\\]+ contains=@tclCommandCluster
-syn region tclBraces     contained extend keepend matchgroup=Bold start=+\(\\\)\@<!{+  end=+}+ skip=+$\|\(\\\)\@<!\\}+ contains=@tclCommandCluster,tclComment
+syn region tclBraces     contained extend keepend matchgroup=Bold start=+\(\\\)\@<!{+  end=+}+ skip=+$\|\(\\\)\@<!\\}+ contains=@tclCommandCluster,tclComment,@htmlTop,@sqlTop
 syn region tclFoldBraces contained extend keepend fold matchgroup=Bold start=+\(\\\)\@<!{+ end=+}+ skip=+$\|\(\\\)\@<!\\}+ contains=@tclCommandCluster
 syn match  tclSemiColon  contained ";\s*" skipwhite nextgroup=@tclCommandCluster
 if exists("s:tcl_comments_ignore_nested_braces")
@@ -86,7 +89,7 @@ syn cluster tclBits            contains=tclBraces,tclBrackets,tclComment,tclExpa
 syn cluster tclStuff           contains=@tclBits,tclVariable,tkBindSubstGroup,tkWidgetName,tclREClassGroup
 syn cluster tclWord0Cluster    contains=@tclStuff
 syn cluster tclWord1Cluster    contains=tclWord1,tclSecondary,tkWidgetCreate,tclConditional,@tclStuff
-syn cluster tclQuotesCluster   contains=tclSpecial,@tclLContinue,@Spell
+syn cluster tclQuotesCluster   contains=tclSpecial,@tclLContinue,@Spell,@htmlTop,@sqlTop,tclVariable
 syn cluster tclLContinue       contains=tclLContinueOk,tclLContinueError
 syn cluster tclCommandCluster contains=@tcltkKeywords,tclWord0,tclComment
 
@@ -847,6 +850,15 @@ if exists("s:tcl_ttk_active")
     runtime! syntax/tcl_ttk.vim
 endif
 
+
+if exists ("tcl_html_active")
+    runtime! syntax/html.vim
+    unlet b:current_syntax
+endif
+
+if exists ("tcl_sql_active")
+    syn include @sqlTop syntax/sql.vim
+endif
 " -------------------------
 
 if exists("s:tcl_highlight_all")
