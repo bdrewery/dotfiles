@@ -5,7 +5,12 @@
 " Default
 syntax on
 set background=dark
-colorscheme delek
+if has("gui_runing")
+  colorscheme fruity
+else
+  colorscheme delek
+endif
+
 set sts=2 sw=2 ts=8 et
 set autoindent           " keep the previous line's indentation
 set cindent              " indent after line ending in {, and use 'cinwords'
