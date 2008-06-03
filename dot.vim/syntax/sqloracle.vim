@@ -32,6 +32,7 @@ syn keyword sqlKeyword	where with option order pctfree privileges procedure
 syn keyword sqlKeyword	public resource return row rowlabel rownum rows
 syn keyword sqlKeyword	session share size smallint type using
 
+syn keyword sqlKeyword  join left right inner outer full natural 
 " added by DAVID, oracle extenstions
 
 syn keyword sqlKeyword  package body replace subtype record constant
