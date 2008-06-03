@@ -25,6 +25,7 @@ map <F3> i######################################################################
 set viminfo='10,\"100,:20,%,n~/.viminfo
 au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif 
 
+
 " Check if the buffer is a tcl file
 au BufRead,BufNewFile *.tcl set filetype=tcl
 au BufRead,BufNewFile *.tcl set cinkeys=0{,0},0),:,!^F,o,O,e
@@ -75,3 +76,5 @@ au BufRead,BufNewFile *.tcl set foldmethod=syntax
 " au BufRead,BufNewFile *.tcl syn keyword tclStatement        global return lindex
 " au BufRead,BufNewFile *.tcl syn match   tclStatement        "proc" contained
 " au BufRead,BufNewFile *.tcl syntax region tclFunc start="^\z(\s*\)proc.*{$" end="^\z1}$" transparent fold contains=ALL
+
+au Filetype html,xml,xsl,tcl,smarty,php source ~/.vim/scripts/closetag.vim
