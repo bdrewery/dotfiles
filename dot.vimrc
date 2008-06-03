@@ -19,6 +19,8 @@ set modeline modelines=5
 set ruler
 set hlsearch history=50 incsearch
 set bs=2
+set laststatus=2
+set wildmenu
 filetype on
 
 " Standard mappings -Eric Peterson
