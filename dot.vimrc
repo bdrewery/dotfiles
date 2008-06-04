@@ -97,3 +97,9 @@ au Filetype html,tcl,smarty,php let b:closetag_html_style=1
 au Filetype html,xml,xsl,tcl,smarty,php source ~/.vim/scripts/closetag.vim
 " Auto close </
 au Filetype html,xml,xsl,tcl,smarty,php map! </ <C-_>
+" Auto close <? for php
+" au Filetype php map! <? <? ?><ESC>hhi
+au Filetype php map! <? <??><ESC>hi
+" Auto create array syntax in strings
+" au Filetype php map! {$ {$['']}<ESC>hhhhi
+au Filetype php map! {$ {$']}<ESC>hhi
