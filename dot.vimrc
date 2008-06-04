@@ -108,3 +108,7 @@ au Filetype php map! <? <??><ESC>hi
 " Auto create array syntax in strings
 " au Filetype php map! {$ {$['']}<ESC>hhhhi
 au Filetype php map! {$ {$']}<ESC>hhi
+
+" Misc maps
+" Reformat/indent whole file
+noremap ,5 1GvG=
