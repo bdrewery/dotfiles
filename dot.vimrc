@@ -34,7 +34,7 @@ map <F2> 0i### <ESC>j
 map <F3> i#######################################################################<ESC>ji
 
 " Save marks for 100 files, and global marks
-set viminfo='100,fl,\"100,:20,%,n~/.viminfo
+set viminfo='100,f1,\"100,:20,%,n~/.viminfo
 " Restore last line
 au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif 
 
