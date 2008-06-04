@@ -21,6 +21,7 @@ set hlsearch history=50 incsearch
 set bs=2
 set laststatus=2
 set wildmenu
+set ff=unix
 filetype plugin indent on
 
 " Disable previewing as it can be very slow
