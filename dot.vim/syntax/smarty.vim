@@ -18,7 +18,7 @@ endif
 
 syn case ignore
 
-runtime! syntax/html.vim
+runtime! syntax/xhtml.vim
 "syn cluster htmlPreproc add=smartyUnZone
 
 syn match smartyBlock contained "[\[\]]"

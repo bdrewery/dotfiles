@@ -10,7 +10,7 @@ if exists('s:doing_indent_inits')
   finish
 endif
 let s:doing_indent_inits = 1
-runtime! indent/html.vim
+runtime! indent/xhtml.vim
 unlet b:did_indent
 runtime! indent/php_only.vim
 unlet s:doing_indent_inits

@@ -324,9 +324,9 @@ if version < 600
   if exists("php_sync_method") && !php_sync_method
     let php_sync_method=-1
   endif
-  so <sfile>:p:h/html.vim
+  so <sfile>:p:h/xhtml.vim
 else
-  runtime! syntax/html.vim
+  runtime! syntax/xhtml.vim
   unlet b:current_syntax
 endif
 

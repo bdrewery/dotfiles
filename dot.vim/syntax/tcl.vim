@@ -852,7 +852,7 @@ endif
 
 
 if exists ("tcl_html_active")
-    runtime! syntax/html.vim
+    runtime! syntax/xhtml.vim
     unlet b:current_syntax
 endif
 

@@ -97,10 +97,10 @@ au BufRead,BufNewFile *.tcl set foldmethod=syntax
 au Filetype tcl map! ${ ${}<ESC>ha
 
 " let b:unaryTagsStack="area base br dd dt hr img input link meta param"
-au Filetype html,tcl,smarty,php let b:closetag_html_style=1
-au Filetype html,xml,xsl,tcl,smarty,php source ~/.vim/scripts/closetag.vim
+au Filetype xhtml,html,tcl,smarty,php let b:closetag_html_style=1
+au Filetype xhtml,html,xml,xsl,tcl,smarty,php source ~/.vim/scripts/closetag.vim
 " Auto close </
-au Filetype html,xml,xsl,tcl,smarty,php map! </ <C-_>
+au Filetype xhtml,html,xml,xsl,tcl,smarty,php map! </ <C-_>
 " Auto close <? for php
 " au Filetype php map! <? <? ?><ESC>hhi
 au Filetype php map! <? <??><ESC>hi
