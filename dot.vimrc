@@ -1,8 +1,5 @@
 " $Id$
-" colorscheme murphy
-" set sw=4 ts=4 cindent ruler
 
-" Default
 syntax on
 set background=dark
 if has("gui_runing")
@@ -28,11 +25,6 @@ filetype plugin indent on
 if version >= 700
   set completeopt-=preview
 endif
-
-" Standard mappings -Eric Peterson
-map <F1> :tabn<ENTER>
-map <F2> 0i### <ESC>j
-map <F3> i#######################################################################<ESC>ji
 
 " Save marks for 100 files, and global marks
 set viminfo='100,f1,\"100,:20,%,n~/.viminfo
