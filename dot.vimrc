@@ -27,7 +27,7 @@ set bs=2
 set laststatus=2
 set wildmenu
 set ff=unix
-set statusline=%<%f%h\ %m%r%=%b\ 0x%B\ \ %l,%c%V\ %P
+set statusline=%<%f%h\ %m%r%=%b\ 0x%B\ \ \ \ \ \ \ \ \ %l,%c%V\ %P
 filetype plugin indent on
 
 " Disable previewing as it can be very slow
