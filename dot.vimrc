@@ -1,6 +1,13 @@
 " $Id$
 
-syntax on
+set nocompatible
+
+" Switch syntax highlighting on, when the terminal has colors
+if &t_Co > 2 || has("gui_running")
+  syntax on
+  set hlsearch
+endif
+
 set background=dark
 if has("gui_runing")
   colorscheme fruity
@@ -14,7 +21,8 @@ set cindent              " indent after line ending in {, and use 'cinwords'
                          " see also ':help c-indent'
 set modeline modelines=5
 set ruler
-set hlsearch history=50 incsearch
+set showcmd
+set history=50 incsearch
 set bs=2
 set laststatus=2
 set wildmenu
@@ -28,9 +36,20 @@ endif
 
 " Save marks for 100 files, and global marks
 set viminfo='100,f1,\"100,:20,%,n~/.viminfo
+" When editing a file, always jump to the last known cursor position.
+" Don't do it when the position is invalid or when inside an event handler
+" (happens when dropping a file on gvim).
+autocmd BufReadPost *
+  \ if line("'\"") > 0 && line("'\"") <= line("$") |
+  \   exe "normal! g`\"" |
+  \ endif
 " Restore last line
-au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif 
+" au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif 
 
+" Convenient command to see the difference between the current buffer and the
+" file it was loaded from, thus the changes you made.
+command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
+                \ | wincmd p | diffthis
 
 " Check if the buffer is a tcl file
 au BufRead,BufNewFile *.tcl set filetype=tcl
