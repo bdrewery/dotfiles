@@ -27,6 +27,7 @@ set bs=2
 set laststatus=2
 set wildmenu
 set ff=unix
+set statusline=%<%f%h\ %m%r%=%b\ 0x%B\ \ %l,%c%V\ %P
 filetype plugin indent on
 
 " Disable previewing as it can be very slow
@@ -48,7 +49,7 @@ autocmd BufReadPost *
 
 " Convenient command to see the difference between the current buffer and the
 " file it was loaded from, thus the changes you made.
-command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
+command! DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
                 \ | wincmd p | diffthis
 
 " Check if the buffer is a tcl file
