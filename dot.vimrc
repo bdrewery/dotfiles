@@ -37,6 +37,7 @@ endif
 
 " Save marks for 100 files, and global marks
 set viminfo='100,f1,\"100,:20,%,n~/.viminfo
+set nobackup
 " When editing a file, always jump to the last known cursor position.
 " Don't do it when the position is invalid or when inside an event handler
 " (happens when dropping a file on gvim).
