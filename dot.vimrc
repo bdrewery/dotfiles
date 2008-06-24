@@ -107,7 +107,7 @@ au BufRead,BufNewFile *.tcl set foldmethod=syntax
 " au BufRead,BufNewFile *.tcl syntax region tclFunc start="^\z(\s*\)proc.*{$" end="^\z1}$" transparent fold contains=ALL
 
 " Tcl maps
-au Filetype tcl map! ${ ${}<ESC>ha
+" au Filetype tcl map! ${ ${}<ESC>ha
 
 " let b:unaryTagsStack="area base br dd dt hr img input link meta param"
 au Filetype xhtml,html,tcl,smarty,php let b:closetag_html_style=1
@@ -119,7 +119,7 @@ au Filetype xhtml,html,xml,xsl,tcl,smarty,php map! </ <C-_>
 au Filetype php map! <? <??><ESC>hi
 " Auto create array syntax in strings
 " au Filetype php map! {$ {$['']}<ESC>hhhhi
-au Filetype php map! {$ {$']}<ESC>hhi
+" au Filetype php map! {$ {$']}<ESC>hhi
 
 " Misc maps
 " Reformat/indent whole file
