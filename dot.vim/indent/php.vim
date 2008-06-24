@@ -1,3 +1,4 @@
+" From http://www.vim.org/scripts/download_script.php?src_id=8779
 " Better indent support for PHP by making it possible to indent HTML sections
 " as well.
 if exists("b:did_indent")
