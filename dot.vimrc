@@ -20,6 +20,8 @@ set autoindent           " keep the previous line's indentation
 set cindent              " indent after line ending in {, and use 'cinwords'
                          " see also ':help c-indent'
 set modeline modelines=5
+set nu " Show line numbers
+" set list " Show tabs as ^I
 set ruler
 set showcmd
 set history=50 incsearch
