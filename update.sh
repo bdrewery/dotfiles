@@ -35,6 +35,7 @@ install -v dot.gitconfig ~/.gitconfig
 install -v dot.supp ~/.supp
 install -v dot.valgrindrc ~/.valgrindrc
 install -v dot.bash_logout ~/.bash_logout
+install -v dot.git-prompt.conf ~/.git-prompt.conf
 
 
 ### Look for needed programs
