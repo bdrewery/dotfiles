@@ -86,9 +86,10 @@ let tcl_html_active = 1
 
 " Recommended by http://wiki.tcl.tk/4049
 au BufRead,BufNewFile *.tcl set sts=4 sw=4 ts=4 noet
-au BufRead,BufNewFile *webroot/*.tpl set sts=4 sw=4 ts=4 noet
-au BufRead,BufNewFile *webroot/*.php set sts=4 sw=4 ts=4 noet
-au BufRead,BufNewFile *webroot/*.js set sts=4 sw=4 ts=4 noet
+au BufRead,BufNewFile *.py set sts=4 sw=4 ts=4 noet
+au BufRead,BufNewFile *webroot/*.tpl set sts=4 sw=4 ts=4 noet ff=dos
+au BufRead,BufNewFile *webroot/*.php set sts=4 sw=4 ts=4 noet ff=dos
+au BufRead,BufNewFile *webroot/*.js set sts=4 sw=4 ts=4 noet ff=dos
 
 " Do not inadvertently break a line
 au BufRead,BufNewFile *.tcl set textwidth=0
