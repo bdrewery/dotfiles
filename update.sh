@@ -1,7 +1,7 @@
 #! /bin/sh
 # $Id$
 
-WANTED_APPS="vim screen svn"
+WANTED_APPS="vim screen svn git"
 
 cd ~/.profile-repo
 svn up
