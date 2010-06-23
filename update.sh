@@ -30,6 +30,9 @@ install -v dot.vimrc ~/.vimrc
 install -v dot.bashrc ~/.bashrc
 install -v dot.nanorc ~/.nanorc
 install -v dot.gitconfig ~/.gitconfig
+install -v dot.supp ~/.supp
+install -v dot.valgrindrc ~/.valgrindrc
+install -v dot.bash_logout ~/.bash_logout
 
 
 ### Look for needed programs
