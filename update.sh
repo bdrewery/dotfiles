@@ -7,7 +7,9 @@ cd ~/.profile-repo
 svn up
 
 if [ -d git-prompt ]; then
+  pushd git-prompt
   git pull && git gc
+  popd
 else
   git clone git://github.com/lvv/git-prompt.git
 fi
