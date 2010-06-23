@@ -29,6 +29,7 @@ install -v bin/update-profile ~/bin/update-profile
 install -v dot.vimrc ~/.vimrc
 install -v dot.bashrc ~/.bashrc
 install -v dot.nanorc ~/.nanorc
+install -v dot.gitconfig ~/.gitconfig
 
 
 ### Look for needed programs
