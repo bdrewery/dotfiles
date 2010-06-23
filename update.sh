@@ -6,6 +6,12 @@ WANTED_APPS="vim screen svn"
 cd ~/.profile-repo
 svn up
 
+if [ -d git-prompt ]; then
+  git pull && git gc
+else
+  git clone git://github.com/lvv/git-prompt.git
+fi
+
 install -v -m 0700 -d ~/.ssh
 install -v -m 0700 -d ~/bin
 install -v -m 0700 -d ~/.screen
