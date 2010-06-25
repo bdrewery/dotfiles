@@ -6,8 +6,13 @@
         status = auto
         branch = auto
         sh = auto
+        color = auto
+        interactive = auto
+        showbranch = auto
+        ui = auto
 [diff]
         renamelimit = 0
+        renames = copy
 [imap]
         folder = "INBOX.Drafts"
         host = imap://secure.xzibition.com
