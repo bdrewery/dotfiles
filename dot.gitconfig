@@ -6,6 +6,7 @@
         status = auto
         branch = auto
         sh = auto
+        grep = auto
         color = auto
         interactive = auto
         showbranch = auto
@@ -26,7 +27,6 @@
         smtpserver = secure.xzibition.com
 [branch]
         autosetupmerge = true
-        mergeoptions = --no-ff
 [alias]
         co = checkout
         s = status
@@ -41,3 +41,5 @@
 [merge]
         log = true
 
+[core]
+	autocrlf = false
