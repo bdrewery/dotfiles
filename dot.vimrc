@@ -13,8 +13,11 @@ if has("gui_runing")
   colorscheme fruity
 else
   colorscheme delek
+  hi Search term=reverse ctermfg=3 ctermbg=None
+  hi Search ctermbg=red ctermfg=yellow term=None
 endif
 
+" set cpo+=$
 set sts=2 sw=2 ts=8 et
 set autoindent           " keep the previous line's indentation
 set cindent              " indent after line ending in {, and use 'cinwords'
@@ -87,12 +90,14 @@ let tcl_html_active = 1
 " Recommended by http://wiki.tcl.tk/4049
 au BufRead,BufNewFile *.tcl set sts=4 sw=4 ts=4 noet
 au BufRead,BufNewFile *.py set sts=4 sw=4 ts=4 noet
-au BufRead,BufNewFile *webroot/*.tpl set sts=4 sw=4 ts=4 noet ff=dos
-au BufRead,BufNewFile *webroot/*.php set sts=4 sw=4 ts=4 noet ff=dos
-au BufRead,BufNewFile *webroot/*.js set sts=4 sw=4 ts=4 noet ff=dos
+au BufRead,BufNewFile *.xml set sts=4 sw=4 ts=4 noet
+
+au BufRead,BufNewFile *.tpl set sts=4 sw=4 ts=4 et
+au BufRead,BufNewFile *.php set sts=4 sw=4 ts=4 et
+au BufRead,BufNewFile *.js set sts=4 sw=4 ts=4 et
 
 " Do not inadvertently break a line
-au BufRead,BufNewFile *.tcl set textwidth=0
+set textwidth=0
 
 
 " Comments
