@@ -1,4 +1,4 @@
-#! /bin/sh
+#! /bin/bash
 # $Id$
 
 WANTED_APPS="vim screen svn git"
