@@ -43,3 +43,7 @@
 
 [core]
 	autocrlf = false
+
+[rerere]
+	enabled = true
+
