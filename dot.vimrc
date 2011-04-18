@@ -33,6 +33,9 @@ set ff=unix
 set statusline=%<%f%h\ %m%r%=%b\ 0x%B\ \ \ \ \ \ \ \ \ %l,%c%V\ %P
 filetype plugin indent on
 
+" Disable bells
+set vb t_vb=
+
 " Disable previewing as it can be very slow
 if version >= 700
   set completeopt-=preview
