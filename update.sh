@@ -28,6 +28,7 @@ install -v -m 0600 dot.ssh/authorized_keys ~/.ssh/authorized_keys
 install -v bin/screen-wrapper.sh ~/bin/screen-wrapper.sh
 install -v bin/start-screen ~/bin/start-screen
 install -v bin/update-profile ~/bin/update-profile
+install -v dot.inputrc ~/.inputrc
 install -v dot.vimrc ~/.vimrc
 install -v dot.bashrc ~/.bashrc
 install -v dot.nanorc ~/.nanorc
