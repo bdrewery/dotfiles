@@ -13,8 +13,6 @@ if has("gui_runing")
   colorscheme fruity
 else
   colorscheme delek
-  hi Search term=reverse ctermfg=3 ctermbg=None
-  hi Search ctermbg=red ctermfg=yellow term=None
 endif
 
 " set cpo+=$

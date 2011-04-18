@@ -28,7 +28,7 @@ hi NonText    ctermfg=Blue	   gui=bold guifg=gray guibg=white
 hi Pmenu      guibg=LightBlue
 hi PmenuSel   ctermfg=White	   ctermbg=DarkBlue  guifg=White  guibg=DarkBlue
 hi Question   ctermfg=DarkGreen    gui=bold guifg=SeaGreen
-hi Search     ctermfg=NONE	   ctermbg=Yellow guibg=Yellow guifg=NONE
+hi Search     ctermfg=black	   ctermbg=Yellow guibg=Yellow guifg=NONE
 hi SpecialKey ctermfg=DarkBlue	   guifg=Blue
 hi StatusLine cterm=bold	   ctermbg=blue ctermfg=yellow guibg=gold guifg=blue
 hi StatusLineNC	cterm=bold	   ctermbg=blue ctermfg=black  guibg=gold guifg=blue
