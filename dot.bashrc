@@ -24,6 +24,8 @@ fi
 alias monitor_server='tail -n 400 -F /usr/local/aolserver/log/server.log | grep -v nsopenssl'
 alias grep='grep --color=auto'
 
+which setterm > /dev/null 2>&1 && setterm -blength 0
+
 #export PS1="[\u@\h \W]\j|$(echo \$?)\$ "
 export EDITOR=vim
 
