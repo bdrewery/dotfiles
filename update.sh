@@ -22,6 +22,10 @@ rm -rf ~/.vim 2>/dev/null
 cp -r dot.vim ~/.vim
 find ~/.vim -type d -name ".svn" -exec rm -rf {} \; 2>/dev/null
 
+install -v -m 0700 -d ~/.vimundo
+install -v -m 0700 -d ~/.vim
+chmod 0700 ~/.viminfo > /dev/null 2>&1
+
 install -v -m 0600 dot.ssh/authorized_keys ~/.ssh/authorized_keys
 install -v bin/screen-wrapper.sh ~/bin/screen-wrapper.sh
 install -v bin/start-screen ~/bin/start-screen
