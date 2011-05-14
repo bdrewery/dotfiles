@@ -1,7 +1,7 @@
 #! /bin/bash
 # $Id$
 
-WANTED_APPS="vim screen svn git"
+WANTED_APPS="vim screen svn git ruby"
 
 cd ~/.profile-repo
 svn up
@@ -39,6 +39,11 @@ install -v dot.bash_logout ~/.bash_logout
 install -v dot.git-prompt.conf ~/.git-prompt.conf
 install -v dot.screenrc ~/.screenrc
 
+! [ -d vim-ruby ] &&  git clone git://github.com/vim-ruby/vim-ruby.git
+pushd vim-ruby
+git pull && git gc
+which ruby > /dev/null 2>&1 && bin/vim-ruby-install.rb -d ~/.vim/
+popd
 
 ### Look for needed programs
 check_for() {
