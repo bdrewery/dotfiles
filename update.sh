@@ -21,8 +21,6 @@ install -v -m 0700 -d ~/.screen
 rm -rf ~/.vim 2>/dev/null
 cp -r dot.vim ~/.vim
 find ~/.vim -type d -name ".svn" -exec rm -rf {} \; 2>/dev/null
-# Link the sql.vim to sqloracle.vim
-ln -s ~/.vim/syntax/sqloracle.vim ~/.vim/syntax/sql.vim
 
 install -v -m 0600 dot.ssh/authorized_keys ~/.ssh/authorized_keys
 install -v bin/screen-wrapper.sh ~/bin/screen-wrapper.sh
