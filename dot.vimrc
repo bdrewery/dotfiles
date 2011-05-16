@@ -70,31 +70,13 @@ autocmd BufReadPost *
 " Restore last line
 " au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif 
 
+" Define <leader>
+let mapleader = ","
+let g:mapleader = ","
+
 " Check if the buffer is a tcl file
 au BufRead,BufNewFile *.tcl set filetype=tcl
 au BufRead,BufNewFile *.tcl set cinkeys=0{,0},0),:,!^F,o,O,e
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Parenthesis/bracket expanding
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-vnoremap $1 <esc>`>a)<esc>`<i(<esc>
-vnoremap $2 <esc>`>a]<esc>`<i[<esc>
-vnoremap $3 <esc>`>a}<esc>`<i{<esc>
-vnoremap $$ <esc>`>a"<esc>`<i"<esc>
-vnoremap $q <esc>`>a'<esc>`<i'<esc>
-vnoremap $e <esc>`>a"<esc>`<i"<esc>
-vnoremap $r <esc>`>a %><esc>`<i<%= <esc>
-
-" Map auto complete of (, ", ', [
-inoremap $1 ()<esc>i
-inoremap $2 []<esc>i
-inoremap $3 {}<esc>i
-inoremap $4 {<esc>o}<esc>O
-inoremap $q ''<esc>i
-inoremap $e ""<esc>i
-inoremap $t <><esc>i
-inoremap $r <%= =><esc>i
 
 
 " Subversion commit file
@@ -132,6 +114,72 @@ set textwidth=0
 set wrap
 set lbr " Use smart wrapping
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Parenthesis/bracket expanding
+" (http://vim.wikia.com/wiki/Automatically_append_closing_characters)
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Auto close braces and skip over them as well
+" autoclose.vim params (http://www.vim.org/scripts/script.php?script_id=2009)
+let g:AutoClosePairs = {'(': ')', '{': '}', '[': ']', '"': '"', "'": "'", "/*":"*/"}
+let g:AutoCloseRegions = ["Comment", "String", "Character"]
+map <leader>a :AutoCloseToggle<cr>
+" Disable and use delimiteMat instead
+let g:AutoCloseOn = 0
+let g:loaded_AutoClose = 1
+
+" delimitMate config (https://github.com/Raimondi/delimitMate)
+" au FileType mail let b:delimitMate_autoclose = 0 
+map <leader>d :DelimitMateSwitch<cr>
+let delimitMate_balance_matchpairs = 1
+let delimitMate_excluded_regions = "Comment,String,Character"
+
+vnoremap $1 <esc>`>a)<esc>`<i(<esc>
+vnoremap $2 <esc>`>a]<esc>`<i[<esc>
+vnoremap $3 <esc>`>a}<esc>`<i{<esc>
+vnoremap $$ <esc>`>a"<esc>`<i"<esc>
+vnoremap $q <esc>`>a'<esc>`<i'<esc>
+vnoremap $e <esc>`>a"<esc>`<i"<esc>
+vnoremap $r <esc>`>a %><esc>`<i<%= <esc>
+
+" Map auto complete of (, ", ', [
+inoremap $1 ()<esc>i
+inoremap $2 []<esc>i
+inoremap $3 {}<esc>i
+inoremap $4 {<esc>o}<esc>O
+inoremap $q ''<esc>i
+inoremap $e ""<esc>i
+inoremap $t <><esc>i
+inoremap $r <%= %><esc>hi
+
+" Auto close </ with closetag.vim
+" au Filetype xhtml,html,xml,xsl,tcl,smarty,php,eruby map! </ <C-_>
+
+" Autoclose on > and be smart about it
+au FileType xhtml,xml,smarty,php,eruby so ~/.vim/ftplugin/html_autoclosetag.vim
+
+
+" Auto close <? for php
+" au Filetype php map! <? <? ?><ESC>hhi
+" au Filetype php map! <? <??><ESC>hi
+
+" Auto close <% and <%= for eruby
+au Filetype eruby map! <%= <%=  %><ESC>hhi
+au Filetype eruby map! <% <%  %><ESC>hhi
+
+" Tcl maps
+" au Filetype tcl map! ${ ${}<ESC>ha
+
+" Auto close comments
+" FIXME: This first one doesn't seem to work
+inoremap /*          /**/<Left><Left>
+inoremap /*<Space>   /*<Space><Space>*/<Left><Left><Left>
+inoremap /*<CR>      /*<CR>/<Esc>O
+" When setting up a doc comment, always expand out
+inoremap /**         /**<CR>/<Esc>O
+inoremap /**<Space>  /**<CR>/<Esc>O
+inoremap /**<CR>     /**<CR>/<Esc>O
+inoremap <Leader>/*  /*
+
 
 " Comments
 au BufRead,BufNewFile *.tcl set comments=:#
@@ -151,22 +199,9 @@ au BufRead,BufNewFile *.rb set foldmethod=syntax
 " au BufRead,BufNewFile *.tcl syn match   tclStatement        "proc" contained
 " au BufRead,BufNewFile *.tcl syntax region tclFunc start="^\z(\s*\)proc.*{$" end="^\z1}$" transparent fold contains=ALL
 
-" Tcl maps
-" au Filetype tcl map! ${ ${}<ESC>ha
-
 " let b:unaryTagsStack="area base br dd dt hr img input link meta param"
 au Filetype xhtml,html,tcl,smarty,php,eruby let b:closetag_html_style=1
 au Filetype xhtml,html,xml,xsl,tcl,smarty,php,eruby source ~/.vim/scripts/closetag.vim
-" Auto close </
-au Filetype xhtml,html,xml,xsl,tcl,smarty,php,eruby map! </ <C-_>
-" Auto close <? for php
-" au Filetype php map! <? <? ?><ESC>hhi
-au Filetype php map! <? <??><ESC>hi
-
-" Auto close <% and <%= for eruby
-au Filetype eruby map! <%= <%=  %><ESC>hhi
-au Filetype eruby map! <% <%  %><ESC>hhi
-
 
 " 7.3 features
 try
@@ -182,9 +217,6 @@ endtry
 
 
 " Misc maps
-let mapleader = ","
-let g:mapleader = ","
-
 map <leader>pp :setlocal paste!<cr>
 
 " Reformat/indent whole file
