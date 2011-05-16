@@ -1,5 +1,7 @@
 " $Id$
 
+" A lot of this is from google and various prefs/testing/experience
+
 set nocompatible
 
 " Switch syntax highlighting on, when the terminal has colors
@@ -11,9 +13,16 @@ endif
 set background=dark
 if has("gui_runing")
   colorscheme fruity
+  set guioptions-=T
 else
   colorscheme delek
 endif
+
+set encoding=utf-8
+try
+  lang en_US
+catch
+endtry
 
 " set cpo+=$
 set sts=2 sw=2 ts=8 et
@@ -25,16 +34,22 @@ set nu " Show line numbers
 " set list " Show tabs as ^I
 set ruler
 set showcmd
-set history=50 incsearch
+set history=700 incsearch
+" Keep some lines around scrolling
+set so=7
 set bs=2
 set laststatus=2
 set wildmenu
 set ff=unix
-set statusline=%<%f%h\ %m%r%=%b\ 0x%B\ \ %{fugitive#statusline()}\ \ \ \ \ \ \ %l,%c%V\ %P
+set statusline=\ %{HasPaste()}%<%f%h\ %m%r%=%b\ 0x%B\ \ %{fugitive#statusline()}\ \ \ \ \ \ \ %l,%c%V\ %P
+set magic
+set nolazyredraw
 filetype plugin indent on
+" 500 ms for mapped key checking
+set tm=500
 
 " Disable bells
-set vb t_vb=
+set novisualbell noerrorbells t_vb=
 
 " Disable previewing as it can be very slow
 if version >= 700
@@ -44,6 +59,7 @@ endif
 " Save marks for 100 files, and global marks
 set viminfo='100,f1,\"100,:20,%,n~/.viminfo
 set nobackup
+set nowb
 " When editing a file, always jump to the last known cursor position.
 " Don't do it when the position is invalid or when inside an event handler
 " (happens when dropping a file on gvim).
@@ -58,11 +74,28 @@ autocmd BufReadPost *
 au BufRead,BufNewFile *.tcl set filetype=tcl
 au BufRead,BufNewFile *.tcl set cinkeys=0{,0},0),:,!^F,o,O,e
 
-" Autoclose curly braces
-" inoremap {              {}<LEFT>
-" inoremap {<CR>  {<CR>}<ESC>O
-" inoremap {{             {
-" inoremap {}             {}
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Parenthesis/bracket expanding
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+vnoremap $1 <esc>`>a)<esc>`<i(<esc>
+vnoremap $2 <esc>`>a]<esc>`<i[<esc>
+vnoremap $3 <esc>`>a}<esc>`<i{<esc>
+vnoremap $$ <esc>`>a"<esc>`<i"<esc>
+vnoremap $q <esc>`>a'<esc>`<i'<esc>
+vnoremap $e <esc>`>a"<esc>`<i"<esc>
+vnoremap $r <esc>`>a %><esc>`<i<%= <esc>
+
+" Map auto complete of (, ", ', [
+inoremap $1 ()<esc>i
+inoremap $2 []<esc>i
+inoremap $3 {}<esc>i
+inoremap $4 {<esc>o}<esc>O
+inoremap $q ''<esc>i
+inoremap $e ""<esc>i
+inoremap $t <><esc>i
+inoremap $r <%= =><esc>i
+
 
 " Subversion commit file
 au BufNewFile,BufRead svn-commit*.tmp           setf svn
@@ -77,6 +110,7 @@ au BufRead,BufNewFile *.php set foldmethod=syntax
 
 " Fix highlighting breaking when closing buffers
 let g:miniBufExplForceSyntaxEnable = 1
+let g:miniBufExplMapWindowNavArrows = 1
 
 let php_sql_query = 1
 let php_folding = 3
@@ -94,6 +128,9 @@ au BufRead,BufNewFile *.js set sts=4 sw=4 ts=4 et
 
 " Do not inadvertently break a line
 set textwidth=0
+" Wrap text for display only
+set wrap
+set lbr " Use smart wrapping
 
 
 " Comments
@@ -130,17 +167,110 @@ au Filetype php map! <? <??><ESC>hi
 au Filetype eruby map! <%= <%=  %><ESC>hhi
 au Filetype eruby map! <% <%  %><ESC>hhi
 
-" Auto create array syntax in strings
-" au Filetype php map! {$ {$['']}<ESC>hhhhi
-" au Filetype php map! {$ {$']}<ESC>hhi
+
+" 7.3 features
+try
+  set undodir=~/.vimundo
+  set undofile
+  set undolevels=1000 "maximum number of changes that can be undone
+  set undoreload=10000 "maximum number lines to save for undo on a buffer reload
+
+  set cryptmethod=blowfish
+catch
+endtry
+
+
 
 " Misc maps
+let mapleader = ","
+let g:mapleader = ","
+
+map <leader>pp :setlocal paste!<cr>
+
 " Reformat/indent whole file
-noremap ,5 1GvG=
+noremap <leader>5 1GvG=
 
-set undodir=~/.vimundo
-set undofile
-set undolevels=1000 "maximum number of changes that can be undone
-set undoreload=10000 "maximum number lines to save for undo on a buffer reload
+" fast saving
+nmap <leader>w :w!<cr>
 
-set cryptmethod=blowfish
+" Disable current search
+map <silent> <leader><cr> :noh<cr>
+
+" Close the current buffer
+map <leader>bd :bd<cr>
+
+function! HasPaste()
+    if &paste
+        return 'PASTE MODE  '
+    else
+        return ''
+    endif
+endfunction
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Cope
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Do :help cope if you are unsure what cope is. It's super useful!
+map <leader>cc :botright cope<cr>
+map <leader>n :cn<cr>
+map <leader>p :cp<cr>
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Spell checking
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"Pressing ,ss will toggle and untoggle spell checking
+map <leader>ss :setlocal spell!<cr>
+
+"Shortcuts using <leader>
+map <leader>sn ]s
+map <leader>sp [s
+map <leader>sa zg
+map <leader>s? z=
+
+
+""""""""""""""""""""""""""""""
+" => MRU plugin
+""""""""""""""""""""""""""""""
+let MRU_Max_Entries = 400
+map <leader>f :MRU<CR>
+
+
+""""""""""""""""""""""""""""""
+" => Visual mode related
+""""""""""""""""""""""""""""""
+" Really useful!
+"  In visual mode when you press * or # to search for the current selection
+vnoremap <silent> * :call VisualSearch('f')<CR>
+vnoremap <silent> # :call VisualSearch('b')<CR>
+
+" When you press gv you vimgrep after the selected text
+vnoremap <silent> gv :call VisualSearch('gv')<CR>
+map <leader>g :vimgrep // **/*.<left><left><left><left><left><left><left>
+
+
+function! CmdLine(str)
+    exe "menu Foo.Bar :" . a:str
+    emenu Foo.Bar
+    unmenu Foo
+endfunction
+
+" From an idea by Michael Naumann
+function! VisualSearch(direction) range
+    let l:saved_reg = @"
+    execute "normal! vgvy"
+
+    let l:pattern = escape(@", '\\/.*$^~[]')
+    let l:pattern = substitute(l:pattern, "\n$", "", "")
+
+    if a:direction == 'b'
+        execute "normal ?" . l:pattern . "^M"
+    elseif a:direction == 'gv'
+        call CmdLine("vimgrep " . '/'. l:pattern . '/' . ' **/*.')
+    elseif a:direction == 'f'
+        execute "normal /" . l:pattern . "^M"
+    endif
+
+    let @/ = l:pattern
+    let @" = l:saved_reg
+endfunction
