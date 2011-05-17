@@ -11,11 +11,24 @@ if &t_Co > 2 || has("gui_running")
 endif
 
 set background=dark
-if has("gui_running")
-  colorscheme fruity
-  set guioptions-=T
+if &t_Co > 16 || has("gui_running")
+
+  colorscheme solarized
+
+  if has("gui_running")
+    au FileType ruby,eruby colorscheme railscasts
+    let g:solarized_degrade=1
+  else
+    let g:solarized_termcolors=256
+  endif
+
 else
   colorscheme delek
+endif
+
+
+if has("gui_running")
+  set guioptions-=T
 endif
 
 set encoding=utf-8
