@@ -54,7 +54,7 @@ set bs=2
 set laststatus=2
 set wildmenu
 set ff=unix
-set statusline=\ %{HasPaste()}%<%f%h\ %m%r%=%b\ 0x%B\ \ %{fugitive#statusline()}\ \ \ \ \ \ \ %l,%c%V\ %P
+set statusline=\ %{HasPaste()}%{SyntasticStatuslineFlag()}%<%f%h\ %m%r%=%b\ 0x%B\ \ %{fugitive#statusline()}\ \ \ \ \ \ \ %l,%c%V\ %P
 set magic
 set nolazyredraw
 filetype plugin indent on
@@ -335,3 +335,15 @@ function! VisualSearch(direction) range
     let @/ = l:pattern
     let @" = l:saved_reg
 endfunction
+
+"""""""""""""""""""""""""
+" syntastic configuration
+"""""""""""""""""""""""""
+
+map <leader>ce :Errors<cr>
+let g:syntastic_enable_signs = 1
+" Auto open/close window
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_quiet_warnings = 0
+let g:syntastic_disabled_filetypes = []
+let g:syntastic_stl_format = '[%E{Err: %fe #%e}%B{, }%W{Warn: %fw #%w}]'
