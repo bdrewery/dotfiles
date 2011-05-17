@@ -114,6 +114,12 @@ set textwidth=0
 set wrap
 set lbr " Use smart wrapping
 
+""""""""""""""""""
+" snipMate configuration
+""""""""""""""""""
+let g:snips_author = 'Bryan Drewery'
+
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Parenthesis/bracket expanding
 " (http://vim.wikia.com/wiki/Automatically_append_closing_characters)
