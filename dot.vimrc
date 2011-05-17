@@ -114,6 +114,7 @@ let tcl_html_active = 1
 
 " Recommended by http://wiki.tcl.tk/4049
 au BufRead,BufNewFile *.tcl set sts=4 sw=4 ts=4 noet
+au BufRead,BufNewFile *.snippet set sts=4 sw=4 ts=4 noet
 au BufRead,BufNewFile *.py set sts=4 sw=4 ts=4 noet
 au BufRead,BufNewFile *.xml set sts=4 sw=4 ts=4 noet
 
