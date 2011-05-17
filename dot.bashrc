@@ -44,4 +44,7 @@ export HISTSIZE=10000000000000 2>/dev/null
 export IGNOREEOF=1
 export HISTFILESIZE=10000000000000 2>/dev/null
 
+# Disable XOFF (^S)
+stty -ixon
+
 . ~/.profile-repo/git-prompt/git-prompt.sh
