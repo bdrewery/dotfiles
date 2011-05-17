@@ -129,7 +129,7 @@ let g:snips_author = 'Bryan Drewery'
 let g:AutoClosePairs = {'(': ')', '{': '}', '[': ']', '"': '"', "'": "'", "/*":"*/"}
 let g:AutoCloseRegions = ["Comment", "String", "Character"]
 map <leader>a :AutoCloseToggle<cr>
-" Disable and use delimiteMat instead
+" Disable and use delimitMate instead
 let g:AutoCloseOn = 0
 let g:loaded_AutoClose = 1
 
