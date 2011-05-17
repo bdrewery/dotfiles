@@ -11,7 +11,7 @@ if &t_Co > 2 || has("gui_running")
 endif
 
 set background=dark
-if has("gui_runing")
+if has("gui_running")
   colorscheme fruity
   set guioptions-=T
 else
