@@ -234,7 +234,7 @@ imap jj <esc>
 map <C-v> "+gP<CR>      " Map copy from outside VIM
 vmap <C-c> "+y          " Map paste from outside VIM
 map <C-x> "+d          " Map cut from outside VIM
-map <C-s> :w!<CR>       " Map quick save
+map <C-w> :w!<CR>       " Map quick save
 
 map <leader>e <esc>:NERDTreeToggle<cr>
 
