@@ -152,24 +152,6 @@ map <leader>d :DelimitMateSwitch<cr>
 let delimitMate_balance_matchpairs = 1
 let delimitMate_excluded_regions = "Comment,String,Character"
 
-vnoremap $1 <esc>`>a)<esc>`<i(<esc>
-vnoremap $2 <esc>`>a]<esc>`<i[<esc>
-vnoremap $3 <esc>`>a}<esc>`<i{<esc>
-vnoremap $$ <esc>`>a"<esc>`<i"<esc>
-vnoremap $q <esc>`>a'<esc>`<i'<esc>
-vnoremap $e <esc>`>a"<esc>`<i"<esc>
-vnoremap $r <esc>`>a %><esc>`<i<%= <esc>
-
-" Map auto complete of (, ", ', [
-inoremap $1 ()<esc>i
-inoremap $2 []<esc>i
-inoremap $3 {}<esc>i
-inoremap $4 {<esc>o}<esc>O
-inoremap $q ''<esc>i
-inoremap $e ""<esc>i
-inoremap $t <><esc>i
-inoremap $r <%= %><esc>hi
-
 " Auto close </ with closetag.vim
 " au Filetype xhtml,html,xml,xsl,tcl,smarty,php,eruby map! </ <C-_>
 
