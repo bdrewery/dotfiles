@@ -222,9 +222,7 @@ endtry
 
 " CTags support
 map <F8> :!/usr/bin/ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
-let Tlist_Ctags_Cmd = "/usr/bin/ctags"
-let Tlist_WinWidth = 50
-map <leader>t :TlistToggle<cr>
+map <leader>t :TagbarToggle<cr>
 inoremap <leader><tab> <C-R>=AutoCompletion()<CR>
 
 function! AutoCompletion()
