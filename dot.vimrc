@@ -220,7 +220,22 @@ try
 catch
 endtry
 
+" CTags support
+map <F8> :!/usr/bin/ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
+let Tlist_Ctags_Cmd = "/usr/bin/ctags"
+let Tlist_WinWidth = 50
+map <leader>t :TlistToggle<cr>
+inoremap <leader><tab> <C-R>=AutoCompletion()<CR>
 
+function! AutoCompletion()
+  if &omnifunc != ''
+    return "\<C-X>\<C-O>"
+  elseif &dictionary != ''
+    return "\<C-K>"
+  else
+    return "\<C-N>"
+  endif
+endfunction
 
 " Misc maps
 map <leader>pp :setlocal paste!<cr>
@@ -234,7 +249,7 @@ imap jj <esc>
 map <C-v> "+gP<CR>      " Map copy from outside VIM
 vmap <C-c> "+y          " Map paste from outside VIM
 map <C-x> "+d          " Map cut from outside VIM
-map <C-w> :w!<CR>       " Map quick save
+" map <C-w> :w!<CR>       " Map quick save
 
 map <leader>e <esc>:NERDTreeToggle<cr>
 
