@@ -219,6 +219,20 @@ endtry
 " Misc maps
 map <leader>pp :setlocal paste!<cr>
 
+" Reload vimrc
+map <leader>v :source ~/.vimrc<cr>
+
+" Alternative ESC mapping in insert mode
+imap jj <esc>
+
+map <C-v> "+gP<CR>      " Map copy from outside VIM
+vmap <C-c> "+y          " Map paste from outside VIM
+map <C-x> "+d          " Map cut from outside VIM
+map <C-s> :w!<CR>       " Map quick save
+
+map <leader>e <esc>:NERDTreeToggle<cr>
+
+
 " Reformat/indent whole file
 noremap <leader>5 1GvG=
 
