@@ -345,5 +345,5 @@ let g:syntastic_enable_signs = 1
 " Auto open/close window
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_quiet_warnings = 0
-let g:syntastic_disabled_filetypes = []
+let g:syntastic_disabled_filetypes = ['c']
 let g:syntastic_stl_format = '[%E{Err: %fe #%e}%B{, }%W{Warn: %fw #%w}]'
