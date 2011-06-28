@@ -48,3 +48,9 @@ export HISTFILESIZE=10000000000000 2>/dev/null
 stty -ixon
 
 . ~/.profile-repo/git-prompt/git-prompt.sh
+
+[[ -f "/etc/bash_completion.d/git" ]] &&
+     . /etc/bash_completion.d/git
+
+[[ -f "/usr/share/bash-completion/git" ]] &&
+     . /usr/share/bash-completion/git
