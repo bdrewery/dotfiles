@@ -78,8 +78,50 @@
    fun:SSL_connect
 }
 {
-     <insert_a_suppression_name_here>
-          Memcheck:Value4
-             fun:_x86_AES_encrypt
+     AES_encrypt
+       Memcheck:Value4
+       fun:_x86_AES_encrypt
+}
+{
+   libtcl internal
+   Memcheck:Cond
+   fun:__GI___strncasecmp_l
+   fun:____strtod_l_internal
+   obj:/usr/lib/libtcl8.4.so.0
+   obj:/usr/lib/libtcl8.4.so.0
+   obj:/usr/lib/libtcl8.4.so.0
+   obj:/usr/lib/libtcl8.4.so.0
+   obj:/usr/lib/libtcl8.4.so.0
+   obj:/usr/lib/libtcl8.4.so.0
+   obj:/usr/lib/libtcl8.4.so.0
+   obj:/usr/lib/libtcl8.4.so.0
+}
+{
+   libtcl internal
+   Memcheck:Value8
+   fun:__GI___strncasecmp_l
+   fun:____strtod_l_internal
+   obj:/usr/lib/libtcl8.4.so.0
+   obj:/usr/lib/libtcl8.4.so.0
+   obj:/usr/lib/libtcl8.4.so.0
+   obj:/usr/lib/libtcl8.4.so.0
+   obj:/usr/lib/libtcl8.4.so.0
+   obj:/usr/lib/libtcl8.4.so.0
+   obj:/usr/lib/libtcl8.4.so.0
+   obj:/usr/lib/libtcl8.4.so.0
+}
+{
+   Ignore String internals
+   Memcheck:Leak
+   fun:_Znam
+   fun:_ZNK2bd8ArrayRefIcE8AllocBufEm
+   fun:_ZNK2bd8ArrayRefIcE7ReserveEmRmm
+}
+{
+   Ignore String internals
+   Memcheck:Leak
+   fun:_Znwm
+   fun:_ZN2bd21ReferenceCountedArrayIcEC2Ev
+   fun:_ZN2bd6StringC1EPKc
 }
 
