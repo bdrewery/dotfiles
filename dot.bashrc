@@ -39,7 +39,7 @@ if [ -d ~/man ]; then
     export MANPATH
 fi
 
-export LESS="R E F"
+export LESS="R E F X"
 export HISTSIZE=10000000000000 2>/dev/null
 export IGNOREEOF=1
 export HISTFILESIZE=10000000000000 2>/dev/null
