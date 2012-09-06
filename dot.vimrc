@@ -118,6 +118,7 @@ au BufRead,BufNewFile *.tcl set sts=4 sw=4 ts=4 noet
 au BufRead,BufNewFile *.snippet set sts=4 sw=4 ts=4 noet
 au BufRead,BufNewFile *.py set sts=4 sw=4 ts=4 noet
 au BufRead,BufNewFile *.xml set sts=4 sw=4 ts=4 noet
+au BufRead,BufNewFile vuln.xml set sts=2 sw=2 ts=8 noet
 
 au BufRead,BufNewFile *.tpl set sts=4 sw=4 ts=4 et
 au BufRead,BufNewFile *.php set sts=4 sw=4 ts=4 et
