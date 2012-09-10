@@ -7,3 +7,6 @@ export HISTFILESIZE=$HISTSIZE 2>/dev/null
 export IGNOREEOF=1
 # Disable XOFF (^S)
 stty -ixon
+export MANWIDTH=tty
+export LSCOLORS=ExGxFxdxCxegDxabagacad
+export CLICOLOR=1
