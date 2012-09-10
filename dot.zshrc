@@ -5,9 +5,6 @@ autoload -U promptinit
 promptinit
 prompt clint
 
-export HISTSIZE=1000000000
-export SAVEHIST=$HISTSIZE
-export HISTFILE=~/.zhistory
 setopt inc_append_history
 # Don't record commands starting with a space
 setopt hist_ignore_space
@@ -20,5 +17,8 @@ bindkey "^[[4~" end-of-line
 bindkey "^[[3~" delete-char
 bindkey "^[[2~" overwrite-mode
 
+. ${HOME}/.profile.common
+
+export HISTFILE=~/.zhistory
 
 [ -f ${HOME}/.zshrc.local ] && . ${HOME}/.zshrc.local
