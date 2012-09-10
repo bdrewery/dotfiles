@@ -640,4 +640,5 @@ bindkey -k k9 windowlist -b
 # EOF  vim: ts=8 et nowrap
 nonblock on
 defnonblock on
+defc1 off
 defutf8 on

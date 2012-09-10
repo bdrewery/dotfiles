@@ -1,16 +1,21 @@
 autoload -U compinit
+zmodload -i zsh/complist
 compinit
 
 autoload -U promptinit
 promptinit
 prompt clint
 
+zstyle ':vcs_info:*' enable git svn
+
 setopt inc_append_history
 # Don't record commands starting with a space
 setopt hist_ignore_space
+# Record timestamps
+setopt extended_history
 
-#bindkey    "^[[3~"          delete-char
-#bindkey    "^[3;5~"         delete-char
+setopt hashcmds
+setopt hashdirs
 
 bindkey "^[[1~" beginning-of-line
 bindkey "^[[4~" end-of-line

@@ -1,4 +1,3 @@
-alias grep='grep --color=auto'
 which setterm > /dev/null 2>&1 && setterm -blength 0
 export EDITOR=vim
 export LESS="R E F X"
@@ -10,3 +9,16 @@ stty -ixon
 export MANWIDTH=tty
 export LSCOLORS=ExGxFxdxCxegDxabagacad
 export CLICOLOR=1
+
+# Portable ls(1) colors
+if [ "$DISABLE_LS_COLORS" != "true" ]
+then
+        # Find the option for using colors in ls, depending on the version: Linux or BSD
+        ls --color -d . &>/dev/null 2>&1 && alias ls='ls -aF --color=tty' || alias ls='ls -GFa'
+fi
+export GREP_OPTIONS="--color=auto"
+export TZ=CST6CDT
+
+export LANG=en_US.UTF-8
+export LC_COLLATE=C
+export MM_CHARSET=UTF-8

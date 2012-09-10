@@ -33,6 +33,7 @@ install -v bin/update-profile ~/bin/update-profile
 install -v dot.inputrc ~/.inputrc
 install -v dot.vimrc ~/.vimrc
 install -v dot.zshrc ~/.zshrc
+install -v dot.login_conf ~/.login_conf
 install -v dot.profile.common ~/.profile.common
 install -v dot.bashrc ~/.bashrc
 install -v dot.nanorc ~/.nanorc
