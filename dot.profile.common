@@ -3,6 +3,7 @@ export EDITOR=vim
 export LESS="R E F X"
 export HISTSIZE=10000000000000 2>/dev/null
 export HISTFILESIZE=$HISTSIZE 2>/dev/null
+export SAVEHIST=$HISTSIZE 2>/dev/null
 export IGNOREEOF=1
 # Disable XOFF (^S)
 stty -ixon
