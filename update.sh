@@ -4,6 +4,7 @@
 WANTED_APPS="vim screen svn git ruby"
 
 cd ~/.profile-repo
+svn upgrade
 svn up
 
 if [ -d git-prompt ]; then
