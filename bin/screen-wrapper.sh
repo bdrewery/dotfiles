@@ -1,7 +1,7 @@
 #! /bin/sh
 # $Id$
 
-while /bin/true; 
+while true; 
 do 
  echo "$@";
  $@;
