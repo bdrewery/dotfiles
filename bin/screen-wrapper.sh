@@ -1,6 +1,7 @@
 #! /bin/sh
 # $Id$
 
+export RAN_FROM_CRON=1
 while true; 
 do 
  echo "$@";
