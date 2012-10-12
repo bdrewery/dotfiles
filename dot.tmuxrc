@@ -1,0 +1,14 @@
+#https://mutelight.org/practical-tmux
+
+# Highlight active window
+set-window-option -g window-status-current-bg red
+
+# Allows for faster key repetition
+set -s escape-time 0
+
+bind-key b send-prefix
+
+# Rather than constraining window size to the maximum size of any client 
+# connected to the *session*, constrain window size to the maximum size of any 
+# client connected to *that window*. Much more reasonable.
+setw -g aggressive-resize on
