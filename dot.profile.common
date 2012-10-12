@@ -23,3 +23,19 @@ export TZ=CST6CDT
 export LANG=en_US.UTF-8
 export LC_COLLATE=C
 export MM_CHARSET=UTF-8
+
+# Refresh ENV from tmux show-environment
+refreshenv() {
+  [ -z "${TMUX}" ] && return 0
+  local current_value var value
+  eval `tmux showenv 2>/dev/null | awk -F = '$1 !~ /^-/ {print $1 " " $2}' | while read var value; do
+    # Get the current value
+    eval current_value=\\$$var
+    if [ "${value}" != "${current_value}" ]; then
+      # Display the change on STDERR
+      echo "Updating ${var} -> ${value}" >&2
+      # Output VAR='VALUE' for the eval
+      echo "${var}='${value}'"
+    fi
+  done`
+}
