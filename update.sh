@@ -9,6 +9,7 @@ svn up
 
 if [ -d git-prompt ]; then
   pushd git-prompt
+  git reset --hard
   git pull && git gc
   popd
 else
