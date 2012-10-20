@@ -22,7 +22,7 @@ install -v -m 0700 -d ~/.screen
 
 rm -rf ~/.vim 2>/dev/null
 cp -r dot.vim ~/.vim
-find ~/.vim -type d -name ".svn" -exec rm -rf {} \; 2>/dev/null
+find ~/.vim -type d -name ".svn" -exec rm -rf {} + 2>/dev/null
 
 install -v -m 0700 -d ~/.vimundo
 install -v -m 0700 -d ~/.vim
