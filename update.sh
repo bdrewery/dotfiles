@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /bin/sh
 # $Id$
 
 WANTED_APPS="vim screen svn git ruby"
@@ -8,10 +8,10 @@ svn upgrade
 svn up
 
 if [ -d git-prompt ]; then
-  pushd git-prompt
+  cd git-prompt
   git reset --hard
   git pull && git gc
-  popd
+  cd ..
 else
   git clone git://github.com/lvv/git-prompt.git
 fi
@@ -48,10 +48,10 @@ install -v dot.git-prompt.conf ~/.git-prompt.conf
 install -v dot.screenrc ~/.screenrc
 
 ! [ -d vim-ruby ] &&  git clone git://github.com/vim-ruby/vim-ruby.git
-pushd vim-ruby
+cd vim-ruby
 git pull && git gc
 which ruby > /dev/null 2>&1 && bin/vim-ruby-install.rb -d ~/.vim/
-popd
+cd ..
 
 ### Look for needed programs
 check_for() {
