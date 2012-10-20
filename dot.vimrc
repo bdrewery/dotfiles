@@ -43,7 +43,9 @@ set sts=2 sw=2 ts=8
 set autoindent           " keep the previous line's indentation
 set cindent              " indent after line ending in {, and use 'cinwords'
                          " see also ':help c-indent'
-set colorcolumn=80
+if exists('+colorcolumn')
+  set colorcolumn=80
+endif
 set modeline modelines=5
 set nu " Show line numbers
 " set list " Show tabs as ^I
