@@ -1,7 +1,7 @@
 #! /bin/sh
 # $Id$
 
-WANTED_APPS="vim screen svn git ruby"
+WANTED_APPS="vim screen svn git ruby tmux"
 
 cd ~/.profile-repo
 svn upgrade
