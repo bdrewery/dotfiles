@@ -26,6 +26,7 @@ if &t_Co > 16 || has("gui_running")
 else
   colorscheme delek
 endif
+set bg=dark
 
 " Use POSIX shell syntax so $() is not hilighted red
 let g:is_posix = 1
