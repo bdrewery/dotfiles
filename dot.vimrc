@@ -27,6 +27,8 @@ else
   colorscheme delek
 endif
 
+" Use POSIX shell syntax so $() is not hilighted red
+let g:is_posix = 1
 
 if has("gui_running")
   set guioptions-=T
