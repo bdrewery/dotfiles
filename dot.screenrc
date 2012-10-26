@@ -642,3 +642,5 @@ nonblock on
 defnonblock on
 defc1 off
 defutf8 on
+
+term screen-256color
