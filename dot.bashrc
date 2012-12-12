@@ -39,3 +39,7 @@ fi
 
 [[ -f "/usr/share/bash-completion/git" ]] &&
      . /usr/share/bash-completion/git
+
+if [ -f ~/.bashrc.local ]; then
+	. ~/.bashrc.local
+fi
