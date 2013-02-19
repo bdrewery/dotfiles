@@ -130,6 +130,10 @@ au BufRead,BufNewFile *.tpl set sts=4 sw=4 ts=4 et
 au BufRead,BufNewFile *.php set sts=4 sw=4 ts=4 et
 au BufRead,BufNewFile *.js set sts=4 sw=4 ts=4 et
 
+augroup filetypedetect
+au BufNewFile,BufRead *.xt  setf xt
+augroup END
+
 " Do not inadvertently break a line
 set textwidth=0
 " Wrap text for display only
