@@ -38,6 +38,7 @@ install -v dot.zshrc ~/.zshrc
 install -v dot.tmuxrc ~/.tmuxrc
 install -v dot.login_conf ~/.login_conf
 install -v dot.profile.common ~/.profile.common
+install -v dot.bash_profile ~/.bash_profile
 install -v dot.bashrc ~/.bashrc
 install -v dot.nanorc ~/.nanorc
 install -v dot.gitconfig ~/.gitconfig
