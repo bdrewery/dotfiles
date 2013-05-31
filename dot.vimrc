@@ -120,15 +120,17 @@ let tcl_sql_active = 1
 let tcl_html_active = 1
 
 " Recommended by http://wiki.tcl.tk/4049
-au BufRead,BufNewFile *.tcl set sts=4 sw=4 ts=4 noet
-au BufRead,BufNewFile *.snippet set sts=4 sw=4 ts=4 noet
-au BufRead,BufNewFile *.py set sts=4 sw=4 ts=4 noet
-au BufRead,BufNewFile *.xml set sts=4 sw=4 ts=4 noet
+au BufRead,BufNewFile *.tcl set sts=4 sw=4 ts=8 noet
+au BufRead,BufNewFile *.snippet set sts=4 sw=4 ts=8 noet
+au BufRead,BufNewFile *.py set sts=4 sw=4 ts=8 noet
+au BufRead,BufNewFile *.xml set sts=4 sw=4 ts=8 noet
 au BufRead,BufNewFile vuln.xml set sts=2 sw=2 ts=8 noet
 
 au BufRead,BufNewFile *.tpl set sts=4 sw=4 ts=4 et
 au BufRead,BufNewFile *.php set sts=4 sw=4 ts=4 et
 au BufRead,BufNewFile *.js set sts=4 sw=4 ts=4 et
+
+au BufRead,BufNewFile *.sh set sts=4 sw=4 ts=8 noet
 
 augroup filetypedetect
 au BufNewFile,BufRead *.xt  setf xt
