@@ -130,7 +130,7 @@ au BufRead,BufNewFile *.tpl set sts=4 sw=4 ts=4 et
 au BufRead,BufNewFile *.php set sts=4 sw=4 ts=4 et
 au BufRead,BufNewFile *.js set sts=4 sw=4 ts=4 et
 
-au BufRead,BufNewFile *.sh set sts=4 sw=4 ts=8 noet
+au BufRead,BufNewFile *.sh set sts=0 sw=8 ts=8 noet
 
 augroup filetypedetect
 au BufNewFile,BufRead *.xt  setf xt
