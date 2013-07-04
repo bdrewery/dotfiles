@@ -42,7 +42,7 @@ catch
 endtry
 
 " set cpo+=$
-set sts=2 sw=2 ts=8
+set sw=2 ts=8
 set autoindent           " keep the previous line's indentation
 set cindent              " indent after line ending in {, and use 'cinwords'
                          " see also ':help c-indent'
