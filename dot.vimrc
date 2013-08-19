@@ -361,6 +361,8 @@ let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [], 'passive
 let g:syntastic_stl_format = '[%E{Err: %fe #%e}%B{, }%W{Warn: %fw #%w}]'
 
 if filereadable(glob("~/.vim-freebsd")) 
+  source ~/.vim/scripts/freebsd.vim
+  au BufRead,BufNewFile *.c call FreeBSD_Style()
   set textwidth=78
 endif
 
