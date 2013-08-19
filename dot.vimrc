@@ -359,3 +359,7 @@ let g:syntastic_quiet_warnings = 0
 let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [], 'passive_filetypes': [] }
 " let g:syntastic_disabled_filetypes = ['c', 'php']
 let g:syntastic_stl_format = '[%E{Err: %fe #%e}%B{, }%W{Warn: %fw #%w}]'
+
+if filereadable(glob("~/.vimrc.local")) 
+    source ~/.vimrc.local
+endif
