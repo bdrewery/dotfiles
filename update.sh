@@ -41,7 +41,7 @@ install -v dot.profile.common ~/.profile.common
 install -v dot.bash_profile ~/.bash_profile
 install -v dot.bashrc ~/.bashrc
 install -v dot.nanorc ~/.nanorc
-install -v dot.gitconfig ~/.gitconfig
+[ -f ~/.keep-gitconfig ] || install -v dot.gitconfig ~/.gitconfig
 install -v dot.supp ~/.supp
 install -v dot.valgrindrc ~/.valgrindrc
 install -v dot.bash_logout ~/.bash_logout
