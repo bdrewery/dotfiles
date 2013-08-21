@@ -68,7 +68,7 @@ filetype plugin indent on
 " 500 ms for mapped key checking
 set tm=500
 
-set wildignore+=*.o,*.So,*.a,*.la,*.obj,*.Po
+set wildignore+=*.o,*.So,*.a,*.la,*.obj,*.Po,*.pyc
 
 " Disable bells
 set novisualbell noerrorbells t_vb=
