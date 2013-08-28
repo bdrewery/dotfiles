@@ -96,21 +96,19 @@ autocmd BufReadPost *
 let mapleader = ","
 let g:mapleader = ","
 
-" Check if the buffer is a tcl file
-au BufRead,BufNewFile *.tcl set filetype=tcl
-au BufRead,BufNewFile *.tcl set cinkeys=0{,0},0),:,!^F,o,O,e
+augroup filetypedetect
+au BufRead,BufNewFile *.tcl setf tcl
+au BufNewFile,BufRead *.xt  setf xt
+au BufRead,BufNewFile *.tpl setf smarty
+au BufNewFile,BufRead svn-commit*.tmp           setf svn
+augroup END
 
 
 " Subversion commit file
-au BufNewFile,BufRead svn-commit*.tmp           setf svn
 
 " smarty
-au BufRead,BufNewFile *.tpl set filetype=smarty
 
-" php
-au BufRead,BufNewFile *.php set filetype=php
 " au BufRead,BufNewFile *.php colorscheme ir_black
-au BufRead,BufNewFile *.php set foldmethod=syntax
 
 " Fix highlighting breaking when closing buffers
 let g:miniBufExplForceSyntaxEnable = 1
@@ -122,21 +120,17 @@ let tcl_sql_active = 1
 let tcl_html_active = 1
 
 " Recommended by http://wiki.tcl.tk/4049
-au BufRead,BufNewFile *.tcl set sts=4 sw=4 ts=8 noet
-au BufRead,BufNewFile *.snippet set sts=4 sw=4 ts=8 noet
-au BufRead,BufNewFile *.py,*.pyw set sts=0 sw=4 ts=8 et
-au BufRead,BufNewFile *.xml set sts=4 sw=4 ts=8 noet
-au BufRead,BufNewFile vuln.xml set sts=2 sw=2 ts=8 noet
+au BufRead,BufNewFile *.snippet setl sts=4 sw=4 ts=8 noet
+au BufRead,BufNewFile vuln.xml setl sts=2 sw=2 ts=8 noet
 
-au BufRead,BufNewFile *.tpl set sts=4 sw=4 ts=4 et
-au BufRead,BufNewFile *.php set sts=4 sw=4 ts=4 et
-au BufRead,BufNewFile *.js set sts=4 sw=4 ts=4 et
-
-au BufRead,BufNewFile *.sh set sts=0 sw=8 ts=8 noet
-
-augroup filetypedetect
-au BufNewFile,BufRead *.xt  setf xt
-augroup END
+au Filetype smarty setl sts=4 sw=4 ts=4 et
+au Filetype xml setl sts=4 sw=4 ts=8 noet
+au Filetype tcl setl sts=4 sw=4 ts=8 noet
+au Filetype tcl setl cinkeys=0{,0},0),:,!^F,o,O,e
+au Filetype php setl sts=4 sw=4 ts=4 et
+au Filetype python setl sts=4 sw=4 ts=8 et
+au Filetype javascript setl sts=4 sw=4 ts=4 et
+au Filetype sh setl sts=8 sw=8 ts=8 noet
 
 " Do not inadvertently break a line
 set textwidth=0
@@ -200,19 +194,18 @@ inoremap <Leader>/*  /*
 
 
 " Comments
-au BufRead,BufNewFile *.tcl set comments=:#
-au BufRead,BufNewFile *.tcl set formatoptions+=r      " Automatically insert the current comment leader
-au BufRead,BufNewFile *.tcl set formatoptions+=q      " Allow formatting of comments with 'gq'
+au Filetype tcl setl comments=:#
+au Filetype tcl setl formatoptions+=r      " Automatically insert the current comment leader
+au Filetype tcl setl formatoptions+=q      " Allow formatting of comments with 'gq'
 
 " Prevent the comment character from forcibly being inserted in column 1
-au BufRead,BufNewFile *.tcl set cpoptions-=<          " allow '<keycode>' forms in mappings, e.g. <CR>
-au BufRead,BufNewFile *.tcl inoremap # X<BS>#
-au BufRead,BufNewFile *.tcl set cinkeys-=0#           " # in column 1 does not prevent >> from indenting
-au BufRead,BufNewFile *.tcl set indentkeys-=0#
+au Filetype tcl setl cpoptions-=<          " allow '<keycode>' forms in mappings, e.g. <CR>
+au Filetype tcl inoremap # X<BS>#
+au Filetype tcl setl cinkeys-=0#           " # in column 1 does not prevent >> from indenting
+au Filetype tcl setl indentkeys-=0#
 
 " Folding
-au BufRead,BufNewFile *.tcl set foldmethod=syntax
-au BufRead,BufNewFile *.rb set foldmethod=syntax
+au Filetype tcl,php,ruby setl foldmethod=syntax
 " au BufRead,BufNewFile *.tcl syn keyword tclStatement        global return lindex
 " au BufRead,BufNewFile *.tcl syn match   tclStatement        "proc" contained
 " au BufRead,BufNewFile *.tcl syntax region tclFunc start="^\z(\s*\)proc.*{$" end="^\z1}$" transparent fold contains=ALL
@@ -364,7 +357,7 @@ let g:syntastic_stl_format = '[%E{Err: %fe #%e}%B{, }%W{Warn: %fw #%w}]'
 
 if filereadable(glob("~/.vim-freebsd")) 
   source ~/.vim/scripts/freebsd.vim
-  au BufRead,BufNewFile *.c call FreeBSD_Style()
+  au Filetype c call FreeBSD_Style()
   set textwidth=78
 endif
 
