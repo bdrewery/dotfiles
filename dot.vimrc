@@ -358,7 +358,6 @@ let g:syntastic_stl_format = '[%E{Err: %fe #%e}%B{, }%W{Warn: %fw #%w}]'
 if filereadable(glob("~/.vim-freebsd")) 
   source ~/.vim/scripts/freebsd.vim
   au Filetype c call FreeBSD_Style()
-  set textwidth=78
 endif
 
 if filereadable(glob("~/.vimrc.local")) 
