@@ -138,6 +138,21 @@ set textwidth=0
 set wrap
 set lbr " Use smart wrapping
 
+" Auto load cscope.out from current directory
+" http://vim.wikia.com/wiki/Autoloading_Cscope_Database
+if has("cscope")
+  function! LoadCscope()
+    let db = findfile("cscope.out", ".;")
+    if (!empty(db))
+      let path = strpart(db, 0, match(db, "/cscope.out$"))
+      set nocscopeverbose " suppress 'duplicate connection' error
+      exe "cs add " . db . " " . path
+      set cscopeverbose
+    endif
+  endfunction
+  au BufEnter /* call LoadCscope()
+endif
+
 """"""""""""""""""
 " snipMate configuration
 """"""""""""""""""
