@@ -1,4 +1,4 @@
 #! /bin/sh
 # $Id$
 
-~/.profile-repo/update.sh
+exec ~/.profile-repo/update.sh
