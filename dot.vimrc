@@ -110,8 +110,6 @@ augroup END
 
 " au BufRead,BufNewFile *.php colorscheme ir_black
 
-" Fix highlighting breaking when closing buffers
-let g:miniBufExplForceSyntaxEnable = 1
 let g:miniBufExplMapWindowNavArrows = 1
 
 let php_sql_query = 1
