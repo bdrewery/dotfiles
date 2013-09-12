@@ -19,5 +19,4 @@ ctags --tag-relative --exclude=.git --exclude=.tgz --exclude=.tar \
     --exclude=.tar.gz -R -f ${CTAGS_FILE}.new . 2>/dev/null
 [ -f ${CTAGS_FILE}.new ] && mv -f ${CTAGS_FILE}.new ${CTAGS_FILE}
 
-pwd
 cscope -Rbq 2>/dev/null
