@@ -1,4 +1,5 @@
 #! /bin/sh
+# $Id$
 
 src_top=$(git rev-parse --show-toplevel 2> /dev/null || echo .)
 ctags_dir=$(git rev-parse --git-dir 2>dev/null || echo .)
