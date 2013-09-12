@@ -1,0 +1,22 @@
+#! /bin/sh
+
+src_top=$(git rev-parse --show-toplevel 2> /dev/null || echo .)
+ctags_dir=$(git rev-parse --git-dir 2>dev/null || echo .)
+
+CTAGS_FILE=${ctags_dir}/tags
+
+if ! mkdir ${ctags_dir}/.generate-tags 2>/dev/null; then
+  echo "generate-tags already running" >&2
+  exit 1
+fi
+trap "rmdir ${ctags_dir}/.generate-tags; rm -f ${CTAGS_FILE}.new cscope.new*" EXIT
+
+cd ${src_top}
+[ -d ${src_top}/src ] && cd ${src_top}/src
+
+ctags --tag-relative --exclude=.git --exclude=.tgz --exclude=.tar \
+    --exclude=.tar.gz -R -f ${CTAGS_FILE}.new . 2>/dev/null
+[ -f ${CTAGS_FILE}.new ] && mv -f ${CTAGS_FILE}.new ${CTAGS_FILE}
+
+pwd
+cscope -Rbq 2>/dev/null
