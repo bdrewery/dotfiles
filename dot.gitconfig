@@ -43,6 +43,7 @@
 
 [core]
 	autocrlf = false
+	excludesfile = ~/.gitignore
 
 [rerere]
 	enabled = true
