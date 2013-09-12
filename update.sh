@@ -13,7 +13,7 @@ if [ -d git-prompt ]; then
   git pull && git gc
   cd ..
 else
-  git clone git://github.com/lvv/git-prompt.git
+  git clone https://github.com/lvv/git-prompt.git
 fi
 
 install -v -m 0700 -d ~/.ssh
@@ -50,7 +50,7 @@ install -v dot.bash_logout ~/.bash_logout
 install -v dot.git-prompt.conf ~/.git-prompt.conf
 install -v dot.screenrc ~/.screenrc
 
-! [ -d vim-ruby ] &&  git clone git://github.com/vim-ruby/vim-ruby.git
+! [ -d vim-ruby ] &&  git clone https://github.com/vim-ruby/vim-ruby.git
 cd vim-ruby
 git pull && git gc
 which ruby > /dev/null 2>&1 && bin/vim-ruby-install.rb -d ~/.vim/
