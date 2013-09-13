@@ -10,7 +10,8 @@ if ! mkdir ${ctags_dir}/.generate-tags 2>/dev/null; then
   echo "generate-tags already running" >&2
   exit 1
 fi
-trap "rmdir ${ctags_dir}/.generate-tags; rm -f ${CTAGS_FILE}.new cscope.new*" EXIT
+trap "rmdir ${ctags_dir}/.generate-tags 2>/devnull; \
+    rm -f ${CTAGS_FILE}.new cscope.new*" EXIT
 
 cd ${src_top}
 [ -d ${src_top}/src ] && cd ${src_top}/src
