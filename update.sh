@@ -1,7 +1,7 @@
 #! /bin/sh
 # $Id$
 
-WANTED_APPS="vim screen svn git ruby tmux ctags cscope python"
+WANTED_APPS="vim screen svn git ruby tmux ctags cscope python bash zsh gvim"
 
 cd ~/.profile-repo
 svn upgrade
