@@ -11,7 +11,6 @@ if &t_Co > 2 || has("gui_running")
   set synmaxcol=200
 endif
 
-set background=dark
 if &t_Co > 16 || has("gui_running")
 
   colorscheme solarized
@@ -19,14 +18,16 @@ if &t_Co > 16 || has("gui_running")
   if has("gui_running")
     au FileType ruby,eruby colorscheme railscasts
     let g:solarized_degrade=1
+    set bg=light
   else
     let g:solarized_termcolors=256
+    set bg=dark
   endif
 
 else
   colorscheme delek
+  set bg=dark
 endif
-set bg=dark
 
 " Use POSIX shell syntax so $() is not hilighted red
 let g:is_posix = 1
