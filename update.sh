@@ -28,7 +28,22 @@ install -v -m 0700 -d ~/.vimundo
 install -v -m 0700 -d ~/.vim
 chmod 0700 ~/.viminfo > /dev/null 2>&1
 
-install -v -m 0600 dot.ssh/authorized_keys ~/.ssh/authorized_keys
+if [ -f ~/.ssh/authorized_keys ]; then
+	# Don't overwrite it, just ensure all keys are added, and alert
+	# on unknown keys
+	installed_keys=$(mktemp)
+	wanted_keys=$(mktemp)
+	sort -u ~/.ssh/authorized_keys | egrep -v '(^$|^#)' > ${installed_keys}
+	sort -u dot.ssh/authorized_keys | egrep -v '(^$|^#)' > ${wanted_keys}
+	echo "### Unknown SSH Keys" >&2
+	comm -2 -3 ${installed_keys} ${wanted_keys} >&2
+	# Add missing keys
+	comm -1 -3 ${installed_keys} ${wanted_keys} >> ~/.ssh/authorized_keys
+	rm -f ${installed_keys} ${wanted_keys}
+	chmod 0600 ~/.ssh/authorized_keys
+else
+	install -v -m 0600 dot.ssh/authorized_keys ~/.ssh/authorized_keys
+fi
 install -v bin/screen-wrapper.sh ~/bin/screen-wrapper.sh
 install -v bin/start-screen ~/bin/start-screen
 install -v bin/update-profile ~/bin/update-profile
