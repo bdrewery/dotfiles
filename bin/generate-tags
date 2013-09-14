@@ -1,6 +1,9 @@
 #! /bin/sh
 # $Id$
 
+PATH=/usr/local/bin:/opt/local/bin:${PATH}
+CTAGS=$(which exctags 2>/dev/null || echo ctags)
+
 src_top=$(git rev-parse --show-toplevel 2> /dev/null || echo .)
 ctags_dir=$(git rev-parse --git-dir 2> /dev/null || echo .)
 
@@ -16,7 +19,7 @@ trap "rmdir ${ctags_dir}/.generate-tags 2>/dev/null; \
 cd ${src_top}
 [ -d ${src_top}/src ] && cd ${src_top}/src
 
-ctags --tag-relative --exclude=.git --exclude=.tgz --exclude=.tar \
+${CTAGS} --tag-relative --exclude=.git --exclude=.tgz --exclude=.tar \
     --exclude=.tar.gz -R -f ${CTAGS_FILE}.new . 2>/dev/null
 [ -f ${CTAGS_FILE}.new ] && mv -f ${CTAGS_FILE}.new ${CTAGS_FILE}
 
