@@ -5,7 +5,8 @@ PATH=/usr/local/bin:/opt/local/bin:${PATH}
 CTAGS=$(which exctags 2>/dev/null || echo ctags)
 
 src_top=$(git rev-parse --show-toplevel 2> /dev/null || echo .)
-ctags_dir=$(git rev-parse --git-dir 2> /dev/null || echo .)
+cd ${src_top}
+ctags_dir=${src_top}/$(git rev-parse --git-dir 2> /dev/null || echo .)
 
 CTAGS_FILE=${ctags_dir}/tags
 
