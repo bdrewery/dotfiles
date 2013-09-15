@@ -1,4 +1,8 @@
+# :vim: setf sh:
+
+which gcc > /dev/null 2>&1 || alias gcc=cc
 which setterm > /dev/null 2>&1 && setterm -blength 0
+
 export EDITOR=vim
 export LESS="R E F X"
 export HISTSIZE=10000000000000 2>/dev/null
