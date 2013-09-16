@@ -14,6 +14,7 @@ fi
 install -v -m 0700 -d ~/.ssh
 install -v -m 0700 -d ~/bin
 install -v -m 0700 -d ~/.screen
+install -v -m 0700 -d ~/.generate-tagsd
 
 rm -rf ~/.vim 2>/dev/null
 cp -r dot.vim ~/.vim
