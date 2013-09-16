@@ -18,6 +18,6 @@ trap 'rm -rf ${LOCKDIR} 2>/dev/null' EXIT INT
 echo $$ > ${LOCKDIR}/pid
 
 while :; do
-  generate-tags
+  generate-tags 2>/dev/null || :
   sleep 30
 done
