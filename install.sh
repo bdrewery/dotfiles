@@ -45,6 +45,7 @@ install -v bin/start-screen ~/bin/start-screen
 install -v bin/update-profile ~/bin/update-profile
 install -v bin/generate-tags ~/bin/generate-tags
 install -v bin/generate-tagsd ~/bin/generate-tagsd
+install -v bin/benv.sh ~/bin/benv.sh
 install -v dot.ctags ~/.ctags
 install -v dot.inputrc ~/.inputrc
 install -v dot.vimrc ~/.vimrc
