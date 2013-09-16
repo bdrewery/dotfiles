@@ -3,7 +3,7 @@
 
 set -e
 
-[ $# -eq 0 ] && exec $0 $(pwd)
+[ $# -eq 0 ] && exec nice $0 $(pwd)
 LOCKDIR=~/.generate-tagsd/$(pwd | tr '/' '_')
 
 if ! mkdir ${LOCKDIR} 2>/dev/null; then
