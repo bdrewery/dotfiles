@@ -1,0 +1,21 @@
+#! /bin/sh
+set -e
+
+[ $# -eq 0 ] && exec $0 $(pwd)
+LOCKDIR=~/.generate-tagsd/$(pwd | tr '/' '_')
+
+if ! mkdir -p ${LOCKDIR} 2>/dev/null; then
+  if [ -f ${LOCKDIR}/pid ]; then
+    echo "Already running in $(cat .generate-tags/pid)" >&2
+  else
+    echo "Already running" >&2
+  fi
+  exit 0
+fi
+trap 'rm -rf ${LOCKDIR} 2>/dev/null' EXIT INT
+echo $$ > ${LOCKDIR}/pid
+
+while :; do
+  generate-tags
+  sleep 30
+done
