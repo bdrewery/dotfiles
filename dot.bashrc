@@ -32,7 +32,7 @@ if [ -d ~/man ]; then
     export MANPATH
 fi
 
-. ~/.profile-repo/git-prompt/git-prompt.sh
+# . ~/.profile-repo/git-prompt/git-prompt.sh
 
 [[ -f "/etc/bash_completion.d/git" ]] &&
      . /etc/bash_completion.d/git
