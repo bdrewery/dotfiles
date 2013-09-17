@@ -47,6 +47,7 @@ install -v bin/generate-tags ~/bin/generate-tags
 install -v bin/generate-tagsd ~/bin/generate-tagsd
 install -v bin/benv.sh ~/bin/benv.sh
 install -v dot.ctags ~/.ctags
+install -v dot.lessfilter ~/.lessfilter
 install -v dot.inputrc ~/.inputrc
 install -v dot.vimrc ~/.vimrc
 install -v dot.zshrc ~/.zshrc

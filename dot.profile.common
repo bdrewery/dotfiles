@@ -5,6 +5,7 @@ which setterm > /dev/null 2>&1 && setterm -blength 0
 
 export EDITOR=vim
 export LESS="R E F X"
+export LESSOPEN='|~/.lessfilter %s'
 export HISTSIZE=10000000000000 2>/dev/null
 export HISTFILESIZE=$HISTSIZE 2>/dev/null
 export SAVEHIST=$HISTSIZE 2>/dev/null
