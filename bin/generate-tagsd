@@ -14,7 +14,7 @@ if ! mkdir ${LOCKDIR} 2>/dev/null; then
   fi
   exit 0
 fi
-trap 'rm -rf ${LOCKDIR} 2>/dev/null' EXIT INT TERM
+trap 'rm -rf ${LOCKDIR} 2>/dev/null; exit' EXIT INT TERM
 echo $$ > ${LOCKDIR}/pid
 
 while :; do
