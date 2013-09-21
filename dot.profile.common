@@ -44,3 +44,5 @@ refreshenv() {
     fi
   done`
 }
+
+[ -f ~/.profile.common.local ] && . ~/.profile.common.local
