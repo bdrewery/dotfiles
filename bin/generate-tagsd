@@ -6,7 +6,7 @@ set -e
 [ $# -eq 0 ] && exec nice $0 $(pwd)
 LOCKDIR=~/.generate-tagsd/$(pwd | tr '/' '_')
 
-if ! mkdir ${LOCKDIR} 2>/dev/null; then
+if ! mkdir -p ${LOCKDIR} 2>/dev/null; then
   if [ -f ${LOCKDIR}/pid ]; then
     echo "Already running in $(cat ${LOCKDIR}/pid)" >&2
   else
