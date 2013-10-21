@@ -23,6 +23,9 @@ bindkey "^[[4~" end-of-line
 bindkey "^[[3~" delete-char
 bindkey "^[[2~" overwrite-mode
 
+# Don't ask to confirm rm -f!
+setopt rmstarsilent
+
 . ${HOME}/.profile.common
 
 export HISTFILE=~/.zhistory
