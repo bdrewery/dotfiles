@@ -23,15 +23,6 @@ fi
 
 . ~/.profile.common
 
-if [ -d ~/bin ] ; then
-    PATH=~/bin:"${PATH}"
-    export PATH
-fi
-if [ -d ~/man ]; then
-    MANPATH=~/man:"${MANPATH}"
-    export MANPATH
-fi
-
 # . ~/.profile-repo/git-prompt/git-prompt.sh
 
 [[ -f "/etc/bash_completion.d/git" ]] &&

@@ -46,4 +46,7 @@ refreshenv() {
   done`
 }
 
+[ -d ~/bin ] && export PATH="~/bin:${PATH}"
+[ -d ~/man ] && export MANPATH="~/man:${MANPATH}"
+
 [ -f ~/.profile.common.local ] && . ~/.profile.common.local
