@@ -79,6 +79,9 @@ if version >= 700
   set completeopt-=preview
 endif
 
+" <Ctrl-l> redraws the screen and removes any search highlighting.
+nnoremap <silent> <C-l> :nohl<CR><C-l>
+
 " Save marks for 100 files, and global marks
 set viminfo='100,f1,\"100,:20,%,n~/.viminfo
 set nobackup
