@@ -1,6 +1,6 @@
 # $Id$
 
-WANTED_APPS="vim screen svn git ruby tmux ctags cscope python bash zsh gvim"
+WANTED_APPS="vim screen svn git ruby tmux ctags cscope python bash zsh gvim pygmentize"
 
 if [ -d git-prompt ]; then
   cd git-prompt
