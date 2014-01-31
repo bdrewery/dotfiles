@@ -51,7 +51,7 @@ install -v dot.lessfilter ~/.lessfilter
 install -v dot.inputrc ~/.inputrc
 install -v dot.vimrc ~/.vimrc
 install -v dot.zshrc ~/.zshrc
-install -v dot.tmuxrc ~/.tmuxrc
+install -v dot.tmux.conf ~/.tmux.conf
 install -v dot.login_conf ~/.login_conf
 install -v dot.profile.common ~/.profile.common
 install -v dot.bash_profile ~/.bash_profile
