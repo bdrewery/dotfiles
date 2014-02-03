@@ -373,6 +373,26 @@ let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [], 'passive
 " let g:syntastic_disabled_filetypes = ['c', 'php']
 let g:syntastic_stl_format = '[%E{Err: %fe #%e}%B{, }%W{Warn: %fw #%w}]'
 
+fun! ReadMan()
+  " Assign current word under cursor to a script variable:
+  let s:man_word = expand('<cword>')
+  " Open a new window:
+  :exe ":wincmd n"
+  " Read in the manpage for man_word (col -b is for formatting):
+  :exe ":r!man " . s:man_word . " | col -b"
+  " Goto first line...
+  :exe ":goto"
+  " and delete it:
+  :exe ":delete"
+  :exec ":set filetype=man"
+  :exec ":wincmd L"
+endfun
+" Map the K key to the ReadMan function:
+map K :call ReadMan()<CR>
+
+" source $VIMRUNTIME/ftplugin/man.vim
+" nmap K :Man <cword><CR>
+
 if filereadable(glob("~/.vim-freebsd")) 
   source ~/.vim/scripts/freebsd.vim
   au Filetype c call FreeBSD_Style()
@@ -381,3 +401,5 @@ endif
 if filereadable(glob("~/.vimrc.local")) 
     source ~/.vimrc.local
 endif
+
+
