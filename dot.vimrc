@@ -3,6 +3,8 @@
 " A lot of this is from google and various prefs/testing/experience
 
 set nocompatible
+" Enable pathogen
+execute pathogen#infect()
 
 " Switch syntax highlighting on, when the terminal has colors
 if &t_Co > 2 || has("gui_running")
