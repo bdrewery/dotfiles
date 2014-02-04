@@ -97,6 +97,9 @@ autocmd BufReadPost *
 " Restore last line
 " au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif 
 
+" Open quickfix window after :grep and :Ggrep
+autocmd QuickFixCmdPost *grep* cwindow
+
 " Define <leader>
 let mapleader = ","
 let g:mapleader = ","
