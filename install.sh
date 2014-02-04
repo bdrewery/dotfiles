@@ -64,6 +64,7 @@ install -v dot.valgrindrc ~/.valgrindrc
 install -v dot.bash_logout ~/.bash_logout
 install -v dot.git-prompt.conf ~/.git-prompt.conf
 install -v dot.screenrc ~/.screenrc
+rm -f ~/.vim/plugin/minbufexpl.vim
 
 ! [ -d vim-ruby ] &&  git clone https://github.com/vim-ruby/vim-ruby.git
 cd vim-ruby
