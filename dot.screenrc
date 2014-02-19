@@ -645,8 +645,10 @@ nonblock on
 defnonblock on
 defc1 off
 defutf8 on
-terminfo xterm-256color 'Co#256:AB=\E[48;5;%p1%dm:AF=\E[38;5;%p1%dm'
-terminfo screen-256color 'Co#256:AB=\E[48;5;%p1%dm:AF=\E[38;5;%p1%dm'
-termcap xterm-256color 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
-termcap screen-256color 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
+terminfo xterm-256color|screen-256color|putty-256color Co\#256:pa#32767:AB=\E[48;5;%p1%dm:AF=\E[38;5;%p1%dm
+termcap xterm-256color|screen-256color|putty-256color Co\#256:pa#32767:AB=\E[48;5;%dm:AF=\E[38;5;%dm
+# This will update TERMPCAP, but is unusable on FreeBSD
+#terminfo xterm-256color|screen-256color|putty-256color "" Co\#256:pa#32767:AB=\E[48;5;%p1%dm:AF=\E[38;5;%p1%dm
+#termcap xterm-256color|screen-256color|putty-256color "" Co\#256:pa#32767:AB=\E[48;5;%dm:AF=\E[38;5;%dm
+altscreen on
 term screen-256color
