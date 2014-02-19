@@ -638,9 +638,15 @@ bindkey -k k9 windowlist -b
 # ie expands TABs to the next column
 # whose number is a multiple of eight.
 # EOF  vim: ts=8 et nowrap
+
+# Allow ^Aa" to not require a 300ms delay.
+maptimeout 0
 nonblock on
 defnonblock on
 defc1 off
 defutf8 on
-
+terminfo xterm-256color 'Co#256:AB=\E[48;5;%p1%dm:AF=\E[38;5;%p1%dm'
+terminfo screen-256color 'Co#256:AB=\E[48;5;%p1%dm:AF=\E[38;5;%p1%dm'
+termcap xterm-256color 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
+termcap screen-256color 'Co#256:AB=\E[48;5;%dm:AF=\E[38;5;%dm'
 term screen-256color
