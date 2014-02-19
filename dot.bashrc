@@ -1,6 +1,9 @@
 # .bashrc
 # $Id$
 
+# Unset TERMCAP from screen as it is wrong with 256colors and breaks vim
+unset TERMCAP
+
 # User specific aliases and functions
 
 # Test for an interactive shell.  There is no need to set anything

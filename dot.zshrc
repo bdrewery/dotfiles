@@ -1,3 +1,6 @@
+# Unset TERMCAP from screen as it is wrong with 256colors and breaks vim
+unset TERMCAP
+
 autoload -U compinit
 zmodload -i zsh/complist
 compinit
