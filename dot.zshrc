@@ -1,7 +1,7 @@
 # Unset TERMCAP from screen as it is wrong with 256colors and breaks vim
 unset TERMCAP
 
-fpath=( "$HOME/.zsh" $fpath )
+fpath=( "$HOME/.zsh/functions" $fpath )
 
 autoload -U compinit
 zmodload -i zsh/complist
