@@ -1,0 +1,75 @@
+# myprompt1 prompt theme
+
+prompt_myprompt1_help () {
+  cat <<'EOF'
+
+  prompt myprompt1 [<color1> [<color2> [<color3> [<color4> [<color5>]]]]]
+
+  defaults are red, cyan, green, yellow, and white, respectively.
+
+EOF
+}
+
+prompt_myprompt1_setup () {
+  local -a pcc
+  local -A pc
+  local p_date p_tty p_plat p_ver p_user p_apm p_status p_end p_win p_pwd
+  local p_rc p_jobs p_pid p_shlvl
+
+  autoload -Uz vcs_info
+
+  pcc[1]=${1:-${${SSH_CLIENT+'cyan'}:-'red'}}
+  pcc[2]=${2:-'cyan'}
+  pcc[3]=${3:-'yellow'}
+  pcc[4]=${4:-'green'}
+  pcc[5]=${5:-'white'}
+
+  pc['\[']="%F{$pcc[5]}["
+  pc['\]']="%F{$pcc[5]}]"
+  pc['<']="%F{$pcc[1]}<"
+  pc['>']="%F{$pcc[1]}>"
+  pc['\(']="%F{$pcc[1]}("
+  pc['\)']="%F{$pcc[1]})"
+
+  p_date="$pc['\[']%F{$pcc[3]}%D{%a %m/%d/%Y %T %Z}$pc['\]']"
+  p_tty="$pc['\[']%F{$pcc[4]}%l$pc['\]']"
+  p_pid="$pc['\[']%F{$pcc[3]}${$}%B\$\$%b$pc['\]']"
+  p_plat="$pc['\[']%F{$pcc[3]}${MACHTYPE}/${OSTYPE}/$(uname -r)$pc['\]']"
+  p_ver="$pc['\[']%F{$pcc[2]}${ZSH_VERSION}$pc['\]']"
+
+  [[ -n "$WINDOW" ]] && p_win="$pc['\(']%F{$pcc[4]}$WINDOW$pc['\)']"
+  p_pwd="%F{$pcc[1]}%~"
+  p_user="$pc['\[']%F{$pcc[4]}%n%B%F{white}@%b%F{$pcc[4]}%m$pc['\]']"
+  p_vcs="%(2v.%F{red}%U%2v%u.)"
+
+  p_rc="%(?.%F{$pcc[3]}.%F{red})%?%1v%F{$pcc[3]}%B?%b"
+  p_jobs="%(1j.%F{magenta}.%F{$pcc[3]})%j%F{$pcc[3]}%B&%b"
+  p_shlvl="$pc['\[']%F{$pcc[4]}zsh%f%(2L.%B/%b%F{$pcc[3]}$SHLVL%f.)$pc['\]']"
+  p_status="$pc['\[']%F{$pcc[3]}$p_rc$p_jobs$pc['\]']"
+  p_end=" %f%B%#%b "
+
+  zle_highlight[(r)default:*]=default:$pcc[2]
+
+  prompt="$p_user$p_tty$p_shlvl$p_date$p_status$p_vcs
+$p_pwd$p_end"
+  PS2='%(4_.\.)%3_> %E'
+
+  add-zsh-hook precmd prompt_myprompt1_precmd
+}
+
+prompt_myprompt1_precmd () {
+  setopt noxtrace noksharrays localoptions
+  local exitstatus=$?
+  local git_dir git_ref
+
+  psvar=()
+  [[ $exitstatus -ge 128 ]] && psvar[1]=" $signals[$exitstatus-127]" ||
+	psvar[1]=""
+
+#  [[ -o interactive ]] && jobs -l
+
+  vcs_info
+  [[ -n $vcs_info_msg_0_ ]] && psvar[2]="$vcs_info_msg_0_"
+}
+
+prompt_myprompt1_setup "$@"

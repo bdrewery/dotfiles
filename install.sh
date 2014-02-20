@@ -24,6 +24,11 @@ install -v -m 0700 -d ~/.vimundo
 install -v -m 0700 -d ~/.vim
 chmod 0700 ~/.viminfo > /dev/null 2>&1
 
+rm -rf ~/.zsh 2>/dev/null
+cp -r dot.zsh ~/.zsh
+find ~/.zsh -type d -name ".svn" -exec rm -rf {} + 2>/dev/null
+install -v -m 0700 -d ~/.zsh
+
 if [ -f ~/.ssh/authorized_keys ]; then
 	# Don't overwrite it, just ensure all keys are added, and alert
 	# on unknown keys

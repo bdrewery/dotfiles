@@ -1,13 +1,16 @@
 # Unset TERMCAP from screen as it is wrong with 256colors and breaks vim
 unset TERMCAP
 
+fpath=( "$HOME/.zsh" $fpath )
+
 autoload -U compinit
 zmodload -i zsh/complist
 compinit
 
 autoload -U promptinit
 promptinit
-prompt clint
+#prompt clint
+prompt myprompt1
 
 zstyle ':vcs_info:*' enable git svn
 
