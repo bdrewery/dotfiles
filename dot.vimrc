@@ -400,7 +400,7 @@ map K :call ReadMan()<CR>
 
 if filereadable(glob("~/.vim-freebsd")) 
   source ~/.vim/scripts/freebsd.vim
-  au Filetype c call FreeBSD_Style()
+  au Filetype c,cpp call FreeBSD_Style()
 endif
 
 if filereadable(glob("~/.vimrc.local")) 
