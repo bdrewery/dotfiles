@@ -53,6 +53,9 @@ key[PageDown]=${terminfo[knp]}
 
 # Don't ask to confirm rm -f!
 setopt rmstarsilent
+# Don't assume $arg should be "$arg"
+# http://zsh.sourceforge.net/FAQ/zshfaq03.html
+setopt shwordsplit
 
 . ${HOME}/.profile.common
 
