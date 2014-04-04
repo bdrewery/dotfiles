@@ -401,7 +401,7 @@ map K :call ReadMan()<CR>
 if filereadable(glob("~/.vim-freebsd")) 
   source ~/.vim/scripts/freebsd.vim
   au Filetype c,cpp call FreeBSD_Style()
-  au FileType make let b:match_words = '\<if\>:\<elif\>:\<else\>:\<endif\>'
+  au FileType make let b:match_words = '\<if\>:\<elif\>:\<else\>:\<endif\>,\<for\>:\<endfor\>'
 endif
 
 if filereadable(glob("~/.vimrc.local")) 
