@@ -1,3 +1,4 @@
+#! /bin/sh
 # $Id$
 
 WANTED_APPS="vim screen svn git ruby tmux ctags cscope python bash zsh gvim pygmentize"
