@@ -2,6 +2,5 @@
 # $Id$
 
 cd ~/.profile-repo
-svn upgrade
-svn up
+git pull
 exec ./install.sh

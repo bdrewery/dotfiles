@@ -1,4 +1,9 @@
 #! /bin/sh
 # $Id$
 
+if [ -d ~/.profile-repo/.svn ]; then
+	rm -rf ~/.profile-repo
+	git clone https://github.com/bdrewery/dotfiles ~/.profile-repo
+fi
+
 exec ~/.profile-repo/update.sh
