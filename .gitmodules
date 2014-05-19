@@ -1,0 +1,3 @@
+[submodule "dot.vim/bundle/vim-ruby"]
+	path = dot.vim/bundle/vim-ruby
+	url = https://github.com/vim-ruby/vim-ruby

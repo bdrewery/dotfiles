@@ -25,7 +25,6 @@ git_clone() {
 
 git_clone https://github.com/lvv/git-prompt.git &&
     ln -fs ${REPO}/dot.git-prompt.conf ~/.git-prompt.conf
-git_clone https://github.com/vim-ruby/vim-ruby.git
 
 install -v -m 0700 -d ~/.generate-tagsd
 install -v -m 0700 -d ~/.screen
