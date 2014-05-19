@@ -2,33 +2,44 @@
 # $Id$
 
 WANTED_APPS="vim screen svn git ruby tmux ctags cscope python bash zsh gvim pygmentize"
+REPO=${0%/*}
+chmod 0700 "${REPO}"
 
-if [ -d git-prompt ]; then
-  cd git-prompt
-  git reset --hard
-  git pull && git gc
-  cd ..
-else
-  git clone https://github.com/lvv/git-prompt.git
-fi
+git_clone() {
+	url="$1"
+	name="${url##*/}"
+	name="${name%.git}"
 
-install -v -m 0700 -d ~/.ssh
-install -v -m 0700 -d ~/bin
-install -v -m 0700 -d ~/.screen
+	if ! [ -d "${name}" ]; then
+		git clone "${url}" || return 1
+	fi
+	(
+		set -e
+		cd "${name}"
+		git reset --hard
+		git pull && git gc
+	) || return 1
+
+	return 0
+}
+
+git_clone https://github.com/lvv/git-prompt.git &&
+    ln -fs ${REPO}/dot.git-prompt.conf ~/.git-prompt.conf
+git_clone https://github.com/vim-ruby/vim-ruby.git
+
 install -v -m 0700 -d ~/.generate-tagsd
+install -v -m 0700 -d ~/.screen
+install -v -m 0700 -d ~/.ssh
+install -v -m 0700 -d ~/.vimundo
+install -v -m 0700 -d ~/bin
 
 rm -rf ~/.vim 2>/dev/null
-cp -r dot.vim ~/.vim
-find ~/.vim -type d -name ".svn" -exec rm -rf {} + 2>/dev/null
+ln -s ${REPO}/dot.vim ~/.vim
 
-install -v -m 0700 -d ~/.vimundo
-install -v -m 0700 -d ~/.vim
 chmod 0700 ~/.viminfo > /dev/null 2>&1
 
 rm -rf ~/.zsh 2>/dev/null
-cp -r dot.zsh ~/.zsh
-find ~/.zsh -type d -name ".svn" -exec rm -rf {} + 2>/dev/null
-install -v -m 0700 -d ~/.zsh
+ln -s ${REPO}/dot.zsh ~/.zsh
 
 if [ -f ~/.ssh/authorized_keys ]; then
 	# Don't overwrite it, just ensure all keys are added, and alert
@@ -46,37 +57,29 @@ if [ -f ~/.ssh/authorized_keys ]; then
 else
 	install -v -m 0600 dot.ssh/authorized_keys ~/.ssh/authorized_keys
 fi
-install -v bin/screen-wrapper.sh ~/bin/screen-wrapper.sh
-install -v bin/start-screen ~/bin/start-screen
-install -v bin/update-profile ~/bin/update-profile
-install -v bin/generate-tags ~/bin/generate-tags
-install -v bin/generate-tagsd ~/bin/generate-tagsd
-install -v bin/benv.sh ~/bin/benv.sh
-install -v dot.ctags ~/.ctags
-install -v dot.lessfilter ~/.lessfilter
-install -v dot.inputrc ~/.inputrc
-install -v dot.vimrc ~/.vimrc
-install -v dot.zshrc ~/.zshrc
-install -v dot.tmux.conf ~/.tmux.conf
-install -v dot.login_conf ~/.login_conf
-install -v dot.profile.common ~/.profile.common
-install -v dot.bash_profile ~/.bash_profile
-install -v dot.bashrc ~/.bashrc
-install -v dot.nanorc ~/.nanorc
-[ -f ~/.keep-gitconfig ] || install -v dot.gitconfig ~/.gitconfig
-install -v dot.gitignore ~/.gitignore
-install -v dot.supp ~/.supp
-install -v dot.valgrindrc ~/.valgrindrc
-install -v dot.bash_logout ~/.bash_logout
-install -v dot.git-prompt.conf ~/.git-prompt.conf
-install -v dot.screenrc ~/.screenrc
-rm -f ~/.vim/plugin/minbufexpl.vim
-
-! [ -d vim-ruby ] &&  git clone https://github.com/vim-ruby/vim-ruby.git
-cd vim-ruby
-git pull && git gc
-which ruby > /dev/null 2>&1 && bin/vim-ruby-install.rb -d ~/.vim/
-cd ..
+ln -fs ${REPO}/bin/benv.sh ~/bin/benv.sh
+ln -fs ${REPO}/bin/generate-tags ~/bin/generate-tags
+ln -fs ${REPO}/bin/generate-tagsd ~/bin/generate-tagsd
+ln -fs ${REPO}/bin/screen-wrapper.sh ~/bin/screen-wrapper.sh
+ln -fs ${REPO}/bin/start-screen ~/bin/start-screen
+ln -fs ${REPO}/bin/update-profile ~/bin/update-profile
+ln -fs ${REPO}/dot.bash_logout ~/.bash_logout
+ln -fs ${REPO}/dot.bash_profile ~/.bash_profile
+ln -fs ${REPO}/dot.bashrc ~/.bashrc
+ln -fs ${REPO}/dot.ctags ~/.ctags
+ln -fs ${REPO}/dot.gitconfig ~/.gitconfig
+ln -fs ${REPO}/dot.gitignore ~/.gitignore
+ln -fs ${REPO}/dot.inputrc ~/.inputrc
+ln -fs ${REPO}/dot.lessfilter ~/.lessfilter
+ln -fs ${REPO}/dot.login_conf ~/.login_conf
+ln -fs ${REPO}/dot.nanorc ~/.nanorc
+ln -fs ${REPO}/dot.profile.common ~/.profile.common
+ln -fs ${REPO}/dot.screenrc ~/.screenrc
+ln -fs ${REPO}/dot.supp ~/.supp
+ln -fs ${REPO}/dot.tmux.conf ~/.tmux.conf
+ln -fs ${REPO}/dot.valgrindrc ~/.valgrindrc
+ln -fs ${REPO}/dot.vimrc ~/.vimrc
+ln -fs ${REPO}/dot.zshrc ~/.zshrc
 
 ### Look for needed programs
 check_for() {
