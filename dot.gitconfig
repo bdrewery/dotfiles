@@ -40,11 +40,12 @@
         n = shortlog master..next
 [merge]
         log = true
-
 [core]
 	autocrlf = false
 	excludesfile = ~/.gitignore
-
 [rerere]
 	enabled = true
-
+[init]
+	templatedir = ~/.git_template
+[include]
+	path = ~/.gitconfig.local
