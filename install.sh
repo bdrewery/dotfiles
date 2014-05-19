@@ -5,27 +5,6 @@ WANTED_APPS="vim screen svn git ruby tmux ctags cscope python bash zsh gvim pygm
 REPO=${0%/*}
 chmod 0700 "${REPO}"
 
-git_clone() {
-	url="$1"
-	name="${url##*/}"
-	name="${name%.git}"
-
-	if ! [ -d "${name}" ]; then
-		git clone "${url}" || return 1
-	fi
-	(
-		set -e
-		cd "${name}"
-		git reset --hard
-		git pull && git gc
-	) || return 1
-
-	return 0
-}
-
-git_clone https://github.com/lvv/git-prompt.git &&
-    ln -fs ${REPO}/dot.git-prompt.conf ~/.git-prompt.conf
-
 install -v -m 0700 -d ~/.generate-tagsd
 install -v -m 0700 -d ~/.screen
 install -v -m 0700 -d ~/.ssh
@@ -56,6 +35,7 @@ if [ -f ~/.ssh/authorized_keys ]; then
 else
 	install -v -m 0600 dot.ssh/authorized_keys ~/.ssh/authorized_keys
 fi
+
 ln -fs ${REPO}/bin/benv.sh ~/bin/benv.sh
 ln -fs ${REPO}/bin/generate-tags ~/bin/generate-tags
 ln -fs ${REPO}/bin/generate-tagsd ~/bin/generate-tagsd
@@ -66,6 +46,7 @@ ln -fs ${REPO}/dot.bash_logout ~/.bash_logout
 ln -fs ${REPO}/dot.bash_profile ~/.bash_profile
 ln -fs ${REPO}/dot.bashrc ~/.bashrc
 ln -fs ${REPO}/dot.ctags ~/.ctags
+ln -fs ${REPO}/dot.git-prompt.conf ~/.git-prompt.conf
 ln -fs ${REPO}/dot.gitconfig ~/.gitconfig
 ln -fs ${REPO}/dot.gitignore ~/.gitignore
 ln -fs ${REPO}/dot.inputrc ~/.inputrc
