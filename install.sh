@@ -2,7 +2,7 @@
 # $Id$
 
 WANTED_APPS="vim screen svn git ruby tmux ctags cscope python bash zsh gvim pygmentize"
-REPO=${0%/*}
+REPO=~/.profile-repo
 chmod 0700 "${REPO}"
 
 install -v -m 0700 -d ~/.generate-tagsd
