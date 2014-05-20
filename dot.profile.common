@@ -47,7 +47,8 @@ refreshenv() {
   done`
 }
 
-[ -d ~/bin ] && export PATH="~/bin:${PATH}"
+[ -d ~/bin ] && export PATH=~/bin:${PATH}
+[ -d ~/man ] && export MANPATH=~/man:${MANPATH}
 
 for dir in /usr/local/libexec/ccache /usr/lib/ccache /usr/lib/ccache/bin; do
 	if [ -e "${dir}/cc" ]; then
@@ -55,6 +56,5 @@ for dir in /usr/local/libexec/ccache /usr/lib/ccache /usr/lib/ccache/bin; do
 		break
 	fi
 done
-[ -d ~/man ] && export MANPATH="~/man:${MANPATH}"
 
 [ -f ~/.profile.common.local ] && . ~/.profile.common.local
