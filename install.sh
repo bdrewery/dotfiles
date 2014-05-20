@@ -54,11 +54,13 @@ ln -fs ${REPO}/dot.lessfilter ~/.lessfilter
 ln -fs ${REPO}/dot.login_conf ~/.login_conf
 ln -fs ${REPO}/dot.nanorc ~/.nanorc
 ln -fs ${REPO}/dot.profile.common ~/.profile.common
+ln -fs ${REPO}/dot.profile.logout ~/.profile.logout
 ln -fs ${REPO}/dot.screenrc ~/.screenrc
 ln -fs ${REPO}/dot.supp ~/.supp
 ln -fs ${REPO}/dot.tmux.conf ~/.tmux.conf
 ln -fs ${REPO}/dot.valgrindrc ~/.valgrindrc
 ln -fs ${REPO}/dot.vimrc ~/.vimrc
+ln -fs ${REPO}/dot.zlogout ~/.zlogout
 ln -fs ${REPO}/dot.zshrc ~/.zshrc
 
 ### Look for needed programs
