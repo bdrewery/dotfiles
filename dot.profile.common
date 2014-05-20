@@ -1,4 +1,4 @@
-# :vim: setf sh:
+# vim: set filetype=sh:
 
 which gcc > /dev/null 2>&1 || alias gcc=cc
 which setterm > /dev/null 2>&1 && setterm -blength 0
