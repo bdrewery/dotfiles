@@ -18,7 +18,10 @@ trap "rmdir ${ctags_dir}/.generate-tags 2>/dev/null; \
   rm -f ${CTAGS_FILE}.new cscope.new*" EXIT
 
 cd ${src_top}
-[ -d ${src_top}/src ] && cd ${src_top}/src
+if [ -f ${src_top}/.cscope-dir ]; then
+	read cscope_dir < ${src_top}/.cscope-dir
+	cd ${src_top}/${cscope_dir}
+fi
 
 (
   ${CTAGS} --tag-relative --exclude=.git --exclude=.tgz --exclude=.tar \
