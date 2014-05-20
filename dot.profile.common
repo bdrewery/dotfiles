@@ -48,6 +48,13 @@ refreshenv() {
 }
 
 [ -d ~/bin ] && export PATH="~/bin:${PATH}"
+
+for dir in /usr/local/libexec/ccache /usr/lib/ccache /usr/lib/ccache/bin; do
+	if [ -e "${dir}/cc" ]; then
+		export PATH="${dir}:${PATH}"
+		break
+	fi
+done
 [ -d ~/man ] && export MANPATH="~/man:${MANPATH}"
 
 [ -f ~/.profile.common.local ] && . ~/.profile.common.local
