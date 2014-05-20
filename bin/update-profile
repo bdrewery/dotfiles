@@ -3,7 +3,7 @@
 
 if [ -d ~/.profile-repo/.svn ]; then
 	rm -rf ~/.profile-repo
-	git clone https://github.com/bdrewery/dotfiles ~/.profile-repo
+	git clone --depth=1 https://github.com/bdrewery/dotfiles ~/.profile-repo
 fi
 
 exec ~/.profile-repo/update.sh

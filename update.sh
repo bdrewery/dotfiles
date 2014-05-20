@@ -4,5 +4,5 @@
 cd ~/.profile-repo
 git pull
 git submodule init
-git submodule update
+git submodule update --depth=1
 exec ./install.sh
