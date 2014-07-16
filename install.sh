@@ -51,8 +51,8 @@ ln -fs ${REPO}/dot.gitconfig ~/.gitconfig
 ln -fs ${REPO}/dot.gitignore ~/.gitignore
 ln -fs ${REPO}/dot.inputrc ~/.inputrc
 ln -fs ${REPO}/dot.lessfilter ~/.lessfilter
-rm -f ~/.login_conf
-install -v ${REPO}/dot.login_conf ~/.login_conf
+[ -L ~/.login_conf ] && rm -f ~/.login_conf
+install -C -v ${REPO}/dot.login_conf ~/.login_conf
 ln -fs ${REPO}/dot.nanorc ~/.nanorc
 ln -fs ${REPO}/dot.profile.common ~/.profile.common
 ln -fs ${REPO}/dot.profile.logout ~/.profile.logout
