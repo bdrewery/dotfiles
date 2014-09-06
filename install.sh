@@ -25,7 +25,7 @@ if [ -f ~/.ssh/authorized_keys ]; then
 	installed_keys=$(mktemp -t keys.XXXXXXXXXX)
 	wanted_keys=$(mktemp -t keys.XXXXXXXXXX)
 	sort -u ~/.ssh/authorized_keys | egrep -v '(^$|^#)' > ${installed_keys}
-	sort -u dot.ssh/authorized_keys | egrep -v '(^$|^#)' > ${wanted_keys}
+	sort -u ${REPO}/dot.ssh/authorized_keys | egrep -v '(^$|^#)' > ${wanted_keys}
 	echo "### Unknown SSH Keys" >&2
 	comm -2 -3 ${installed_keys} ${wanted_keys} >&2
 	# Add missing keys
@@ -33,7 +33,7 @@ if [ -f ~/.ssh/authorized_keys ]; then
 	rm -f ${installed_keys} ${wanted_keys}
 	chmod 0600 ~/.ssh/authorized_keys
 else
-	install -v -m 0600 dot.ssh/authorized_keys ~/.ssh/authorized_keys
+	install -v -m 0600 ${REPO}/dot.ssh/authorized_keys ~/.ssh/authorized_keys
 fi
 
 ln -fs ${REPO}/bin/benv.sh ~/bin/benv.sh
