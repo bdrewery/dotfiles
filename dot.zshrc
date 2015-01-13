@@ -57,6 +57,7 @@ setopt rmstarsilent
 # http://zsh.sourceforge.net/FAQ/zshfaq03.html
 setopt shwordsplit
 # Don't try to make /u/b/s into /usr/bin/sed, it's too slow for NFS.
+zstyle ':completion:*' path-completion false
 zstyle ':completion:*' accept-exact-dirs true
 
 . ${HOME}/.profile.common
