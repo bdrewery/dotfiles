@@ -3,6 +3,11 @@ unset TERMCAP
 
 fpath=( "$HOME/.zsh/functions" $fpath )
 
+# Speedup git tab completion - http://superuser.com/questions/458906/zsh-tab-completion-of-git-commands-is-very-slow-how-can-i-turn-it-off
+__git_files () {
+    _wanted files expl 'local files' _files
+}
+
 autoload -U compinit
 zmodload -i zsh/complist
 compinit
