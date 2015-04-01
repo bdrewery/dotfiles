@@ -40,6 +40,7 @@ ln -fs ${REPO}/bin/benv.sh ~/bin/benv.sh
 ln -fs ${REPO}/bin/generate-tags ~/bin/generate-tags
 ln -fs ${REPO}/bin/generate-tagsd ~/bin/generate-tagsd
 ln -fs ${REPO}/bin/screen-wrapper.sh ~/bin/screen-wrapper.sh
+ln -fs ${REPO}/bin/fixscreen ~/bin/fixscreen
 ln -fs ${REPO}/bin/start-screen ~/bin/start-screen
 ln -fs ${REPO}/bin/update-profile ~/bin/update-profile
 ln -fs ${REPO}/dot.bash_logout ~/.bash_logout
