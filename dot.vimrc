@@ -179,14 +179,14 @@ endif
 """"""""""""""""""
 let g:snips_author = 'Bryan Drewery'
 
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Parenthesis/bracket expanding
 " (http://vim.wikia.com/wiki/Automatically_append_closing_characters)
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Auto close braces and skip over them as well
 " autoclose.vim params (http://www.vim.org/scripts/script.php?script_id=2009)
-let g:AutoClosePairs = {'(': ')', '{': '}', '[': ']', '"': '"', "'": "'", "/*":"*/"}
+set matchpairs+=<:>
+let g:AutoClosePairs = {'(': ')', '{': '}', '[': ']', '<': '>', '"': '"', "'": "'", "/*":"*/"}
 let g:AutoCloseRegions = ["Comment", "String", "Character"]
 map <leader>a :AutoCloseToggle<cr>
 " Disable and use delimitMate instead
