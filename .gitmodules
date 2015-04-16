@@ -22,3 +22,6 @@
 [submodule "dot.vim/bundle/vim-rails"]
 	path = dot.vim/bundle/vim-rails
 	url = https://github.com/tpope/vim-rails
+[submodule "dot.vim/bundle/vim-dispatch"]
+	path = dot.vim/bundle/vim-dispatch
+	url = https://github.com/tpope/vim-dispatch
