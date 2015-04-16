@@ -19,3 +19,6 @@
 [submodule "dot.vim/bundle/vim-fugitive"]
 	path = dot.vim/bundle/vim-fugitive
 	url = https://github.com/tpope/vim-fugitive
+[submodule "dot.vim/bundle/vim-rails"]
+	path = dot.vim/bundle/vim-rails
+	url = https://github.com/tpope/vim-rails
