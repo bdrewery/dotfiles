@@ -49,3 +49,5 @@
 	templatedir = ~/.git_template
 [include]
 	path = ~/.gitconfig.local
+[push]
+	default = matching
