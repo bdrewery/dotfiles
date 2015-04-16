@@ -28,3 +28,6 @@
 [submodule "dot.vim/bundle/vim-rake"]
 	path = dot.vim/bundle/vim-rake
 	url = https://github.com/tpope/vim-rake
+[submodule "dot.vim/bundle/vim-ragtag"]
+	path = dot.vim/bundle/vim-ragtag
+	url = https://github.com/tpope/vim-ragtag
