@@ -7,3 +7,6 @@
 [submodule "dot.vim/bundle/terminalkeys"]
 	path = dot.vim/bundle/terminalkeys
 	url = https://github.com/nacitar/terminalkeys.vim
+[submodule "dot.vim/bundle/delimitMate"]
+	path = dot.vim/bundle/delimitMate
+	url = https://github.com/Raimondi/delimitMate
