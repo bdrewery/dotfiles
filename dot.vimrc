@@ -45,6 +45,9 @@ catch
 endtry
 
 set lazyredraw
+if v:version > 703 || v:version == 703 && has("patch541")
+  set formatoptions+=j " Delete comment character when joining commented lines
+endif
 
 " set cpo+=$
 set sw=2 ts=8
@@ -57,12 +60,13 @@ if exists('+colorcolumn')
 endif
 set modeline modelines=5
 set nu " Show line numbers
-" set list " Show tabs as ^I
+set listchars=tab:>\ ,trail:~,extends:>,precedes:<,nbsp:+
 set ruler
 set showcmd
 set history=700 incsearch
 " Keep some lines around scrolling
-set so=7
+set scrolloff=7
+set sidescrolloff=5
 set bs=2
 set laststatus=2
 set wildmenu
