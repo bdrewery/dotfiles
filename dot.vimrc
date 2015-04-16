@@ -44,6 +44,8 @@ try
 catch
 endtry
 
+set lazyredraw
+
 " set cpo+=$
 set sw=2 ts=8
 set et
