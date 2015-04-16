@@ -31,3 +31,6 @@
 [submodule "dot.vim/bundle/vim-ragtag"]
 	path = dot.vim/bundle/vim-ragtag
 	url = https://github.com/tpope/vim-ragtag
+[submodule "dot.vim/bundle/vim-endwise"]
+	path = dot.vim/bundle/vim-endwise
+	url = https://github.com/tpope/vim-endwise
