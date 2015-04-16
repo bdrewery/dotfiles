@@ -4,3 +4,6 @@
 [submodule "git-prompt"]
 	path = git-prompt
 	url = https://github.com/lvv/git-prompt.git
+[submodule "dot.vim/bundle/terminalkeys"]
+	path = dot.vim/bundle/terminalkeys
+	url = https://github.com/nacitar/terminalkeys.vim
