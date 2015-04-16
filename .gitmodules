@@ -25,3 +25,6 @@
 [submodule "dot.vim/bundle/vim-dispatch"]
 	path = dot.vim/bundle/vim-dispatch
 	url = https://github.com/tpope/vim-dispatch
+[submodule "dot.vim/bundle/vim-rake"]
+	path = dot.vim/bundle/vim-rake
+	url = https://github.com/tpope/vim-rake
