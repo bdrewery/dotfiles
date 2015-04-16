@@ -13,3 +13,6 @@
 [submodule "dot.vim/bundle/vim-repeat"]
 	path = dot.vim/bundle/vim-repeat
 	url = https://github.com/tpope/vim-repeat
+[submodule "dot.vim/bundle/vim-surround"]
+	path = dot.vim/bundle/vim-surround
+	url = https://github.com/tpope/vim-surround
