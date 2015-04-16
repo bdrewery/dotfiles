@@ -10,3 +10,6 @@
 [submodule "dot.vim/bundle/delimitMate"]
 	path = dot.vim/bundle/delimitMate
 	url = https://github.com/Raimondi/delimitMate
+[submodule "dot.vim/bundle/vim-repeat"]
+	path = dot.vim/bundle/vim-repeat
+	url = https://github.com/tpope/vim-repeat
