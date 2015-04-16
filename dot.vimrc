@@ -199,6 +199,12 @@ map <leader>d :DelimitMateSwitch<cr>
 let delimitMate_balance_matchpairs = 1
 let delimitMate_excluded_regions = "Comment,String,Character"
 
+" delimitMate is too broken in 7.4.
+" https://github.com/Raimondi/delimitMate/issues/138
+" http://vim.wikia.com/wiki/Automatically_append_closing_characters
+" https://groups.google.com/d/topic/vim_dev/gBumYDSEJoo/discussion
+let g:loaded_delimitMate = 1
+
 " Auto close </ with closetag.vim
 " au Filetype xhtml,html,xml,xsl,tcl,smarty,php,eruby map! </ <C-_>
 
