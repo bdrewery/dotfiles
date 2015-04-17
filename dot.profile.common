@@ -53,7 +53,7 @@ refreshenv() {
 for prefix in /usr/local /opt/local; do
 	[ -d "${prefix}/bin" ] && export PATH="${PATH}:${prefix}/bin"
 	[ -d "${prefix}/sbin" ] && export PATH="${PATH}:${prefix}/sbin"
-	[ -d "${prefix}/man" ] && export MANPATH="${MANPATH}:${prefix}/man"
+#	[ -d "${prefix}/man" ] && export MANPATH="${MANPATH}${MANPATH:+:}${prefix}/man"
 done
 
 for dir in /usr/local/libexec/ccache /usr/lib/ccache /usr/lib/ccache/bin; do
