@@ -3,6 +3,7 @@
 
 PATH=/usr/local/bin:/opt/local/bin:${PATH}
 CTAGS=$(which exctags 2>/dev/null || echo ctags)
+export LC_COLLATE=C
 
 src_top=$(git rev-parse --show-toplevel 2> /dev/null || echo .)
 cd ${src_top}
