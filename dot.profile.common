@@ -25,7 +25,7 @@ then
         ls --color -d . &>/dev/null 2>&1 && alias ls='ls -aF --color=tty' || alias ls='ls -GFa'
 fi
 export GREP_OPTIONS="--color=auto"
-export TZ=CST6CDT
+export TZ=America/Los_Angeles
 
 export LANG=en_US.UTF-8
 export LC_COLLATE=C
