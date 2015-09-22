@@ -64,6 +64,8 @@ setopt shwordsplit
 # Don't try to make /u/b/s into /usr/bin/sed, it's too slow for NFS.
 zstyle ':completion:*' path-completion false
 zstyle ':completion:*' accept-exact-dirs true
+# Don't consider 'blah 2>&1 >/dev/null' to send both to 1. Work as it should.
+setopt nomultios
 
 . ${HOME}/.profile.common
 
