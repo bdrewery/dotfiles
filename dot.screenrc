@@ -31,7 +31,7 @@
 # This results in programs waiting for some timeout when
 # they start up - and this just keeps getting in my way.
 # I therefore unset the DISPLAY variable with this command:
-#  setenv DISPLAY ''
+  setenv DISPLAY ''
 # Text Tools rule!  :-)
 #
 # ===============================================================
