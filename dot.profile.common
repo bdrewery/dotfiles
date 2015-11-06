@@ -63,4 +63,8 @@ for dir in /usr/local/libexec/ccache /usr/lib/ccache /usr/lib/ccache/bin; do
 	fi
 done
 
+if [ -n "${BUILDENV}" ]; then
+        PS1="(buildenv) ${PS1}"
+fi
+
 [ -f ~/.profile.common.local ] && . ~/.profile.common.local
