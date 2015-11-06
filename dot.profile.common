@@ -56,15 +56,16 @@ for prefix in /usr/local /opt/local; do
 #	[ -d "${prefix}/man" ] && export MANPATH="${MANPATH}${MANPATH:+:}${prefix}/man"
 done
 
-for dir in /usr/local/libexec/ccache /usr/lib/ccache /usr/lib/ccache/bin; do
-	if [ -e "${dir}/cc" ]; then
-		export PATH="${dir}:${PATH}"
-		break
-	fi
-done
-
 if [ -n "${BUILDENV}" ]; then
         PS1="(buildenv) ${PS1}"
+else
+	for dir in /usr/local/libexec/ccache /usr/lib/ccache \
+	    /usr/lib/ccache/bin; do
+		if [ -e "${dir}/cc" ]; then
+			export PATH="${dir}:${PATH}"
+			break
+		fi
+	done
 fi
 
 [ -f ~/.profile.common.local ] && . ~/.profile.common.local
