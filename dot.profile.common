@@ -49,6 +49,7 @@ refreshenv() {
 
 if [ -n "${BUILDENV}" ]; then
         PS1="(buildenv) ${PS1}"
+        unset CPUTYPE
 else
 	[ -d ~/bin ] && export PATH=~/bin:${PATH}
 	[ -d ~/man ] && export MANPATH=~/man:${MANPATH}
