@@ -21,7 +21,11 @@ prompt_myprompt1_setup () {
   pcc[1]=${1:-${${SSH_CLIENT+'cyan'}:-'red'}}
   pcc[2]=${2:-'cyan'}
   pcc[3]=${3:-'yellow'}
-  pcc[4]=${4:-'green'}
+  if [ $(id -u) -eq 0 ]; then
+    pcc[4]=${4:-'red'}
+  else
+    pcc[4]=${4:-'green'}
+  fi
   pcc[5]=${5:-'white'}
 
   pc['\[']="%F{$pcc[5]}["
