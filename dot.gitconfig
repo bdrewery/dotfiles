@@ -38,6 +38,7 @@
         cpx = cherry-pick -x
         cl = clean -fdx
         n = shortlog master..next
+        mb = !"BRANCH=$(git rev-parse --abbrev-ref HEAD);UPSTREAM=$(git for-each-ref --format='%(upstream:short)' refs/heads/${BRANCH});git merge-base --fork ${UPSTREAM} ${BRANCH}"
 [merge]
         log = true
 [core]
