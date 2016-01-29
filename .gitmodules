@@ -34,3 +34,6 @@
 [submodule "dot.vim/bundle/vim-endwise"]
 	path = dot.vim/bundle/vim-endwise
 	url = https://github.com/tpope/vim-endwise
+[submodule "markjdb-scripts"]
+	path = markjdb-scripts
+	url = https://github.com/markjdb/scripts.git

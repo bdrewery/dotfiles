@@ -56,6 +56,8 @@ for prefix in /usr/local /opt/local; do
 #	[ -d "${prefix}/man" ] && export MANPATH="${MANPATH}${MANPATH:+:}${prefix}/man"
 done
 
+export PATH="${PATH}:~/.profile-repo/markjdb-scripts"
+
 if [ -n "${BUILDENV}" ]; then
         PS1="(buildenv) ${PS1}"
         unset CPUTYPE
