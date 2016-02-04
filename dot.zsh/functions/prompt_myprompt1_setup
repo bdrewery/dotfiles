@@ -21,7 +21,9 @@ prompt_myprompt1_setup () {
   pcc[1]=${1:-${${SSH_CLIENT+'cyan'}:-'red'}}
   pcc[2]=${2:-'cyan'}
   pcc[3]=${3:-'yellow'}
-  if [ $(id -u) -eq 0 ]; then
+  if [ -f /etc/vm ]; then
+    pcc[4]=${4:-'magenta'}
+  elif [ $(id -u) -eq 0 ]; then
     pcc[4]=${4:-'red'}
   else
     pcc[4]=${4:-'green'}
