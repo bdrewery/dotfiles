@@ -57,6 +57,7 @@ for prefix in /usr/local /opt/local; do
 done
 
 export PATH=${PATH}:~/.profile-repo/markjdb-scripts
+export PATH=${PATH}:~/.profile-repo/markjdb-scripts/dtrace
 
 if [ -n "${BUILDENV}" ]; then
         PS1="(buildenv) ${PS1}"
