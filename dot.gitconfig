@@ -12,7 +12,7 @@
         showbranch = auto
         ui = auto
 [diff]
-        renamelimit = 0
+        renamelimit = 1000
         renames = copy
 [imap]
         folder = "INBOX.Drafts"
