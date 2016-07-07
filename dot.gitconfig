@@ -14,6 +14,7 @@
 [diff]
         renamelimit = 1000
         renames = copy
+        noprefix = true
 [imap]
         folder = "INBOX.Drafts"
         host = imap://secure.xzibition.com
