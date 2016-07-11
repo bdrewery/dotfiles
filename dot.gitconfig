@@ -46,6 +46,8 @@
 [core]
 	autocrlf = false
 	excludesfile = ~/.gitignore
+[rebase]
+        autoSquash = true
 [rerere]
 	enabled = true
 [init]
