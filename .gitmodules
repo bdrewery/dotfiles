@@ -37,3 +37,6 @@
 [submodule "markjdb-scripts"]
 	path = markjdb-scripts
 	url = https://github.com/markjdb/scripts.git
+[submodule "dot.vim/bundle/vim-pathogen"]
+	path = dot.vim/bundle/vim-pathogen
+	url = https://github.com/tpope/vim-pathogen

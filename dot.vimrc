@@ -4,6 +4,7 @@
 
 set nocompatible
 " Enable pathogen
+runtime bundle/vim-pathogen/autoload/pathogen.vim
 execute pathogen#infect()
 
 " Switch syntax highlighting on, when the terminal has colors
