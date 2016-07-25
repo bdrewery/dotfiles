@@ -40,3 +40,6 @@
 [submodule "dot.vim/bundle/vim-pathogen"]
 	path = dot.vim/bundle/vim-pathogen
 	url = https://github.com/tpope/vim-pathogen
+[submodule "dot.vim/bundle/minibufexpl.vim"]
+	path = dot.vim/bundle/minibufexpl.vim
+	url = https://github.com/fholgado/minibufexpl.vim.git
