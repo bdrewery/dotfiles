@@ -43,3 +43,6 @@
 [submodule "dot.vim/bundle/minibufexpl.vim"]
 	path = dot.vim/bundle/minibufexpl.vim
 	url = https://github.com/fholgado/minibufexpl.vim.git
+[submodule "dot.vim/bundle/tagbar"]
+	path = dot.vim/bundle/tagbar
+	url = https://github.com/majutsushi/tagbar.git
