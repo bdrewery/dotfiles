@@ -52,3 +52,6 @@
 [submodule "dot.vim/bundle/vim-characterize"]
 	path = dot.vim/bundle/vim-characterize
 	url = https://github.com/tpope/vim-characterize.git
+[submodule "dot.vim/bundle/vim-jdaddy"]
+	path = dot.vim/bundle/vim-jdaddy
+	url = https://github.com/tpope/vim-jdaddy
