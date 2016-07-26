@@ -7,7 +7,7 @@ export LC_COLLATE=C
 
 src_top=$(git rev-parse --show-toplevel 2> /dev/null || echo .)
 cd ${src_top}
-ctags_dir=${src_top}/$(git rev-parse --git-dir 2> /dev/null || echo .)
+ctags_dir=$(realpath $(git rev-parse --git-dir 2> /dev/null || echo .))
 
 CTAGS_FILE=${ctags_dir}/tags
 
