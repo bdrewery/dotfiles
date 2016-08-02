@@ -18,6 +18,10 @@ export MANWIDTH=tty
 export LSCOLORS=ExGxFxdxCxegDxabagacad
 export CLICOLOR=1
 
+if [ -t 0 ]; then
+	export GPG_TTY=$(tty)
+fi
+
 # Portable ls(1) colors
 if [ "$DISABLE_LS_COLORS" != "true" ]
 then
