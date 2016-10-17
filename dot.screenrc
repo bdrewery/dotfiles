@@ -48,7 +48,6 @@
 # screen -t viper        0 ssh -l shatow viper.falcon-networks.com
 # screen -t ROOT         3 su -
 # screen 2 bash
-# screen -t HUB         8 telnet hub.lordares.net 9227
 # screen -t GOOGLE      2 links http://www.google.com
 # screen -t NEWS        3 slrn
 # screen -t WWW         4 links http://www.math.fu-berlin.de/~guckes/
