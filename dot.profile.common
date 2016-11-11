@@ -76,4 +76,8 @@ else
 	done
 fi
 
+if [ -f /etc/proxy.conf ]; then
+        . /etc/proxy.conf
+fi
+
 [ -f ~/.profile.common.local ] && . ~/.profile.common.local
