@@ -24,3 +24,5 @@ curl -so /dev/null \
         -F application="alert-on-exit $1" \
         -F event="Command ${result}" \
         -F description="Command: $*" &
+
+exit ${ret}
