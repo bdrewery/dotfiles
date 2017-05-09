@@ -36,6 +36,7 @@ else
 	install -v -m 0600 ${REPO}/dot.ssh/authorized_keys ~/.ssh/authorized_keys
 fi
 
+ln -fs ${REPO}/bin/alert-on-exit.sh ~/bin/alert-on-exit.sh
 ln -fs ${REPO}/bin/benv.sh ~/bin/benv.sh
 ln -fs ${REPO}/bin/generate-tags ~/bin/generate-tags
 ln -fs ${REPO}/bin/generate-tagsd ~/bin/generate-tagsd
