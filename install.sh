@@ -49,7 +49,7 @@ ln -fs ${REPO}/dot.bash_profile ~/.bash_profile
 ln -fs ${REPO}/dot.bashrc ~/.bashrc
 ln -fs ${REPO}/dot.ctags ~/.ctags
 ln -fs ${REPO}/dot.git-prompt.conf ~/.git-prompt.conf
-if [ -f ~/.gitconfig ]; then
+if [ -f ~/.gitconfig ] && [ ! -L ~/.gitconfig ]; then
 	mv ~/.gitconfig ~/.gitconfig.local
 fi
 ln -fs ${REPO}/dot.gitconfig ~/.gitconfig
@@ -67,7 +67,7 @@ ln -fs ${REPO}/dot.tmux.conf ~/.tmux.conf
 ln -fs ${REPO}/dot.valgrindrc ~/.valgrindrc
 ln -fs ${REPO}/dot.vimrc ~/.vimrc
 ln -fs ${REPO}/dot.zlogout ~/.zlogout
-if [ -f ~/.zshrc ]; then
+if [ -f ~/.zshrc ] && [ ! -L ~/.zshrc ]; then
 	mv ~/.zshrc ~/.zshrc.local
 fi
 ln -fs ${REPO}/dot.zshrc ~/.zshrc
