@@ -64,6 +64,9 @@ ln -fs ${REPO}/dot.tmux.conf ~/.tmux.conf
 ln -fs ${REPO}/dot.valgrindrc ~/.valgrindrc
 ln -fs ${REPO}/dot.vimrc ~/.vimrc
 ln -fs ${REPO}/dot.zlogout ~/.zlogout
+if [ -f ~/.zshrc ]; then
+	mv ~/.zshrc ~/.zshrc.local
+fi
 ln -fs ${REPO}/dot.zshrc ~/.zshrc
 
 ### Look for needed programs
