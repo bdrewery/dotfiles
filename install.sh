@@ -49,6 +49,9 @@ ln -fs ${REPO}/dot.bash_profile ~/.bash_profile
 ln -fs ${REPO}/dot.bashrc ~/.bashrc
 ln -fs ${REPO}/dot.ctags ~/.ctags
 ln -fs ${REPO}/dot.git-prompt.conf ~/.git-prompt.conf
+if [ -f ~/.gitconfig ]; then
+	mv ~/.gitconfig ~/.gitconfig.local
+fi
 ln -fs ${REPO}/dot.gitconfig ~/.gitconfig
 ln -fs ${REPO}/dot.gitignore ~/.gitignore
 ln -fs ${REPO}/dot.inputrc ~/.inputrc
