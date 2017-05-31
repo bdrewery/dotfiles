@@ -3,7 +3,6 @@
 --num-callers=10
 --trace-children=no
 --track-fds=no
---suppressions=/home/bryan/.supp
 -v
 --gen-suppressions=no
 --leak-check=full
