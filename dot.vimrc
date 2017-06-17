@@ -162,7 +162,7 @@ set lbr " Use smart wrapping
 
 " Auto load cscope.out from current directory
 " http://vim.wikia.com/wiki/Autoloading_Cscope_Database
-if has("cscope")
+if has("cscope") && executable("cscope")
   function! LoadCscope()
     let db = findfile("cscope.out", ".;")
     if (!empty(db))
