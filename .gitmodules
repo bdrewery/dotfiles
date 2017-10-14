@@ -55,3 +55,6 @@
 [submodule "dot.vim/bundle/vim-jdaddy"]
 	path = dot.vim/bundle/vim-jdaddy
 	url = https://github.com/tpope/vim-jdaddy
+[submodule "jhb-gdb"]
+	path = jhb-gdb
+	url = https://github.com/bsdjhb/kdbg.git
