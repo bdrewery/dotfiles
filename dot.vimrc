@@ -15,9 +15,6 @@ if &t_Co > 2 || has("gui_running")
 endif
 
 if &t_Co > 16 || has("gui_running")
-
-  colorscheme solarized
-
   if has("gui_running")
     au FileType ruby,eruby colorscheme railscasts
     let g:solarized_degrade=1
@@ -34,9 +31,10 @@ if &t_Co > 16 || has("gui_running")
     set t_ut=
   endif
 
+  colorscheme solarized
 else
-  colorscheme delek
   set bg=dark
+  colorscheme delek
 endif
 
 " Use POSIX shell syntax so $() is not hilighted red
