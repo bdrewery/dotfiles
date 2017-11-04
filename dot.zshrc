@@ -71,4 +71,6 @@ setopt nomultios
 
 export HISTFILE=~/.zhistory
 
-[ -f ${HOME}/.zshrc.local ] && . ${HOME}/.zshrc.local
+if [ -f ${HOME}/.zshrc.local ]; then
+	. ${HOME}/.zshrc.local
+fi
