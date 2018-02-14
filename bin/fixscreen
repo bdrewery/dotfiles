@@ -3,4 +3,8 @@
 # Unset TERMCAP from screen as it is wrong with 256colors and breaks vim
 unset TERMCAP
 
+if [ "${TERM}" = "screen-256color" ]; then
+	export TERM="xterm-256color"
+fi
+
 exec "$@"
