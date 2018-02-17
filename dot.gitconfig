@@ -51,8 +51,6 @@
         autoSquash = true
 [rerere]
 	enabled = true
-[init]
-	templatedir = ~/.git_template
 [include]
 	path = ~/.gitconfig.local
 [push]
