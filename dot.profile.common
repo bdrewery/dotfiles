@@ -66,6 +66,7 @@ done
 
 export PATH=${PATH}:~/.profile-repo/markjdb-scripts
 export PATH=${PATH}:~/.profile-repo/markjdb-scripts/dtrace
+export PATH=${PATH}:~/.cargo/bin
 
 if [ -n "${BUILDENV}" ]; then
         PS1="(buildenv) ${PS1}"
