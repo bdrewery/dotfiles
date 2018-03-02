@@ -57,6 +57,7 @@ refreshenv() {
 
 [ -d ~/bin ] && export PATH=~/bin:${PATH}
 [ -d ~/man ] && export MANPATH=~/man:${MANPATH}
+[ -d ~/.cargo ] && export PATH=${PATH}:~/.cargo/bin
 
 for prefix in /usr/local /opt/local; do
 	[ -d "${prefix}/bin" ] && export PATH="${PATH}:${prefix}/bin"
@@ -66,7 +67,6 @@ done
 
 export PATH=${PATH}:~/.profile-repo/markjdb-scripts
 export PATH=${PATH}:~/.profile-repo/markjdb-scripts/dtrace
-export PATH=${PATH}:~/.cargo/bin
 
 if [ -n "${BUILDENV}" ]; then
         PS1="(buildenv) ${PS1}"
