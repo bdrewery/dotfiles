@@ -17,15 +17,13 @@
         noprefix = true
 [imap]
         folder = "INBOX.Drafts"
-        host = imap://mail.xzibition.com
+        host = imaps://mail.xzibition.com
         user = bryan@shatow.net
-        port = 143
-        sslverify = true
 [sendemail]
-        smtpencryption = tls
-        smtpuser = bryan@shatow.net
-        smtpserver-port = 587
-        smtpserver = mail.xzibition.com
+        smtpEncryption = tls
+        smtpUser = bryan@shatow.net
+        smtpServerPort = 587
+        smtpServerOption = mail.xzibition.com
 [branch]
         autosetupmerge = true
 [alias]
