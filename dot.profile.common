@@ -55,18 +55,25 @@ refreshenv() {
   done`
 }
 
-[ -d ~/bin ] && export PATH=~/bin:${PATH}
+[ -d ~/bin ] && [ -n "${PATH%%*:${HOME}/bin:*}" ] &&
+    [ "${PATH#${HOME}/bin:}" = "${PATH}" &&
+    PATH=~/bin:${PATH}
 [ -d ~/man ] && export MANPATH=~/man:${MANPATH}
-[ -d ~/.cargo ] && export PATH=${PATH}:~/.cargo/bin
+[ -d ~/.cargo/bin ] && [ -n "${PATH%%*:${HOME}/.cargo/bin:*}" ] &&
+    PATH=${PATH}:~/.cargo/bin
 
 for prefix in /usr/local /opt/local; do
-	[ -d "${prefix}/bin" ] && export PATH="${PATH}:${prefix}/bin"
-	[ -d "${prefix}/sbin" ] && export PATH="${PATH}:${prefix}/sbin"
+	[ -d "${prefix}/bin" ] && [ -n "${PATH%%*:${prefix}/bin:*}" ] &&
+	    PATH="${PATH}:${prefix}/bin"
+	[ -d "${prefix}/sbin" ] && [ -n "${PATH%%*:${prefix}/sbin:*}" ] &&
+	    PATH="${PATH}:${prefix}/sbin"
 #	[ -d "${prefix}/man" ] && export MANPATH="${MANPATH}${MANPATH:+:}${prefix}/man"
 done
 
-export PATH=${PATH}:~/.profile-repo/markjdb-scripts
-export PATH=${PATH}:~/.profile-repo/markjdb-scripts/dtrace
+#[ -n "${PATH%%*:${HOME}/.profile-repo/markjdb-scripts:*}" ] &&
+#    PATH=${PATH}:~/.profile-repo/markjdb-scripts
+[ -n "${PATH%%*:${HOME}/.profile-repo/markjdb-scripts/dtrace:*}" ] &&
+    PATH=${PATH}:~/.profile-repo/markjdb-scripts/dtrace
 
 if [ -n "${BUILDENV}" ]; then
         PS1="(buildenv) ${PS1}"
@@ -74,12 +81,16 @@ if [ -n "${BUILDENV}" ]; then
 else
 	for dir in /usr/local/libexec/ccache /usr/lib/ccache \
 	    /usr/lib/ccache/bin; do
-		if [ -e "${dir}/cc" ]; then
-			export PATH="${dir}:${PATH}"
+		if [ -n "${PATH%%*:${dir}:*}" ] &&
+		    [ "${PATH#${dir}:}" = "${PATH}" ] &&
+		    [ -e "${dir}/cc" ]; then
+			PATH="${dir}:${PATH}"
 			break
 		fi
 	done
 fi
+
+export PATH
 
 if [ -f /etc/proxy.conf ]; then
         . /etc/proxy.conf
