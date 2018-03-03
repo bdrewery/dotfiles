@@ -60,7 +60,8 @@ refreshenv() {
     PATH=~/bin:${PATH}
 [ -d ~/man ] && export MANPATH=~/man:${MANPATH}
 [ -d ~/.cargo/bin ] && [ -n "${PATH%%*:${HOME}/.cargo/bin:*}" ] &&
-    PATH=${PATH}:~/.cargo/bin
+    [ "${PATH#${HOME}/.cargo/bin:}" = "${PATH}" ] &&
+    PATH=~/.cargo/bin:${PATH}
 
 for prefix in /usr/local /opt/local; do
 	[ -d "${prefix}/bin" ] && [ -n "${PATH%%*:${prefix}/bin:*}" ] &&
