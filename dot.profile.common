@@ -56,7 +56,7 @@ refreshenv() {
 }
 
 [ -d ~/bin ] && [ -n "${PATH%%*:${HOME}/bin:*}" ] &&
-    [ "${PATH#${HOME}/bin:}" = "${PATH}" &&
+    [ "${PATH#${HOME}/bin:}" = "${PATH}" ] &&
     PATH=~/bin:${PATH}
 [ -d ~/man ] && export MANPATH=~/man:${MANPATH}
 [ -d ~/.cargo/bin ] && [ -n "${PATH%%*:${HOME}/.cargo/bin:*}" ] &&
