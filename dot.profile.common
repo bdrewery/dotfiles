@@ -2,11 +2,13 @@
 
 which gcc > /dev/null 2>&1 || alias gcc=cc
 which setterm > /dev/null 2>&1 && setterm -blength 0
-if which colordiff > /dev/null 2>&1; then
-	alias cless="colordiff | less"
-else
-	alias cless="less"
-fi
+cless() {
+	if which colordiff > /dev/null 2>&1; then
+		colordiff | less
+	else
+		less
+	fi
+}
 
 export EDITOR=vim
 export PAGER=less
