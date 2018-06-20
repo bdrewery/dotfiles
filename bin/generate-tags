@@ -25,7 +25,7 @@ if [ -f ${src_top}/.cscope-dir ]; then
 fi
 
 (
-  ${CTAGS} --tag-relative --exclude=.git --exclude=.tgz --exclude=.tar \
+  ${CTAGS} --tag-relative --exclude=.git --exclude=OBJ --exclude=.tgz --exclude=.tar \
     --exclude=.tar.gz -R -f ${CTAGS_FILE}.new . 2>/dev/null
   [ -f ${CTAGS_FILE}.new ] && mv -f ${CTAGS_FILE}.new ${CTAGS_FILE}
 ) &
