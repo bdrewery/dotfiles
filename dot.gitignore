@@ -9,12 +9,9 @@
 *.log
 *.o
 *.pyc
-*.pc
-*.po
 *.so*
 .*.sw*
 a.out
-Doxyfile
 cscope.in.out
 cscope.out
 cscope.po.out
