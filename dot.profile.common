@@ -4,9 +4,9 @@ which gcc > /dev/null 2>&1 || alias gcc=cc
 which setterm > /dev/null 2>&1 && setterm -blength 0
 cless() {
 	if which ydiff > /dev/null 2>&1; then
-		ydiff | less
+		ydiff
 	elif which cdiff > /dev/null 2>&1; then
-		cdiff | less
+		cdiff
 	elif which colordiff > /dev/null 2>&1; then
 		colordiff | less
 	else
