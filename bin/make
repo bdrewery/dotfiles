@@ -1,0 +1,36 @@
+#! /bin/sh
+#
+# GNU autotools commit 6a675ef17edf7109da189f5ae70e2dc6b7665896 incorrectly
+# assumes make is always named "make" rather than respecting $MAKE.
+#
+# https://people.freebsd.org/~bdrewery/patches/autotools-MAKE.diff has an
+# example fix.
+#
+# repro: ./configure --enable-maintainer-mode && touch Makefile.in && gmake
+#
+# For now just redirect to gmake when needed.
+
+#exec 2>${MAKE_TERMERR:-/dev/stderr}
+#set -x
+
+if [ "${MAKELEVEL:-0}" -eq 0 ]; then
+	exec command -p ${MAKE:-/usr/bin/make} "$@"
+fi
+case ${MAKEFLAGS} in
+*jobserver-auth*)	# gmake uses --jobserver-auth
+	exec command /usr/local/bin/gmake "$@"
+	;;
+*-J*)
+	exec command -p ${MAKE:-/usr/bin/make} "$@"
+	;;
+
+*-j[0-9]*)
+	exec command -p ${MAKE:-/usr/bin/make} "$@"
+	;;
+
+*-j*)	# gmake -j<empty> does not pass --jobserver
+	exec command /usr/local/bin/gmake "$@"
+	;;
+esac
+
+exec command -p ${MAKE:-/usr/bin/make} "$@"
