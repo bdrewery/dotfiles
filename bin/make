@@ -13,24 +13,13 @@
 #exec 2>${MAKE_TERMERR:-/dev/stderr}
 #set -x
 
-if [ "${MAKELEVEL:-0}" -eq 0 ]; then
-	exec command -p ${MAKE:-/usr/bin/make} "$@"
+if [ -n "${MAKE}" ]; then
+	exec command -p ${MAKE} "$@"
 fi
+# gmake doesn't use - for first char
 case ${MAKEFLAGS} in
-*jobserver-auth*)	# gmake uses --jobserver-auth
-	exec command /usr/local/bin/gmake "$@"
-	;;
-*-J*)
-	exec command -p ${MAKE:-/usr/bin/make} "$@"
-	;;
-
-*-j[0-9]*)
-	exec command -p ${MAKE:-/usr/bin/make} "$@"
-	;;
-
-*-j*)	# gmake -j<empty> does not pass --jobserver
-	exec command /usr/local/bin/gmake "$@"
-	;;
+-*)		_make=/usr/bin/make		;;
+[a-zA-Z]*)	_make=/usr/local/bin/gmake	;;
 esac
 
-exec command -p ${MAKE:-/usr/bin/make} "$@"
+exec command -p ${_make:-/usr/bin/make} "$@"
