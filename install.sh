@@ -82,7 +82,7 @@ check_for() {
 }
 
 if which pip >/dev/null 2>&1; then
-	pip install tmuxomatic --upgrade --user
+	#pip install tmuxomatic --upgrade --user
 fi
 
 for app in ${WANTED_APPS}; do
