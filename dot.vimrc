@@ -44,6 +44,7 @@ if has("gui_running")
   set guioptions-=T
 endif
 
+set noautoread
 set encoding=utf-8
 try
   lang en_US
