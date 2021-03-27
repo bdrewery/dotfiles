@@ -1,5 +1,4 @@
 --tool=memcheck
---db-attach=yes
 --num-callers=10
 --trace-children=no
 --track-fds=no
