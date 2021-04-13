@@ -15,15 +15,6 @@
         renamelimit = 1000
         renames = copy
         noprefix = true
-[imap]
-        folder = "INBOX.Drafts"
-        host = imaps://mail.xzibition.com
-        user = bryan@shatow.net
-[sendemail]
-        smtpEncryption = tls
-        smtpUser = bryan@shatow.net
-        smtpServerPort = 587
-        smtpServerOption = mail.xzibition.com
 [branch]
         autosetupmerge = true
 [alias]
