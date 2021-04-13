@@ -32,6 +32,7 @@
         a = add
         d = diff
         l = log --graph --decorate
+        logp = log -m --first-parent -p
         cp = cherry-pick
         b = branch
         cpx = cherry-pick -x
