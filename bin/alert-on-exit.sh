@@ -7,7 +7,7 @@ fi
 
 echo "* Will alert on PROWL_APIKEY=${PROWL_APIKEY}..." >&2
 
-"$@"
+/usr/bin/time -l "$@"
 ret=$?
 
 if [ ${ret} -eq 0 ]; then
