@@ -305,8 +305,13 @@ nmap <leader>w :w!<cr>
 " Disable current search
 map <silent> <leader><cr> :noh<cr>
 
-" Close the current buffer
-map <leader>bd :bd<cr>
+" Close the current buffer without hitting minbufexpl errors
+map <leader>bd :MBEbd<cr>
+map <leader>bn :MBEbn<cr>
+map <leader>bp :MBEbp<cr>
+map <leader>bun :MBEbun<cr>
+map <leader>bw :MBEbw<cr>
+map <leader>bf :MBEbf<cr>
 
 function! HasPaste()
     if &paste
