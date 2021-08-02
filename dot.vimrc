@@ -268,8 +268,8 @@ catch
 endtry
 
 " CTags support
-map <F8> :!/usr/bin/ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
-map <leader>t :TagbarToggle<cr>
+nmap <F8> :!/usr/bin/ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
+nmap <leader>t :TagbarToggle<cr>
 inoremap <leader><tab> <C-R>=AutoCompletion()<CR>
 
 function! AutoCompletion()
@@ -283,10 +283,10 @@ function! AutoCompletion()
 endfunction
 
 " Misc maps
-map <leader>pp :setlocal paste!<cr>
+nmap <leader>pp :setlocal paste!<cr>
 
 " Reload vimrc
-map <leader>v :source ~/.vimrc<cr>
+nmap <leader>v :source ~/.vimrc<cr>
 
 " Alternative ESC mapping in insert mode
 imap jj <esc>
@@ -297,21 +297,22 @@ map <leader>e <esc>:NERDTreeToggle<cr>
 
 
 " Reformat/indent whole file
-noremap <leader>5 1GvG=
+nnoremap <leader>5 1GvG=
 
 " fast saving
 nmap <leader>w :w!<cr>
+
 
 " Disable current search
 map <silent> <leader><cr> :noh<cr>
 
 " Close the current buffer without hitting minbufexpl errors
-map <leader>bd :MBEbd<cr>
-map <leader>bn :MBEbn<cr>
-map <leader>bp :MBEbp<cr>
-map <leader>bun :MBEbun<cr>
-map <leader>bw :MBEbw<cr>
-map <leader>bf :MBEbf<cr>
+nmap <leader>bd :MBEbd<cr>
+nmap <leader>bn :MBEbn<cr>
+nmap <leader>bp :MBEbp<cr>
+nmap <leader>bun :MBEbun<cr>
+nmap <leader>bw :MBEbw<cr>
+nmap <leader>bf :MBEbf<cr>
 
 function! HasPaste()
     if &paste
@@ -334,7 +335,7 @@ map <leader>p :cp<cr>
 " => Spell checking
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "Pressing ,ss will toggle and untoggle spell checking
-map <leader>ss :setlocal spell!<cr>
+nmap <leader>ss :setlocal spell!<cr>
 
 "Shortcuts using <leader>
 map <leader>sn ]s
@@ -393,7 +394,7 @@ endfunction
 " syntastic configuration
 """""""""""""""""""""""""
 
-map <leader>ce :Errors<cr>
+nmap <leader>ce :Errors<cr>
 let g:syntastic_enable_signs = 1
 " Auto open/close window
 let g:syntastic_auto_loc_list = 0
