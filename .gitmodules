@@ -64,3 +64,6 @@
 [submodule "dot.vim/bundle/vim-tmux-focus-events"]
 	path = dot.vim/bundle/vim-tmux-focus-events
 	url = https://github.com/tmux-plugins/vim-tmux-focus-events.git
+[submodule "dot.vim/bundle/vim-colors-solarized"]
+	path = dot.vim/bundle/vim-colors-solarized
+	url = https://github.com/altercation/vim-colors-solarized.git
