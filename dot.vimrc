@@ -301,12 +301,14 @@ nnoremap <leader>5 1GvG=
 
 " fast saving
 nmap <leader>w :w!<cr>
+map <leader>q :qa!<cr>
 
 
 " Disable current search
 map <silent> <leader><cr> :noh<cr>
 
 " Close the current buffer without hitting minbufexpl errors
+nmap <leader>d :MBEbd<cr>
 nmap <leader>bd :MBEbd<cr>
 nmap <leader>bn :MBEbn<cr>
 nmap <leader>bp :MBEbp<cr>
