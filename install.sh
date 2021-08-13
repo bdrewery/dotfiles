@@ -43,6 +43,9 @@ for f in alert-on-exit.sh benv.sh generate-tags generate-tagsd \
 		rm -f ~/bin/${f}
 	fi
 done
+if [ -L ~/.supp ]; then
+	rm -f ~/.supp
+fi
 ln -fs ${REPO}/dot.bash_logout ~/.bash_logout
 ln -fs ${REPO}/dot.bash_profile ~/.bash_profile
 ln -fs ${REPO}/dot.bashrc ~/.bashrc
