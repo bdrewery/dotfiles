@@ -65,9 +65,14 @@ refreshenv() {
   done`
 }
 
+REPO=${HOME}/.profile-repo
+
 [ -d ~/bin ] && [ -n "${PATH%%*:${HOME}/bin:*}" ] &&
     [ "${PATH#${HOME}/bin:}" = "${PATH}" ] &&
     PATH=~/bin:${PATH}
+[ -d ${REPO}/bin ] && [ -n "${PATH%%*:${REPO}/bin:*}" ] &&
+    [ "${PATH#${REPO}/bin:}" = "${PATH}" ] &&
+    PATH=${REPO}/bin:${PATH}
 [ -d ~/man ] && export MANPATH=~/man:${MANPATH}
 [ -d ~/.cargo/bin ] && [ -n "${PATH%%*:${HOME}/.cargo/bin:*}" ] &&
     [ "${PATH#${HOME}/.cargo/bin:}" = "${PATH}" ] &&
@@ -84,10 +89,10 @@ for prefix in /usr/local /opt/local; do
 #	[ -d "${prefix}/man" ] && export MANPATH="${MANPATH}${MANPATH:+:}${prefix}/man"
 done
 
-#[ -n "${PATH%%*:${HOME}/.profile-repo/markjdb-scripts:*}" ] &&
-#    PATH=${PATH}:~/.profile-repo/markjdb-scripts
-[ -n "${PATH%%*:${HOME}/.profile-repo/markjdb-scripts/dtrace:*}" ] &&
-    PATH=${PATH}:~/.profile-repo/markjdb-scripts/dtrace
+#[ -n "${PATH%%*:${REPO}/markjdb-scripts:*}" ] &&
+#    PATH=${PATH}:${REPO}/markjdb-scripts
+[ -n "${PATH%%*:${REPO}/markjdb-scripts/dtrace:*}" ] &&
+    PATH=${PATH}:${REPO}/markjdb-scripts/dtrace
 
 if [ -n "${BUILDENV}" ]; then
         PS1="(buildenv) ${PS1}"

@@ -37,15 +37,12 @@ else
 	install -v -m 0600 ${REPO}/dot.ssh/authorized_keys ~/.ssh/authorized_keys
 fi
 
-ln -fs ../${REPO}/bin/alert-on-exit.sh ~/bin/
-ln -fs ../${REPO}/bin/benv.sh ~/bin/
-ln -fs ../${REPO}/bin/generate-tags ~/bin/
-ln -fs ../${REPO}/bin/generate-tagsd ~/bin/
-ln -fs ../${REPO}/bin/screen-wrapper.sh ~/bin/
-ln -fs ../${REPO}/bin/fixscreen ~/bin/
-ln -fs ../${REPO}/bin/make ~/bin/
-ln -fs ../${REPO}/bin/start-screen ~/bin/
-ln -fs ../${REPO}/bin/update-profile ~/bin/
+for f in alert-on-exit.sh benv.sh generate-tags generate-tagsd \
+    screen-wrapper.sh fixscreen make start-screen update-profile; do
+	if [ -L ~/bin/${f} ]; then
+		rm -f ~/bin/${f}
+	fi
+done
 ln -fs ../${REPO}/dot.bash_logout ~/.bash_logout
 ln -fs ../${REPO}/dot.bash_profile ~/.bash_profile
 ln -fs ../${REPO}/dot.bashrc ~/.bashrc
