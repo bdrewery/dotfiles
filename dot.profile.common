@@ -42,7 +42,8 @@ alias grep='grep --color=auto'
 alias egrep='egrep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias rgrep='rgrep --color=auto'
-export TZ=America/Los_Angeles
+: ${TZ:=America/Los_Angeles}
+export TZ
 
 export LANG=en_US.UTF-8
 export LC_COLLATE=C
