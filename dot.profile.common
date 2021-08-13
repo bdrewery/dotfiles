@@ -67,32 +67,53 @@ refreshenv() {
 
 REPO=${HOME}/.profile-repo
 
-[ -d ~/bin ] && [ -n "${PATH%%*:${HOME}/bin:*}" ] &&
-    [ "${PATH#${HOME}/bin:}" = "${PATH}" ] &&
-    PATH=~/bin:${PATH}
-[ -d ${REPO}/bin ] && [ -n "${PATH%%*:${REPO}/bin:*}" ] &&
-    [ "${PATH#${REPO}/bin:}" = "${PATH}" ] &&
-    PATH=${REPO}/bin:${PATH}
+addpath() {
+	local which="$1"
+	local newdir="$2"
+	local realdir
+
+	if [ ! -d "${newdir}" ]; then
+		return
+	fi
+	realdir=$(readlink -f "${newdir}")
+	if [ "${which}" = "front" ]; then
+		case "${PATH}" in
+		${newdir}:*) return 0 ;;
+		${realdir}:*) return 0 ;;
+		esac
+	else
+		case "${PATH}" in
+		${newdir}:*|*:${newdir}:*|*:${newdir}) return 0 ;;
+		${realdir}:*|*:${realdir}:*|*:${realdir}) return 0 ;;
+		esac
+	fi
+	#echo "Adding $newdir to PATH" >&2
+	if [ "${which}" = "front" ]; then
+		PATH="${newdir}:${PATH}"
+	else
+		PATH="${PATH}:${newdir}"
+	fi
+}
+
+
+addpath_front() {
+	addpath front "$@"
+}
+
+addpath_back() {
+	addpath back "$@"
+}
+
 [ -d ~/man ] && export MANPATH=~/man:${MANPATH}
-[ -d ~/.cargo/bin ] && [ -n "${PATH%%*:${HOME}/.cargo/bin:*}" ] &&
-    [ "${PATH#${HOME}/.cargo/bin:}" = "${PATH}" ] &&
-    PATH=~/.cargo/bin:${PATH}
-[ -d ~/.local/bin ] && [ -n "${PATH%%*:${HOME}/.local/bin:*}" ] &&
-    [ "${PATH#${HOME}/.local/bin:}" = "${PATH}" ] &&
-    PATH=~/.local/bin:${PATH}
-
+addpath_front ~/bin
+addpath_front ${REPO}/bin
+addpath_front ~/.cargo/bin
+addpath_front ~/.local/bin
 for prefix in /usr/local /opt/local; do
-	[ -d "${prefix}/bin" ] && [ -n "${PATH%%*:${prefix}/bin:*}" ] &&
-	    PATH="${PATH}:${prefix}/bin"
-	[ -d "${prefix}/sbin" ] && [ -n "${PATH%%*:${prefix}/sbin:*}" ] &&
-	    PATH="${PATH}:${prefix}/sbin"
-#	[ -d "${prefix}/man" ] && export MANPATH="${MANPATH}${MANPATH:+:}${prefix}/man"
+	addpath_back ${prefix}/bin
+	addpath_back ${prefix}/sbin
 done
-
-#[ -n "${PATH%%*:${REPO}/markjdb-scripts:*}" ] &&
-#    PATH=${PATH}:${REPO}/markjdb-scripts
-[ -n "${PATH%%*:${REPO}/markjdb-scripts/dtrace:*}" ] &&
-    PATH=${PATH}:${REPO}/markjdb-scripts/dtrace
+addpath_back ${REPO}/markjdb-scripts/dtrace
 
 if [ -n "${BUILDENV}" ]; then
         PS1="(buildenv) ${PS1}"
@@ -100,10 +121,8 @@ if [ -n "${BUILDENV}" ]; then
 else
 	for dir in /usr/local/libexec/ccache /usr/lib/ccache \
 	    /usr/lib/ccache/bin; do
-		if [ -n "${PATH%%*:${dir}:*}" ] &&
-		    [ "${PATH#${dir}:}" = "${PATH}" ] &&
-		    [ -e "${dir}/cc" ]; then
-			PATH="${dir}:${PATH}"
+		if [ -e "${dir}/cc" ]; then
+			addpath_front ${dir}
 			break
 		fi
 	done
