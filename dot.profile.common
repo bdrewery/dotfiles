@@ -104,28 +104,32 @@ addpath_back() {
 	addpath back "$@"
 }
 
-[ -d ~/man ] && export MANPATH=~/man:${MANPATH}
-addpath_front ~/bin
-addpath_front ${REPO}/bin
-addpath_front ~/.cargo/bin
-addpath_front ~/.local/bin
-for prefix in /usr/local /opt/local; do
-	addpath_back ${prefix}/bin
-	addpath_back ${prefix}/sbin
-done
-addpath_back ${REPO}/markjdb-scripts/dtrace
+if [ -z "${TMUX-}${STY-}" ]; then
+	[ -d ~/man ] && export MANPATH=~/man:${MANPATH}
+	addpath_front ~/bin
+	addpath_front ${REPO}/bin
+	addpath_front ~/.cargo/bin
+	addpath_front ~/.local/bin
+	for prefix in /usr/local /opt/local; do
+		addpath_back ${prefix}/bin
+		addpath_back ${prefix}/sbin
+	done
+	addpath_back ${REPO}/markjdb-scripts/dtrace
+fi
 
 if [ -n "${BUILDENV}" ]; then
         PS1="(buildenv) ${PS1}"
         unset CPUTYPE
 else
-	for dir in /usr/local/libexec/ccache /usr/lib/ccache \
-	    /usr/lib/ccache/bin; do
-		if [ -e "${dir}/cc" ]; then
-			addpath_front ${dir}
-			break
-		fi
-	done
+	if [ -z "${TMUX-}${STY-}" ]; then
+		for dir in /usr/local/libexec/ccache /usr/lib/ccache \
+		    /usr/lib/ccache/bin; do
+			if [ -e "${dir}/cc" ]; then
+				addpath_front ${dir}
+				break
+			fi
+		done
+	fi
 fi
 
 export PATH
