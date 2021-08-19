@@ -106,15 +106,15 @@ addpath_back() {
 
 if [ -z "${TMUX-}${STY-}" ]; then
 	[ -d ~/man ] && export MANPATH=~/man:${MANPATH}
-	addpath_front ~/bin
-	addpath_front ${REPO}/bin
-	addpath_front ~/.cargo/bin
-	addpath_front ~/.local/bin
 	for prefix in /usr/local /opt/local; do
 		addpath_back ${prefix}/bin
 		addpath_back ${prefix}/sbin
 	done
 	addpath_back ${REPO}/markjdb-scripts/dtrace
+	addpath_front ~/.cargo/bin
+	addpath_front ~/.local/bin
+	addpath_front ${REPO}/bin
+	addpath_front ~/bin
 fi
 
 if [ -n "${BUILDENV}" ]; then
