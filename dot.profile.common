@@ -70,7 +70,7 @@ REPO=${HOME}/.profile-repo
 addpath() {
 	local which="$1"
 	local newdir="$2"
-	local realdir
+	local realdir left right
 
 	if [ ! -d "${newdir}" ]; then
 		return
@@ -79,8 +79,16 @@ addpath() {
 	if [ "${which}" = "front" ]; then
 		case "${PATH}" in
 		${newdir}:*) return 0 ;;
-		${realdir}:*) return 0 ;;
+		${realdir}:*)
+			PATH="${PATH#${realdir}:}"
+			;;
+		*:${newdir}:*)
+			left="${PATH%%:${newdir}:*}"
+			right="${PATH##*:${newdir}:}"
+			PATH="${left}:${right}"
+			;;
 		esac
+
 	else
 		case "${PATH}" in
 		${newdir}:*|*:${newdir}:*|*:${newdir}) return 0 ;;
