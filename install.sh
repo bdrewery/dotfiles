@@ -62,12 +62,17 @@ ln -fs ${REPO}/dot.lessfilter ~/.lessfilter
 install -C -v ${REPO}/dot.login_conf ~/.login_conf
 ln -fs ${REPO}/dot.nanorc ~/.nanorc
 ln -fs ${REPO}/dot.profile.common ~/.profile.common
-ln -fs ${REPO}/dot.profile.logout ~/.profile.logout
+ln -fs ${REPO}/dot.logout ~/.logout.common
 ln -fs ${REPO}/dot.screenrc ~/.screenrc
 ln -fs ${REPO}/dot.tmux.conf ~/.tmux.conf
 ln -fs ${REPO}/dot.valgrindrc ~/.valgrindrc
 ln -fs ${REPO}/dot.vimrc ~/.vimrc
 ln -fs ${REPO}/dot.zlogout ~/.zlogout
+
+ln -fs ${REPO}/dot.env.common ~/.env.common
+ln -fs ${REPO}/dot.zprofile ~/.zprofile
+ln -fs ${REPO}/dot.zshenv ~/.zshenv
+
 if [ -f ~/.zshrc ] && [ ! -L ~/.zshrc ] && [ ! -L ~/.zshrc.local ] &&
     [ ! -f ~/.zshrc.local ]; then
 	mv ~/.zshrc ~/.zshrc.local

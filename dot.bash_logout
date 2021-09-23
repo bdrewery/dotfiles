@@ -1,1 +1,1 @@
-. ~/.profile.logout
+. ~/.logout.common

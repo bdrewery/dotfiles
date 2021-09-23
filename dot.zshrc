@@ -1,6 +1,3 @@
-# Unset TERMCAP from screen as it is wrong with 256colors and breaks vim
-unset TERMCAP
-
 fpath=( "$HOME/.zsh/functions" $fpath )
 
 # Speedup git tab completion - http://superuser.com/questions/458906/zsh-tab-completion-of-git-commands-is-very-slow-how-can-i-turn-it-off
@@ -66,8 +63,6 @@ zstyle ':completion:*' path-completion false
 zstyle ':completion:*' accept-exact-dirs true
 # Don't consider 'blah 2>&1 >/dev/null' to send both to 1. Work as it should.
 setopt nomultios
-
-. ${HOME}/.profile.common
 
 export HISTFILE=~/.zhistory
 
