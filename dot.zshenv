@@ -1,6 +1,8 @@
 : ${PROFILE_REPO:=${HOME}/.profile-repo}
 
-. ${HOME}/.env.common
-if [ -f ${HOME}/.zshenv.local ]; then
+if [ -r "${HOME}/.env.common" ]; then
+	. ${HOME}/.env.common
+fi
+if [ -r ${HOME}/.zshenv.local ]; then
 	. ${HOME}/.zshenv.local
 fi
