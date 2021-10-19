@@ -24,6 +24,7 @@ alias grep='grep --color=auto'
 alias egrep='egrep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias rgrep='rgrep --color=auto'
+alias nopaste='printf "\e[?2004l"'
 
 if [ -n "${BUILDENV}" ]; then
         PS1="(buildenv) ${PS1}"
