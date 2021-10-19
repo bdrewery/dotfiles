@@ -37,11 +37,42 @@ else
   colorscheme delek
 endif
 
-if &term =~ "screen"
-  let &t_BE = "\e[?2004h"
-  let &t_BD = "\e[?2004l"
-  exec "set t_PS=\e[200~"
-  exec "set t_PE=\e[201~"
+if !has('gui_running') && &term =~ '^\%(screen\|tmux\)'
+    " Better mouse support, see  :help 'ttymouse'
+    " set ttymouse=sgr
+
+    " Enable true colors, see  :help xterm-true-color
+    let &termguicolors = v:true
+    let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+    let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+
+    " Enable bracketed paste mode, see  :help xterm-bracketed-paste
+    let &t_BE = "\<Esc>[?2004h"
+    let &t_BD = "\<Esc>[?2004l"
+    let &t_PS = "\<Esc>[200~"
+    let &t_PE = "\<Esc>[201~"
+
+    " Auto paste mode when pasting with bracketed paste
+    let &t_SI .= "\<Esc>[?2004h"
+    let &t_EI .= "\<Esc>[?2004l"
+
+    inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
+
+    function! XTermPasteBegin()
+        set pastetoggle=<Esc>[201~
+        set paste
+        return ""
+    endfunction
+
+    " Enable focus event tracking, see  :help xterm-focus-event
+    let &t_fe = "\<Esc>[?1004h"
+    let &t_fd = "\<Esc>[?1004l"
+
+    " Enable modified arrow keys, see  :help xterm-modifier-keys
+    execute "silent! set <xUp>=\<Esc>[@;*A"
+    execute "silent! set <xDown>=\<Esc>[@;*B"
+    execute "silent! set <xRight>=\<Esc>[@;*C"
+    execute "silent! set <xLeft>=\<Esc>[@;*D"
 endif
 
 " Use POSIX shell syntax so $() is not hilighted red
