@@ -12,7 +12,7 @@ sigint_handler() {
 export RAN_FROM_CRON=1
 while true;
 do
-	echo "# $@";
+	echo "# screen-wrapper.sh $@";
 	fixscreen "$@";
 	echo "Program terminated..sleeping"
 	sleep 10
