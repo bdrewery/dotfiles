@@ -137,7 +137,7 @@ endif
 nnoremap <silent> <C-l> :nohl<CR><C-l>
 
 " Save marks for 100 files, and global marks
-set viminfo='100,f1,\"100,:20,%,n~/.viminfo
+set viminfo='100,f1,\"100,:20,n~/.viminfo
 set nobackup
 set nowb
 " When editing a file, always jump to the last known cursor position.
