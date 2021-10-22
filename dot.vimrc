@@ -41,10 +41,15 @@ if !has('gui_running') && &term =~ '^\%(screen\|tmux\)'
     " Better mouse support, see  :help 'ttymouse'
     " set ttymouse=sgr
 
-    " Enable true colors, see  :help xterm-true-color
-    " let &termguicolors = v:true
-    " let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-    " let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+    if &term =~ '-direct'
+        " Enable true colors, see  :help xterm-true-color
+        let &termguicolors = v:true
+        let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+        let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+        " let &t_8f = "\<Esc>[38:2:%lu:%lu:%lum"
+        " let &t_8b = "\<Esc>[48;2:%lu:%lu:%lum"
+        colorscheme darkspectrum
+    endif
 
     " Enable bracketed paste mode, see  :help xterm-bracketed-paste
     let &t_BE = "\<Esc>[?2004h"
