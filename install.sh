@@ -38,7 +38,8 @@ else
 fi
 
 for f in alert-on-exit.sh benv.sh generate-tags generate-tagsd \
-    screen-wrapper.sh fixscreen make start-screen update-profile; do
+    screen-wrapper.sh fixscreen make start-screen update-profile \
+    lscolors lscolors 24-bit-color.sh; do
 	if [ -L ~/bin/${f} ]; then
 		rm -f ~/bin/${f}
 	fi

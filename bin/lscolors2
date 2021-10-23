@@ -1,0 +1,154 @@
+#!/usr/bin/env bash
+#
+# https://www.reddit.com/r/commandline/comments/a1tub3/comment/eat49eu/?utm_source=share&utm_medium=web2x&context=3
+
+CHARS="  "
+PRE="\e[48;5;"
+SUF=m
+VARIANT=${1:-RGB}
+case $VARIANT in
+    RGB)
+        V1=R V2=G V3=B;;
+    RBG)
+        V1=R V2=B V3=G;;
+    GRB)
+        V1=G V2=R V3=B;;
+    GBR)
+        V1=G V2=B V3=R;;
+    BRG)
+        V1=B V2=R V3=G;;
+    BGR)
+        V1=B V2=G V3=R;;
+    *)
+        echo Unknown VARIANT
+        exit 1
+        ;;
+esac
+
+if [ "$TERM" = fbterm ]
+then
+    PRE="\e[2;"
+    SUF='}'
+fi
+echo System Colors:
+for COLOR in {0..7}; do echo -ne "$PRE${COLOR}$SUF$CHARS";done
+echo -e '\e[0m'
+for COLOR in {8..15}; do echo -ne "$PRE${COLOR}$SUF$CHARS";done
+echo -e '\e[0m'
+
+echo Color Cube, 6x6x6:
+for I1 in {0..5}; do
+    eval $V1=$I1
+    for I2 in {0..5}; do
+        eval $V2=$I2
+        for I3 in {0..5}; do
+            eval $V3=$I3
+            echo -ne "$PRE$((16+(36*R)+(6*G)+B))$SUF$CHARS"
+        done
+        echo -ne '\e[0m '
+    done
+    echo
+done
+
+echo Grayscale Ramp:
+for COLOR in 16 16 16 16 16 16 16 59 59 59 59 102 102 102 102 145 145 145 145 188 188 188 188 231; do
+  echo -ne "$PRE${COLOR}$SUF$CHARS"
+done
+echo -e '\e[0m'
+for COLOR in {232..255}; do
+  echo -ne "$PRE${COLOR}$SUF$CHARS"
+done
+echo -e '\e[0m'
+for COLOR in 0 0 0 0 0 0 0 8 8 8 8 8 8 8 7 7 7 7 7 7 7 15 15 15 ; do
+  echo -ne "$PRE${COLOR}$SUF$CHARS"
+done
+echo -e '\e[0m'
+
+for COLOR in {0..31}; do
+  echo -ne "\e[48;2;${COLOR};${COLOR};${COLOR}$SUF$CHARS"
+done
+echo -e '\e[0m'
+for COLOR in {63..32}; do
+  echo -ne "\e[48;2;${COLOR};${COLOR};${COLOR}$SUF$CHARS"
+done
+echo -e '\e[0m'
+for COLOR in {64..95}; do
+  echo -ne "\e[48;2;${COLOR};${COLOR};${COLOR}$SUF$CHARS"
+done
+echo -e '\e[0m'
+for COLOR in {127..96}; do
+  echo -ne "\e[48;2;${COLOR};${COLOR};${COLOR}$SUF$CHARS"
+done
+echo -e '\e[0m'
+for COLOR in {128..159}; do
+  echo -ne "\e[48;2;${COLOR};${COLOR};${COLOR}$SUF$CHARS"
+done
+echo -e '\e[0m'
+for COLOR in {191..160}; do
+  echo -ne "\e[48;2;${COLOR};${COLOR};${COLOR}$SUF$CHARS"
+done
+echo -e '\e[0m'
+for COLOR in {192..223}; do
+  echo -ne "\e[48;2;${COLOR};${COLOR};${COLOR}$SUF$CHARS"
+done
+echo -e '\e[0m'
+for COLOR in {255..224}; do
+  echo -ne "\e[48;2;${COLOR};${COLOR};${COLOR}$SUF$CHARS"
+done
+echo -e '\e[0m'
+
+echo Attributes:
+attr() {
+    printf '%-11s -> \e[%sm %-11s \n' "$3" "$1" "$3"
+    printf '%-11s     %-11s \e[%sm <- %-11s %6s  %3s\e[m\n' "" "$3" "$2" "$3" "$1" "$2"
+    # The trailing \e[m is only to ensure a clean state for terminals that
+    # don't support the "restore single attribute" commands.
+}
+attr 38:2:255:0:0 39 fg-colon24
+attr 38\;2\;255\;0\;0 39 fg-semi24
+attr 48:2:255:0:0 49 bg-colon24
+attr 48\;2\;255\;0\;0 49 bg-semi24
+attr 38:5:1 39 fg-colon256
+attr 38\;5\;1 39 fg-semi256
+attr 48:5:1 49 bg-colon256
+attr 48\;5\;1 49 bg-semi256
+attr 31 39 foreground
+attr 41 49 background
+attr 91 39 fg-bright
+attr 101 49 bg-bright
+attr 31\;1 39\;22 fg8+bold          # legacy bright fg
+attr 38\;5\;1\;1 39\;22 fg256+bold  # Must *not* be bright
+attr 41\;5 49\;25 bg8+blink         # legacy bright bg
+attr 48\;5\;1\;5 49\;25 bg256+blink # Must *not* be bright
+attr 1 22 bold
+attr 2 22 faint
+attr 3 23 italic
+#attr 20 23 fraktur
+attr 4 24 underline
+attr 21 24 double
+attr 5 25 blink
+#attr 6 25 rapid
+attr 7 27 reverse
+attr 8 28 conceal
+attr 9 29 striked
+#attr 11 10 font1
+#attr 12 10 font2
+#attr 13 10 font3
+#attr 14 10 font4
+#attr 15 10 font5
+#attr 16 10 font6
+#attr 17 10 font7
+#attr 18 10 font8
+#attr 19 10 font9
+#attr 51 54 framed
+#attr 52 54 circled
+#attr 53 55 overline
+#attr 60 65 right1
+#attr 61 65 right2
+#attr 62 65 left1
+#attr 63 65 left2
+#attr 64 65 stress
+
+echo Boxes:
+echo -e '\e[31m▄\e[7m▀\e[;31m▗▄\e[7m▜▛▀\e[;31m▖\e[m┌┐┏┓╔╗╭╮'
+echo -e '\e[31m▀\e[7m▄\e[;31m▝▀\e[7m▟▙▄\e[;31m▘\e[m└┘┗┛╚╝╰╯'
