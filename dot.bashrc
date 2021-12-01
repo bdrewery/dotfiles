@@ -1,8 +1,9 @@
 # .bashrc
-# $Id$
+: ${PROFILE_REPO:=${HOME}/.profile-repo}
 
-# Unset TERMCAP from screen as it is wrong with 256colors and breaks vim
-unset TERMCAP
+if [ -r "${HOME}/.env.common" ]; then
+	. ${HOME}/.env.common
+fi
 
 # User specific aliases and functions
 
@@ -23,8 +24,6 @@ fi
 if [ -f ~/.bash_completion ]; then
 		. ~/.bash_completion
 fi
-
-. ~/.profile.common
 
 # . ~/.profile-repo/git-prompt/git-prompt.sh
 
