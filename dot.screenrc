@@ -57,7 +57,7 @@
 # ===============================================================
   autodetach            on              # default: on
   crlf                  off             # default: off
-  deflogin              off             # default: on
+#  deflogin              off             # default: on
 # defsilence            off             # default: off
   hardcopy_append       on              # default: off
 # nethack               on              # default: off
@@ -80,7 +80,7 @@
 # ===============================================================
 # bufferfile:   The file to use for commands
 #               "readbuf" ('<') and  "writebuf" ('>'):
-# bufferfile            $HOME/.screen_exchange
+ bufferfile            $HOME/.screen_exchange
 #
 # hardcopydir:  The directory which contains all hardcopies.
 # hardcopydir           ~/.hardcopy
@@ -627,11 +627,6 @@ bindkey -k k9 windowlist -b
 # Welcome the user:
   echo "welcome to screen :-)  -> http://www.guckes.net/screen/"
 #
-# ========
-# Tell Vim to use a "tabstop" of '8',
-# ie expands TABs to the next column
-# whose number is a multiple of eight.
-# EOF  vim: ts=8 et nowrap
 
 # Allow ^Aa" to not require a 300ms delay.
 maptimeout 0
@@ -648,6 +643,6 @@ altscreen on
 term screen-256color
 idle 300 blanker
 
-
-
+# ========
 source ~/.screenrc.local
+# EOF  vim: ts=8 et nowrap
