@@ -14,6 +14,10 @@ cless() {
 	fi
 }
 
+if [ "$(stty speed 2>/dev/null || echo 9600)" -lt "38400" ]; then
+	stty speed 38400 >/dev/null || :
+fi
+
 # Portable ls(1) colors
 if [ "$DISABLE_LS_COLORS" != "true" ]
 then
