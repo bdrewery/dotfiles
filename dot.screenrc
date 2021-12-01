@@ -185,7 +185,6 @@ hardstatus alwayslastline "%{rk}%H %{gk}%c:%s %{yk}%M%d %{bw}%n*%f %t%{kk}"
 # ============================
 # Password
 # ============================
-password KPm.CN85SEL1g
 # WARNING!!  Do NOT remove the comment
 # if you don't know what this does!
 # read on:
@@ -304,10 +303,6 @@ password KPm.CN85SEL1g
 # split       S
 bind ^Z
 bind z
-bind ^S
-bind ^Q
-bind s
-bind q
 # suspend     ^Z z
 # time        ^T t
 # title       A
@@ -651,3 +646,8 @@ termcap xterm-256color|screen-256color|putty-256color Co\#256:pa#32767:AB=\E[48;
 #termcap xterm-256color|screen-256color|putty-256color "" Co\#256:pa#32767:AB=\E[48;5;%dm:AF=\E[38;5;%dm
 altscreen on
 term screen-256color
+idle 300 blanker
+
+
+
+source ~/.screenrc.local
