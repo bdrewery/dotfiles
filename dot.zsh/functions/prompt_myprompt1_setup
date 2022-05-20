@@ -23,13 +23,12 @@ prompt_myprompt1_setup () {
   pcc[3]=${3:-'yellow'}
   if [ -f /etc/vm ]; then
     pcc[4]=${4:-'magenta'}
-  elif [ $(id -u) -eq 0 ]; then
-    pcc[4]=${4:-'red'}
   else
     pcc[4]=${4:-'green'}
   fi
   pcc[5]=${5:-'white'}
 
+  privcolor="%(0#.%F{red}.%F{$pcc[4]})"
 
   pc['\[']="%F{$pcc[5]}["
   pc['\]']="%F{$pcc[5]}]"
@@ -39,7 +38,7 @@ prompt_myprompt1_setup () {
   pc['\)']="%F{$pcc[1]})"
 
   p_date="$pc['\[']%F{$pcc[3]}%D{%a %m/%d/%Y %T %Z}$pc['\]']"
-  p_tty="$pc['\[']%F{$pcc[4]}%l$pc['\]']"
+  p_tty="$pc['\[']${privcolor}%l$pc['\]']"
   p_jailed=""
   if [ "$(sysctl -n security.jail.jailed 2>/dev/null || echo 0)" -eq 1 ]; then
     p_jailed="$pc['\[']%F{magenta}jailed$pc['\]']"
@@ -48,14 +47,14 @@ prompt_myprompt1_setup () {
   p_plat="$pc['\[']%F{$pcc[3]}${MACHTYPE}/${OSTYPE}/$(uname -r)$pc['\]']"
   p_ver="$pc['\[']%F{$pcc[2]}${ZSH_VERSION}$pc['\]']"
 
-  [[ -n "$WINDOW" ]] && p_win="$pc['\(']%F{$pcc[4]}$WINDOW$pc['\)']"
+  [[ -n "$WINDOW" ]] && p_win="$pc['\(']${privcolor}$WINDOW$pc['\)']"
   p_pwd="%F{$pcc[1]}%~"
-  p_user="$pc['\[']%F{$pcc[4]}%n%B%F{white}@%b%F{$pcc[4]}%m$pc['\]']"
+  p_user="$pc['\[']${privcolor}%n%B%F{white}@%b${privcolor}%m$pc['\]']"
   p_vcs="%(2v.%F{red}%U%2v%u.)"
 
   p_rc="%(?.%F{$pcc[3]}.%F{red})%?%1v%F{$pcc[3]}%B?%b"
   p_jobs="%(1j.%F{magenta}.%F{$pcc[3]})%j%F{$pcc[3]}%B&%b"
-  p_shlvl="$pc['\[']%F{$pcc[4]}zsh%f%(2L.%B/%b%F{$pcc[3]}$SHLVL%f.)$pc['\]']"
+  p_shlvl="$pc['\[']${privcolor}zsh%f%(2L.%B/%b%F{$pcc[3]}$SHLVL%f.)$pc['\]']"
   p_status="$pc['\[']%F{$pcc[3]}$p_rc$p_jobs$pc['\]']"
   p_end=" %f%B%#%b "
 
