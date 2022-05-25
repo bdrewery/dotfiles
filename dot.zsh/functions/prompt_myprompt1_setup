@@ -60,7 +60,7 @@ prompt_myprompt1_setup () {
 
   zle_highlight[(r)default:*]=default:$pcc[2]
 
-  prompt="$p_user$p_tty$p_shlvl$p_date$p_status$p_plat$p_jailed$p_vcs
+  prompt="$p_user$p_tty$p_shlvl$p_date$p_plat$p_jailed$p_status$p_vcs
 $p_pwd$p_end"
   PS2='%(4_.\.)%3_> %E'
 
