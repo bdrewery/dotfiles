@@ -74,6 +74,8 @@ ln -fs ${REPO}/dot.env.common ~/.env.common
 ln -fs ${REPO}/dot.zprofile ~/.zprofile
 ln -fs ${REPO}/dot.zshenv ~/.zshenv
 
+ln -hfs ${REPO}/dot.zpool.d ~/.zpool.d
+
 if [ -f ~/.zshrc ] && [ ! -L ~/.zshrc ] && [ ! -L ~/.zshrc.local ] &&
     [ ! -f ~/.zshrc.local ]; then
 	mv ~/.zshrc ~/.zshrc.local
