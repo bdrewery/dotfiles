@@ -39,6 +39,30 @@ zpool() {
 	command zpool "$@"
 }
 
+reboot() {
+	case "$(uname -r)" in
+	FreeBSD)
+		# FreeBSD <= 13 (as of 2022-06) does not have graceful 'reboot'
+		if [ "$#" -eq 0 ]; then
+			exec shutdown -r now
+		fi
+		;;
+	esac
+	command reboot "$@"
+}
+
+halt() {
+	case "$(uname -r)" in
+	FreeBSD)
+		# FreeBSD <= 13 (as of 2022-06) does not have graceful 'halt'
+		if [ "$#" -eq 0 ]; then
+			exec shutdown -h now
+		fi
+		;;
+	esac
+	command halt "$@"
+}
+
 if [ -n "${BUILDENV}" ]; then
         PS1="(buildenv) ${PS1}"
         unset CPUTYPE
