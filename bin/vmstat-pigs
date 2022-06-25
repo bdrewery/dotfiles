@@ -5,4 +5,4 @@
         vmstat -z | "${PROFILE_REPO:?}/dot.awk/vmstat-z-pigs.awk"
         echo
         vmstat -m | "${PROFILE_REPO:?}/dot.awk/vmstat-m-pigs.awk"
-} | column -t
+} | column -t | tr '%' ' '

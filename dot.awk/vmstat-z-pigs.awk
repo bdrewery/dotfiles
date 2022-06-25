@@ -3,7 +3,7 @@
 	# Some names have spaces
 	colon = index($0, ":")
 	bucket = substr($0, 1, colon)
-	gsub(/ /, "_", bucket)
+	gsub(/ /, "%", bucket)
 	$0 = bucket substr($0, colon + 1)
 	# Some values lack spaces after ','
 	gsub(/,/, ", ", $0)

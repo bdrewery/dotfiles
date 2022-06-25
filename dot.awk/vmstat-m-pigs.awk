@@ -15,7 +15,7 @@
 			name = name FS $(i)
 	}
 	name_fixed = name
-	gsub(/ /, "_", name_fixed)
+	gsub(/ /, "%", name_fixed)
 	sub(name, name_fixed, $0)
 }
 {
