@@ -7,7 +7,9 @@
 	$0 = bucket substr($0, colon + 1)
 	# Some values lack spaces after ','
 	gsub(/,/, ", ", $0)
+	# Drop ',' and ':'
 	gsub(/,/, "", $0)
+	sub(/:/, "", $0)
 	sub(/FAILSLEEP/, "FAIL SLEEP", $0)
 }
 {
