@@ -14,7 +14,7 @@ prompt_myprompt1_setup () {
   local -a pcc
   local -A pc
   local p_date p_tty p_plat p_ver p_user p_apm p_status p_end p_win p_pwd
-  local p_rc p_jobs p_pid p_shlvl p_jailed
+  local p_rc p_jobs p_pid p_shlvl p_jailed p_chroot p_chrooted
 
   autoload -Uz vcs_info
 
@@ -43,6 +43,14 @@ prompt_myprompt1_setup () {
   if [ "$(sysctl -n security.jail.jailed 2>/dev/null || echo 0)" -eq 1 ]; then
     p_jailed="$pc['\[']%F{magenta}jailed$pc['\]']"
   fi
+  p_chroot=$(df -h / | sed -e '1d' -e 's,.*%[[:space:]]*,,')
+  case "${p_chroot}" in
+  /) ;;
+  *)
+    p_chrooted="$pc['\[']%F{magenta}chrooted:${p_chroot}$pc['\]']"
+    ;;
+  esac
+
   p_pid="$pc['\[']%F{$pcc[3]}${$}%B\$\$%b$pc['\]']"
   p_plat="$pc['\[']%F{$pcc[3]}${MACHTYPE}/${OSTYPE}/$(uname -r)$pc['\]']"
   p_ver="$pc['\[']%F{$pcc[2]}${ZSH_VERSION}$pc['\]']"
@@ -60,7 +68,7 @@ prompt_myprompt1_setup () {
 
   zle_highlight[(r)default:*]=default:$pcc[2]
 
-  prompt="$p_user$p_tty$p_shlvl$p_date$p_plat$p_jailed$p_status$p_vcs
+  prompt="$p_user$p_tty$p_shlvl$p_date$p_plat$p_jailed${p_chrooted}$p_status$p_vcs
 $p_pwd$p_end"
   PS2='%(4_.\.)%3_> %E'
 
