@@ -20,6 +20,7 @@ if &t_Co > 16 || has("gui_running")
     let g:solarized_degrade=1
     set bg=light
   else
+    let g:solarized_contrast = "high"
     let g:solarized_termcolors=256
     set bg=dark
   endif
