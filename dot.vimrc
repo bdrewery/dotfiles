@@ -12,6 +12,7 @@ if &t_Co > 2 || has("gui_running")
   syntax on
   set hlsearch
   set synmaxcol=200
+  let g:solarized_extra_hi_groups=1
 endif
 
 if &t_Co > 16 || has("gui_running")
@@ -20,7 +21,6 @@ if &t_Co > 16 || has("gui_running")
     let g:solarized_degrade=1
     set bg=light
   else
-    let g:solarized_contrast = "high"
     let g:solarized_termcolors=256
     set bg=dark
   endif
@@ -32,7 +32,7 @@ if &t_Co > 16 || has("gui_running")
     set t_ut=
   endif
 
-  colorscheme solarized
+  colorscheme solarized8_high
 else
   set bg=dark
   colorscheme delek
