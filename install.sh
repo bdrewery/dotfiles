@@ -74,11 +74,10 @@ ln -fs ${REPO}/dot.env.common ~/.env.common
 ln -fs ${REPO}/dot.zprofile ~/.zprofile
 ln -fs ${REPO}/dot.zshenv ~/.zshenv
 
-ln -hfs ${REPO}/dot.zpool.d ~/.zpool.d
-
 mkdir -p ~/.tmux/plugins
 # XXX: Need a reldir install
-ln -hfs ../../${REPO}/dot.tmux/plugins/tpm ~/.tmux/plugins/tpm
+ln -nfs ../../${REPO}/dot.tmux/plugins/tpm ~/.tmux/plugins/tpm
+ln -nfs ${REPO}/dot.zpool.d ~/.zpool.d
 
 if [ -f ~/.zshrc ] && [ ! -L ~/.zshrc ] && [ ! -L ~/.zshrc.local ] &&
     [ ! -f ~/.zshrc.local ]; then
