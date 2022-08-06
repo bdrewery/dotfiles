@@ -52,7 +52,7 @@ prompt_myprompt1_setup () {
   esac
 
   p_pid="$pc['\[']%F{$pcc[3]}${$}%B\$\$%b$pc['\]']"
-  p_plat="$pc['\[']%F{$pcc[3]}${MACHTYPE}/${OSTYPE}/$(uname -r)$pc['\]']"
+  p_plat="$pc['\[']%F{$pcc[3]}${MACHTYPE}/${OSTYPE}$pc['\]']"
   p_ver="$pc['\[']%F{$pcc[2]}${ZSH_VERSION}$pc['\]']"
 
   [[ -n "$WINDOW" ]] && p_win="$pc['\(']${privcolor}$WINDOW$pc['\)']"
