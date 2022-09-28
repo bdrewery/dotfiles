@@ -17,11 +17,14 @@ do
 	echo "# screen-wrapper.sh $@";
 	fixscreen "$@";
 	ret="$?"
-	echo "Program terminated..sleeping"
-	if [ "${ret}" -eq 0 ]; then
+	echo "Program terminated ${ret}..sleeping"
+	case "${ret}" in
+	0|130)
+		# 130 = SIGINT
 		cnt=0
 		continue
-	fi
+		;;
+	esac
 	if [ "${cnt}" -lt 5 ]; then
 		sleep 1
 	else
