@@ -1,8 +1,16 @@
 #! /usr/bin/awk -f
 {
-  sum += $1
+	for (i = 1; i <= NF; i++) {
+		sum[i] += $i
+	}
 }
 END {
-  print sum
+	for (i = 1; i <= NF; i++) {
+		printf sum[i]
+		if (i != NF) {
+			printf FS
+		}
+	}
+	printf RS
 }
 # vim: set noet sw=8 ts=8:
