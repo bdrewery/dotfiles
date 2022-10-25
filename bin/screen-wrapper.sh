@@ -10,7 +10,9 @@ sigint_handler() {
 [ -n "${SHELL}" ] && trap sigint_handler INT TERM EXIT
 
 export RAN_FROM_CRON=1
-max=60
+max_orig=60
+max="${max_orig}"
+inc=10
 while true;
 do
 	sleep="${max}"
@@ -25,5 +27,9 @@ do
 		continue
 		;;
 	esac
-	read -t "${sleep}" _ || :
+	if read -t "${sleep}" _; then
+		max="${max_orig}"
+	else
+		max=$((max + inc))
+	fi
 done
