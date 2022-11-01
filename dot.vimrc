@@ -88,7 +88,8 @@ if has("gui_running")
   set guioptions-=T
 endif
 
-set noautoread
+" focus-events might need this? c4b6afc8c7d2a03841baa5e921cc2ccffc218508
+" set noautoread
 set encoding=utf-8
 try
   lang en_US
