@@ -285,11 +285,12 @@ au Filetype tcl setl comments=:#
 au Filetype tcl setl formatoptions+=r      " Automatically insert the current comment leader
 au Filetype tcl setl formatoptions+=q      " Allow formatting of comments with 'gq'
 
-" Prevent the comment character from forcibly being inserted in column 1
+" :verbose set autoindent? smartindent? cindent? cinkeys? indentexpr? indentkeys?
+" Prevent the comment character from forcibly being inserted in column 1; # changing indent
 au Filetype tcl setl cpoptions-=<          " allow '<keycode>' forms in mappings, e.g. <CR>
-au Filetype tcl inoremap # X<BS>#
-au Filetype tcl setl cinkeys-=0#           " # in column 1 does not prevent >> from indenting
-au Filetype tcl setl indentkeys-=0#
+set cinkeys-=0#
+set indentkeys-=0#
+:inoremap # X<BS>#
 
 " Folding
 au Filetype tcl,php,ruby setl foldmethod=syntax
