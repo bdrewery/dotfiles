@@ -76,7 +76,7 @@ ln -fs ${REPO}/dot.zshenv ~/.zshenv
 
 mkdir -p ~/.tmux/plugins
 # XXX: Need a reldir install
-ln -nfs ../../${REPO}/dot.tmux/plugins/tpm ~/.tmux/plugins/tpm
+ln -nfs ../../${REPO}/dot.tmux/plugins/tpm/tpm ~/.tmux/plugins/tpm
 ln -nfs ${REPO}/dot.zpool.d ~/.zpool.d
 
 if [ -f ~/.zshrc ] && [ ! -L ~/.zshrc ] && [ ! -L ~/.zshrc.local ] &&
