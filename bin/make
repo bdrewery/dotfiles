@@ -22,4 +22,4 @@ case ${MAKEFLAGS} in
 [a-zA-Z]*)	_make=/usr/local/bin/gmake	;;
 esac
 
-exec command -p ${_make:-/usr/bin/make} "$@"
+command -p ${_make:-/usr/bin/make} "$@"
