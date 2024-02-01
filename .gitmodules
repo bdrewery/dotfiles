@@ -79,3 +79,6 @@
 [submodule "dot.vim/bundle/vim-lsp"]
 	path = dot.vim/bundle/vim-lsp
 	url = https://github.com/prabirshrestha/vim-lsp.git
+[submodule "dot.vim/bundle/vim-plug"]
+	path = dot.vim/bundle/vim-plug
+	url = https://github.com/junegunn/vim-plug.git
