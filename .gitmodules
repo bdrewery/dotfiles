@@ -76,3 +76,6 @@
 [submodule "dot.vim/bundle/vim-solarized8"]
 	path = dot.vim/bundle/vim-solarized8
 	url = https://github.com/lifepillar/vim-solarized8.git
+[submodule "dot.vim/bundle/vim-lsp"]
+	path = dot.vim/bundle/vim-lsp
+	url = https://github.com/prabirshrestha/vim-lsp.git
