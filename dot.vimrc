@@ -7,6 +7,10 @@ set nocompatible
 runtime bundle/vim-pathogen/autoload/pathogen.vim
 execute pathogen#infect()
 
+runtime bundle/vim-plug/plug.vim
+call plug#begin('~/.vim/plugged')
+call plug#end()
+
 " Switch syntax highlighting on, when the terminal has colors
 if &t_Co > 2 || has("gui_running")
   syntax on
