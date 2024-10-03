@@ -82,3 +82,6 @@
 [submodule "dot.vim/bundle/vim-plug"]
 	path = dot.vim/bundle/vim-plug
 	url = https://github.com/junegunn/vim-plug.git
+[submodule "dot.vim/bundle/vim-ollama"]
+	path = dot.vim/bundle/vim-ollama
+	url = https://github.com/gergap/vim-ollama
