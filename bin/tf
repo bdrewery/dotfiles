@@ -1,0 +1,8 @@
+#! /bin/sh
+# vim:ft=sh
+
+if ! which terraform >/dev/null 2>&1; then
+	echo "terraform not found" >&2
+	exit 1
+fi
+exec terraform "$@"
