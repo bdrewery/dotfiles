@@ -349,6 +349,7 @@ map <leader>e <esc>:NERDTreeToggle<cr>
 
 " Reformat/indent whole file
 nnoremap <leader>5 1GvG=
+au FileType terraform nnoremap <leader>5 TerraformFmt
 
 " fast saving
 nmap <leader>w :w!<cr>
@@ -442,6 +443,8 @@ function! VisualSearch(direction) range
     let @/ = l:pattern
     let @" = l:saved_reg
 endfunction
+
+let g:terraform_align=1
 
 """""""""""""""""""""""""
 " syntastic configuration
