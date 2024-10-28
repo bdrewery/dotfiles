@@ -7,7 +7,9 @@ sigint_handler() {
 	echo "# ${_ARGS}"
 	exec ${SHELL}
 }
-[ -n "${SHELL}" ] && trap sigint_handler INT TERM EXIT
+if [ -n "${SHELL}" ]; then
+	trap sigint_handler INT TERM EXIT
+fi
 
 export RAN_FROM_CRON=1
 max_orig=60
