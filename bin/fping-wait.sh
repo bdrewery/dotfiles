@@ -71,7 +71,7 @@ PERIOD=1
 INCREMENT="1.5"
 TRIES=0
 backoff() {
-	read -t "${PERIOD}" || :
+	read -t "${PERIOD}" _ || :
 	# ZSH supports decimals but sh/bash do not so use bc(1).
 	PERIOD="$(echo "${PERIOD} * ${INCREMENT}" | bc)"
 	TRIES=$((TRIES + 1))
