@@ -1,40 +1,14 @@
 #! /bin/sh
 
 extract_hostname() {
-	local arg uh h
-
-	for arg in "$@"; do
-		case "${arg}" in
-		ssh)
-			continue
-			;;
-		-b|-B|-J)
-			return 1
-			;;
-		-*)
-			continue
-			;;
-		*)
-			uh="${arg}"
-			h="${uh##*@}"
-			echo "${h}"
-			return 0
-			;;
-		esac
-	done
-	return 0
-}
-
-extract_port() {
-	local arg port
+	local arg uhost host port
 
 	while [ "$#" -gt 0 ]; do
 		arg="${1}"
 		case "${arg}" in
 		-p)
 			port="${2?}"
-			echo "${port}"
-			return 0
+			shift
 			;;
 		ssh)
 			;;
@@ -46,7 +20,9 @@ extract_port() {
 		esac
 		shift
 	done
-	echo "22"
+	uhost="${arg:?}"
+	host="${uhost##*@}"
+	echo "${host}${port:+:${port}}"
 }
 
 sigint_handler() {
@@ -66,7 +42,15 @@ if [ "$#" -lt 1 ]; then
 fi
 
 hostname="$(extract_hostname "$@" || echo)"
-port="$(extract_port "$@" || echo)"
+case "${hostname}" in
+*:*)
+	port="${hostname##*:}"
+	hostname="${hostname%:*}"
+	;;
+*)
+	port=
+	;;
+esac
 if [ -z "${hostname}" ] || [ -z "${port}" ]; then
 	exec "$@"
 fi
