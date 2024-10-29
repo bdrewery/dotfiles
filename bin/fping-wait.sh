@@ -1,31 +1,5 @@
 #! /bin/sh
 
-if [ "$#" -lt 1 ]; then
-	echo "Usage: $0 <hostname[:port]> <cmd ...>" >&2
-	exit 1
-fi
-hostname="${1}"
-port=
-shift
-case "${hostname}" in
-*:*)
-	port="${hostname##*:}"
-	hostname="${hostname%:*}"
-	;;
-esac
-
-if ! which fping >/dev/null 2>&1; then
-	echo "[!] fping not installed" >&2
-	exec "$@"
-fi
-
-if [ -n "${port}" ]; then
-	if ! which nc >/dev/null 2>&1; then
-		echo "[!] netcat not installed" >&2
-		exec "$@"
-	fi
-fi
-
 fping() {
 	local ret
 
@@ -61,6 +35,33 @@ checkport() {
 sigint_handler() {
 	exit
 }
+
+if [ "$#" -lt 1 ]; then
+	echo "Usage: $0 <hostname[:port]> <cmd ...>" >&2
+	exit 1
+fi
+hostname="${1}"
+port=
+shift
+case "${hostname}" in
+*:*)
+	port="${hostname##*:}"
+	hostname="${hostname%:*}"
+	;;
+esac
+
+if ! which fping >/dev/null 2>&1; then
+	echo "[!] fping not installed" >&2
+	exec "$@"
+fi
+
+if [ -n "${port}" ]; then
+	if ! which nc >/dev/null 2>&1; then
+		echo "[!] netcat not installed" >&2
+		exec "$@"
+	fi
+fi
+
 if [ -n "${SHELL-}" ]; then
 	trap sigint_handler INT
 fi
