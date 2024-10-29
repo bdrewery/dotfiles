@@ -37,7 +37,7 @@ sigint_handler() {
 }
 
 if [ "$#" -lt 1 ]; then
-	echo "Usage: $0 <hostname[:port]> <cmd ...>" >&2
+	echo "Usage: $0 <hostname[:port]>" >&2
 	exit 1
 fi
 hostname="${1}"
