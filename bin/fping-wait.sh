@@ -58,6 +58,13 @@ checkport() {
 	nc -z "${hostname}" "${port}" >/dev/null 2>&1
 }
 
+sigint_handler() {
+	exit
+}
+if [ -n "${SHELL-}" ]; then
+	trap sigint_handler INT
+fi
+
 MAX=60
 PERIOD=1
 INCREMENT="1.5"

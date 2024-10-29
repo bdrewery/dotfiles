@@ -49,6 +49,13 @@ extract_port() {
 	echo "22"
 }
 
+sigint_handler() {
+	exit
+}
+if [ -n "${SHELL-}" ]; then
+	trap sigint_handler INT
+fi
+
 if ! which fping >/dev/null 2>&1; then
 	exec "$@"
 fi
