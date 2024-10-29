@@ -1,7 +1,9 @@
 # vim: set filetype=sh:
 
 which gcc > /dev/null 2>&1 || alias gcc=cc
-which setterm > /dev/null 2>&1 && setterm -blength 0
+if which setterm > /dev/null 2>&1; then
+	setterm -blength 0 >/dev/null 2>&1 || :
+fi
 cless() {
 	if which ydiff > /dev/null 2>&1; then
 		ydiff
