@@ -55,7 +55,7 @@ checkport() {
 		return 0
 	fi
 
-	nc -z "${hostname}" "${port}" >/dev/null 2>&1
+	nc -w 1 -z "${hostname}" "${port}" >/dev/null 2>&1
 }
 
 sigint_handler() {
@@ -81,7 +81,7 @@ backoff() {
 }
 
 while :; do
-	if ! fping "${hostname}" ||
+	if ! fping -r 0 "${hostname}" ||
 	   ! checkport "${hostname}" "${port}"; then
 		echo "[%] Waiting for host '${hostname}${port:+:${port}}' to become available..." >&2
 		until fping -B "${INCREMENT}" -r "${MAX}" "${hostname}"; do
