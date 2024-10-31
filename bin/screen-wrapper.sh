@@ -1,5 +1,4 @@
 #! /bin/sh
-# $Id$
 
 _ARGS="$@"
 sigint_handler() {

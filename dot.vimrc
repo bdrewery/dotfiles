@@ -1,4 +1,3 @@
-" $Id$
 
 " A lot of this is from google and various prefs/testing/experience
 

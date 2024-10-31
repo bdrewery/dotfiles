@@ -1,7 +1,6 @@
 #! /bin/sh
-# $Id$
 
-WANTED_APPS="vim screen svn git ruby tmux ctags cscope python bash zsh gvim pygmentize"
+WANTED_APPS="vim screen git ruby tmux ctags cscope python bash zsh gvim pygmentize"
 cd ~
 REPO=.profile-repo
 chmod 0700 "${REPO}"

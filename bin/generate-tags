@@ -1,5 +1,4 @@
 #! /bin/sh
-# $Id$
 
 PATH=/usr/local/bin:/opt/local/bin:${PATH}
 CTAGS=$(which exctags 2>/dev/null || echo ctags)

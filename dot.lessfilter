@@ -1,5 +1,4 @@
 #!/bin/sh
-# $Id$
 # From http://superuser.com/a/337640/34747
 
 which pygmentize >/dev/null 2>&1 || exit 0

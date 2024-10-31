@@ -1,5 +1,4 @@
 #! /bin/sh
-# $Id$
 
 update() {
 	cd ~/.profile-repo
