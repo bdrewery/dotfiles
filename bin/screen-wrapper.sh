@@ -11,7 +11,7 @@ if [ -n "${SHELL}" ]; then
 fi
 
 export RAN_FROM_CRON=1
-max_orig=60
+max_orig=3
 max="${max_orig}"
 inc=10
 while true;
