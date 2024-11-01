@@ -484,8 +484,10 @@ if filereadable(glob("~/.vim-freebsd"))
   au FileType make let b:match_words = '^\.\s*\<ifn\=\(def\|make\)\=\>:^\.\s*\<elifn\=\(def\|make\)\=\>:^\.\s*\<else\>:^\.\s*\<endif\>,^\.\s*\<for\>:^\.\s*\<endfor\>'
 endif
 
+if filereadable(glob("~/.vimrc.site"))
+    source ~/.vimrc.site
+endif
+
 if filereadable(glob("~/.vimrc.local")) 
     source ~/.vimrc.local
 endif
-
-
