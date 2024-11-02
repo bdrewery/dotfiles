@@ -88,3 +88,6 @@
 [submodule "dot.vim/bundle/vim-terraform"]
 	path = dot.vim/bundle/vim-terraform
 	url = https://github.com/hashivim/vim-terraform.git
+[submodule "dot.vim/bundle/vim-commentary"]
+	path = dot.vim/bundle/vim-commentary
+	url = https://github.com/tpope/vim-commentary
