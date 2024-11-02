@@ -53,6 +53,9 @@ key[PageDown]=${terminfo[knp]}
 [[ -n "${key[PageUp]}"   ]]  && bindkey  "${key[PageUp]}"   beginning-of-buffer-or-history
 [[ -n "${key[PageDown]}" ]]  && bindkey  "${key[PageDown]}" end-of-buffer-or-history
 
+bindkey '\e[H'    beginning-of-line
+bindkey '\e[F'    end-of-line
+
 # Don't ask to confirm rm -f!
 setopt rmstarsilent
 # Don't assume $arg should be "$arg"
