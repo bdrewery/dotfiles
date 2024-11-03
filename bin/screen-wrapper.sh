@@ -11,12 +11,12 @@ if [ -n "${SHELL}" ]; then
 fi
 
 export RAN_FROM_CRON=1
-max_orig=3
-max="${max_orig}"
-inc=10
+max=3
+n=1
+inc=1
 while true;
 do
-	sleep="${max}"
+	sleep="${n}"
 	echo "# screen-wrapper.sh $@";
 	fixscreen "$@";
 	ret="$?"
@@ -29,8 +29,11 @@ do
 		;;
 	esac
 	if read -t "${sleep}" _; then
-		max="${max_orig}"
+		n="${max}"
 	else
-		max=$((max + inc))
+		n=$((n + inc))
+	fi
+	if [ "${n}" -gt "${max}" ]; then
+		n=1
 	fi
 done
