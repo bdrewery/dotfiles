@@ -77,7 +77,7 @@ backoff() {
 	# ZSH supports decimals but sh/bash do not so use bc(1).
 	PERIOD="$(echo "${PERIOD} * ${INCREMENT}" | bc)"
 	TRIES=$((TRIES + 1))
-	if [ "${TRIES}" -gt "${MAX}" ]; then
+	if [ "${TRIES%.*}" -gt "${MAX}" ]; then
 		#exit 1
 		PERIOD=1
 	fi
