@@ -1,6 +1,5 @@
 #! /bin/sh
 
-WANTED_APPS="vim screen git ruby tmux ctags cscope python bash zsh gvim pygmentize"
 cd ~
 REPO=.profile-repo
 chmod 0700 "${REPO}"
@@ -86,18 +85,6 @@ if [ -f ~/.zshrc ] && [ ! -L ~/.zshrc ] && [ ! -L ~/.zshrc.local ] &&
 fi
 ln -fs ${REPO}/dot.zshrc ~/.zshrc
 
-### Look for needed programs
-check_for() {
-  which $1 > /dev/null 2>&1
-  if [ $? -eq 1 ]; then
-    echo "$1 missing"
-  fi
-}
-
 #if which pip >/dev/null 2>&1; then
 #	pip install tmuxomatic --upgrade --user
 #fi
-
-for app in ${WANTED_APPS}; do
-  check_for $app
-done
