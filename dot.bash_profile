@@ -3,8 +3,12 @@ if [ -f ~/.bashrc ]; then
 fi
 : ${PROFILE_REPO:=${HOME}/.profile-repo}
 
-. ${HOME}/.profile.common
+if which direnv >/dev/null 2>&1; then
+	eval "$(direnv hook bash)"
+fi
 
+. ${HOME}/.profile.common
 if [ -f ~/.bash_profile.local ]; then
   . ~/.bash_profile.local
 fi
+# vim: set filetype=sh:
