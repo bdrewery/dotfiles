@@ -84,7 +84,7 @@
 	url = https://github.com/junegunn/vim-plug.git
 [submodule "dot.vim/bundle/vim-ollama"]
 	path = dot.vim/bundle/vim-ollama
-	url = https://github.com/gergap/vim-ollama
+	url = https://github.com/bdrewery/vim-ollama.git
 [submodule "dot.vim/bundle/vim-terraform"]
 	path = dot.vim/bundle/vim-terraform
 	url = https://github.com/hashivim/vim-terraform.git
