@@ -65,11 +65,24 @@ if !has('gui_running') && &term =~ '^\%(screen\|tmux\)'
     let &t_SI .= "\<Esc>[?2004h"
     let &t_EI .= "\<Esc>[?2004l"
 
-    inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
-
+    inoremap <special> <expr> <Esc>[200\~ XTermPasteBegin()
     function! XTermPasteBegin()
-        set pastetoggle=<Esc>[201~
-        set paste
+        if ! &paste
+                " set pastetoggle=<Esc>[201~
+                set paste
+                let b:bracketed_paste_active = 1
+        else
+                let b:bracketed_paste_active = 0
+        endif
+        return ""
+    endfunction
+
+    inoremap <special> <expr> <Esc>[201\~ XTermPasteEnd()
+    function! XTermPasteEnd()
+        if &paste && exists("b:bracketed_paste_active") && b:bracketed_paste_active == 1
+                set nopaste
+                let b:bracketed_paste_active = 0
+        endif
         return ""
     endfunction
 
