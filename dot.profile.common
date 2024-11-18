@@ -70,6 +70,15 @@ if [ -n "${BUILDENV}" ]; then
         unset CPUTYPE
 fi
 
+case "${UID}" in
+0)
+	if [ -f /var/run/reboot-required ]; then
+		echo "***** REBOOT REQUIRED *****" >&2
+		cat /var/run/reboot-required
+	fi
+	;;
+esac
+
 if [ -f ${HOME}/.profile.common.local ]; then
 	. ${HOME}/.profile.common.local
 fi
