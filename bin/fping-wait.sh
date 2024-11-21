@@ -83,6 +83,20 @@ backoff() {
 	fi
 }
 
+fping() {
+	local ret
+
+	ret=0
+	command fping "$@" || ret="$?"
+	case "${ret}" in
+	2)
+		# Some error like DNS failure.
+		sleep 1
+		;;
+	esac
+	return "${ret}"
+}
+
 while :; do
 	if ! fping -r 0 "${hostname}" ||
 	   ! checkport "${hostname}" "${port}"; then
