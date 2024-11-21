@@ -4,7 +4,7 @@ fping() {
 	local ret
 
 	ret=0
-	command fping -q "$@" || ret="$?"
+	command timeout --preserve-status 5 fping -q "$@" || ret="$?"
 	case "${ret}" in
 	2|3)
 		error="$(command fping "$@" 2>&1 || :)"
@@ -29,7 +29,7 @@ checkport() {
 		return 0
 	fi
 
-	nc -w 1 -z "${hostname}" "${port}" >/dev/null 2>&1
+	timeout --preserve-status 5 nc -w 1 -z "${hostname}" "${port}" >/dev/null 2>&1
 }
 
 sigint_handler() {
