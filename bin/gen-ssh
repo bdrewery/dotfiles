@@ -1,2 +1,6 @@
 #! /bin/sh
-exec ssh-keygen -t ed25519 -C "ed25519-key-$(date +%Y%m%d) ${USER}@$(hostname -s)"
+
+if [ -e ~/.ssh/id_ed25519 ]; then
+	return 0
+fi
+ssh-keygen -t ed25519 -C "ed25519-key-$(date +%Y%m%d) ${USER}@$(hostname -s)"
