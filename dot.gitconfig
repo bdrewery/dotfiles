@@ -45,3 +45,5 @@
 	path = ~/.gitconfig.local
 [push]
 	default = matching
+[blame]
+	ignoreRevsFile = .git-blame-ignore-revs
