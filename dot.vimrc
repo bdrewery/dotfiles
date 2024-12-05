@@ -67,6 +67,12 @@ if !has('gui_running') && &term =~ '^\%(screen\|tmux\)'
 
     inoremap <special> <expr> <Esc>[200\~ XTermPasteBegin()
     function! XTermPasteBegin()
+        if mode() == 'n'
+                let b:paste_inserted = 1
+                startinsert
+        else
+                let b:paste_inserted = 0
+        endif
         if ! &paste
                 " set pastetoggle=<Esc>[201~
                 set paste
@@ -83,6 +89,12 @@ if !has('gui_running') && &term =~ '^\%(screen\|tmux\)'
                 set nopaste
                 let b:bracketed_paste_active = 0
         endif
+        if exists("b:paste_inserted") && b:paste_inserted == 1
+                stopinsert
+                let b:paste_inserted = 0
+        endif
+        unlet b:paste_inserted
+        unlet b:bracketed_paste_active
         return ""
     endfunction
 
