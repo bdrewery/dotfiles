@@ -14,7 +14,7 @@ call plug#end()
 if &t_Co > 2 || has("gui_running")
   syntax on
   set hlsearch
-  set synmaxcol=200
+  set synmaxcol=500
   let g:solarized_extra_hi_groups=1
 endif
 
