@@ -1,6 +1,9 @@
 #! /bin/sh
 # vim:ft=sh
 
+if which tofu >/dev/null 2>&1; then
+	exec tofu "$@"
+fi
 if ! which terraform >/dev/null 2>&1; then
 	echo "terraform not found" >&2
 	exit 1
