@@ -31,6 +31,7 @@ alias egrep='egrep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias rgrep='rgrep --color=auto'
 alias nopaste='printf "\e[?2004l"'
+alias k="kubectl"
 
 zpool() {
 	local ZFS_COLOR
