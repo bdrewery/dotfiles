@@ -1,0 +1,8 @@
+#! /bin/sh
+# vim:ft=sh
+
+if ! which kubectl >/dev/null 2>&1; then
+	echo "kubectl not found" >&2
+	exit 1
+fi
+exec kubectl "$@"
