@@ -593,18 +593,18 @@ bind z
 # it eats the "kb" when typing "dankbar" for example. :-(
 #
 
-bindkey -k k2 meta
-bindkey -k k3 other
-bindkey -k k4 stuff ^a^a
-bindkey -k k5 fit
-#bindkey -k k7 prev
-#bindkey -k k8 next
+#bindkey -k k2 meta
+#bindkey -k k3 other
+#bindkey -k k4 stuff ^a^a
+#bindkey -k k5 fit
+##bindkey -k k7 prev
+##bindkey -k k8 next
 
-bindkey -k k6 stuff ^a\"
-bindkey -k k7 stuff ^ap
-bindkey -k k8 stuff ^an
+#bindkey -k k6 stuff ^a\"
+#bindkey -k k7 stuff ^ap
+#bindkey -k k8 stuff ^an
 
-bindkey -k k9 windowlist -b
+#bindkey -k k9 windowlist -b
 
 # NumPad keybindings:
 # ^[Oo /      resize =
