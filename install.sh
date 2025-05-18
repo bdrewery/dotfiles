@@ -74,6 +74,8 @@ ln -fs ${REPO}/dot.env.common ~/.env.common
 ln -fs ${REPO}/dot.zprofile ~/.zprofile
 ln -fs ${REPO}/dot.zshenv ~/.zshenv
 
+rsync -avH ${REPO}/dot.config/ ~/.config/
+
 mkdir -p ~/.tmux/plugins
 # XXX: Need a reldir install
 ln -nfs ../../${REPO}/dot.tmux/plugins/tpm ~/.tmux/plugins/tpm
