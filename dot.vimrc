@@ -226,6 +226,7 @@ au Filetype php setl sts=4 sw=4 ts=4 et
 au Filetype python setl sts=4 sw=4 ts=8 et
 au Filetype javascript setl sts=4 sw=4 ts=4 et
 au Filetype sh setl sts=8 sw=8 ts=8 noet
+au FileType gitcommit setl sw=4 ts=4 noet
 
 " Do not inadvertently break a line
 set textwidth=0
