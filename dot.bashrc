@@ -1,3 +1,4 @@
+# Loaded for interactive shells
 # .bashrc
 : ${PROFILE_REPO:=${HOME}/.profile-repo}
 
@@ -38,3 +39,4 @@ fi
 if [ -f ~/.bashrc.local ]; then
 	. ~/.bashrc.local
 fi
+# vim: set filetype=bash:

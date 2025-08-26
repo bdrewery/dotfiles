@@ -1,3 +1,4 @@
+# Loaded for interactive shells
 fpath=( "$HOME/.zsh/functions" $fpath )
 
 # Speedup git tab completion - http://superuser.com/questions/458906/zsh-tab-completion-of-git-commands-is-very-slow-how-can-i-turn-it-off
@@ -75,3 +76,4 @@ fi
 if [ -f ${HOME}/.zshrc.local ]; then
 	. ${HOME}/.zshrc.local
 fi
+# vim: set filetype=zsh:

@@ -6,3 +6,4 @@ fi
 if [ -r ${HOME}/.zshenv.local ]; then
 	. ${HOME}/.zshenv.local
 fi
+# vim: set filetype=zsh:
