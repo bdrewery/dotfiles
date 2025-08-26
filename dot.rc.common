@@ -1,3 +1,4 @@
+# Loaded for interactive shells
 export HISTSIZE=1000000
 export HISTFILESIZE=$HISTSIZE
 export SAVEHIST=$HISTSIZE

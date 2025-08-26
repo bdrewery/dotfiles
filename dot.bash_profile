@@ -1,3 +1,4 @@
+# Loaded for login shells
 if [ -f ~/.bashrc ]; then
   . ~/.bashrc
 fi
@@ -11,4 +12,4 @@ fi
 if [ -f ~/.bash_profile.local ]; then
   . ~/.bash_profile.local
 fi
-# vim: set filetype=sh:
+# vim: set filetype=bash:
