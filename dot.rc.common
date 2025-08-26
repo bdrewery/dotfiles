@@ -1,0 +1,9 @@
+export HISTSIZE=1000000
+export HISTFILESIZE=$HISTSIZE
+export SAVEHIST=$HISTSIZE
+readonly HISTFILESIZE SAVEHIST HISTSIZE 2>/dev/null
+
+if [ -f ${HOME}/.rc.common.local ]; then
+	. ${HOME}/.rc.common.local
+fi
+# vim: set filetype=sh:
