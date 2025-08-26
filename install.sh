@@ -70,6 +70,7 @@ ln -fs ${REPO}/dot.valgrindrc ~/.valgrindrc
 ln -fs ${REPO}/dot.vimrc ~/.vimrc
 ln -fs ${REPO}/dot.zlogout ~/.zlogout
 
+ln -fs ${REPO}/dot.rc.common ~/.rc.common
 ln -fs ${REPO}/dot.env.common ~/.env.common
 ln -fs ${REPO}/dot.zprofile ~/.zprofile
 ln -fs ${REPO}/dot.zshenv ~/.zshenv
