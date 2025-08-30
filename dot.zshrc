@@ -70,6 +70,10 @@ setopt nomultios
 
 export HISTFILE=~/.zhistory
 
+if which direnv >/dev/null 2>&1; then
+	eval "$(direnv hook zsh)"
+fi
+
 if [ -f "${HOME}/.rc.common" ]; then
 	. "${HOME}/.rc.common"
 fi
