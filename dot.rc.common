@@ -4,6 +4,14 @@ export HISTFILESIZE=$HISTSIZE
 export SAVEHIST=$HISTSIZE
 readonly HISTFILESIZE SAVEHIST HISTSIZE 2>/dev/null
 
+case "${BUILDENV-}" in
+"") ;;
+*)
+        PS1="(buildenv) ${PS1}"
+	;;
+esac
+
+
 if [ -f ${HOME}/.rc.common.local ]; then
 	. ${HOME}/.rc.common.local
 fi
