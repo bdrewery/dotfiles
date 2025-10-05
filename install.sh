@@ -35,7 +35,7 @@ else
 	install -v -m 0600 ${REPO}/dot.ssh/authorized_keys ~/.ssh/authorized_keys
 fi
 
-for f in alert-on-exit.sh benv.sh generate-tags generate-tagsd \
+for f in alert-on-exit benv.sh generate-tags generate-tagsd \
     alert-on-failure \
     screen-wrapper.sh ssh-wrapper.sh fixscreen make start-screen tf update-profile \
     fping-wait.sh \
@@ -48,6 +48,7 @@ done
 if [ -L ~/.supp ]; then
 	rm -f ~/.supp
 fi
+ln -fs ${REPO}/bin/alert-on-exit ~/bin/alert-on-exit.sh
 ln -fs ${REPO}/dot.bash_logout ~/.bash_logout
 ln -fs ${REPO}/dot.bash_profile ~/.bash_profile
 ln -fs ${REPO}/dot.bashrc ~/.bashrc
