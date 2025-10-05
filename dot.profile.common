@@ -30,6 +30,15 @@ alias fgrep='fgrep --color=auto'
 alias rgrep='rgrep --color=auto'
 alias nopaste='printf "\e[?2004l"'
 
+zfs() {
+	local ZFS_COLOR
+
+	if [ -t 0 ]; then
+		export ZFS_COLOR=1
+	fi
+	command zfs "$@"
+}
+
 zpool() {
 	local ZFS_COLOR
 
