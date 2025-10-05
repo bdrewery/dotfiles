@@ -36,6 +36,7 @@ else
 fi
 
 for f in alert-on-exit.sh benv.sh generate-tags generate-tagsd \
+    alert-on-failure \
     screen-wrapper.sh ssh-wrapper.sh fixscreen make start-screen tf update-profile \
     fping-wait.sh \
     gen-ssh k \
