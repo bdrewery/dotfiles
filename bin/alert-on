@@ -1,6 +1,11 @@
 #! /bin/sh
 
 SCRIPT="${0##*/}"
+
+case "${NO_ALERT:+set}${NOALERT:+set}" in
+*set*) exec "$@" ;;
+esac
+
 if [ -z "${PROWL_APIKEY}" ]; then
 	echo "* No PROWL_APIKEY set, not alerting." >&2
 	exec "$@"
