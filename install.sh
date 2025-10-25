@@ -36,7 +36,6 @@ else
 fi
 
 for f in alert-on-exit benv.sh generate-tags generate-tagsd \
-    alert-on-failure \
     screen-wrapper.sh ssh-wrapper.sh fixscreen make start-screen tf update-profile \
     fping-wait.sh \
     gen-ssh k \
@@ -48,7 +47,6 @@ done
 if [ -L ~/.supp ]; then
 	rm -f ~/.supp
 fi
-ln -fs ${REPO}/bin/alert-on-exit ~/bin/alert-on-exit.sh
 ln -fs ${REPO}/dot.bash_logout ~/.bash_logout
 ln -fs ${REPO}/dot.bash_profile ~/.bash_profile
 ln -fs ${REPO}/dot.bashrc ~/.bashrc
