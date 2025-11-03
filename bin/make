@@ -19,7 +19,7 @@ fi
 # gmake doesn't use - for first char
 case ${MAKEFLAGS} in
 -*)		_make=/usr/bin/make		;;
-[a-zA-Z]*)	_make=/usr/local/bin/gmake	;;
+[a-zA-Z]*)	_make=gmake	;;
 esac
 
 command -p ${_make:-/usr/bin/make} "$@"
