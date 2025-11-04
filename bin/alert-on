@@ -1,7 +1,7 @@
 #! /bin/sh
 
 SCRIPT="${0##*/}"
-IGNORE_THRESHOLD=10
+: "${IGNORE_THRESHOLD:=10}"
 
 case "${NO_ALERT:+set}${NOALERT:+set}" in
 *set*) exec "$@" ;;
@@ -27,7 +27,7 @@ ret=$?
 
 end="$(date +%s)"
 
-if [ "$((end - start))" -le "${IGNORE_THRESHOLD:?}" ]; then
+if [ "$((end - start))" -lt "${IGNORE_THRESHOLD:?}" ]; then
 	exit "${ret}"
 fi
 
@@ -57,13 +57,9 @@ alert-on-failure*)
 	;;
 esac
 
-echo "* Sending prowl alert..." >&2
-
-curl -so /dev/null \
-        https://api.prowlapp.com/publicapi/add \
-        -F apikey=${PROWL_APIKEY} \
-        -F application="alert-on-exit $1" \
-        -F event="Command ${result}" \
-        -F description="Command: $*" &
+send-alert -k "${PROWL_APIKEY}" \
+	-a "alert-on-exit $1" \
+	-e "Command ${result}" \
+	-d "Command: $*"
 
 exit ${ret}

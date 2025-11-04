@@ -1,0 +1,40 @@
+#! /bin/sh
+
+while getopts "a:d:e:k:" FLAG; do
+        case "${FLAG}" in
+        a)
+                APP="${OPTARG}"
+                ;;
+        e)
+                EVENT="${OPTARG}"
+                ;;
+        d)
+                DESCRIPTION="${OPTARG}"
+                ;;
+        k)
+                PROWL_APIKEYS="${PROWL_APIKEYS:+${PROWL_APIKEYS} }${OPTARG}"
+                ;;
+        esac
+done
+
+shift $((OPTIND-1))
+
+: ${EVENT:="$@"}
+: ${DESCRIPTION:="$@"}
+
+if [ -z "${EVENT}" ]; then
+	echo "* Need an event, not alerting" >&2
+	echo "Usage: $0 -e <event> -d <description>" >&2
+	exit 0
+fi
+
+echo "* Sending prowl alert..." >&2
+: "${PROWL_APIKEYS:=${PROWL_APIKEY:-}}"
+for PROWL_APIKEY in ${PROWL_APIKEYS}; do
+	curl -so /dev/null -m 10 \
+	    https://api.prowlapp.com/publicapi/add \
+	    -F apikey="${PROWL_APIKEY}" \
+	    -F application="${APP:-alert}" \
+	    -F event="${EVENT}" \
+	    -F description="${DESCRIPTION}"
+done
