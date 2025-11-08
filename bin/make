@@ -14,12 +14,13 @@
 #set -x
 
 if [ -n "${MAKE}" ]; then
-	exec command -p ${MAKE} "$@"
+	command ${MAKE} "$@"
+	exit
 fi
 # gmake doesn't use - for first char
 case ${MAKEFLAGS} in
--*)		_make=/usr/bin/make		;;
-[a-zA-Z]*)	_make=gmake	;;
+-*)		_make=/usr/bin/make	;;
+[a-zA-Z]*)	_make=gmake		;;
 esac
 
-command -p ${_make:-/usr/bin/make} "$@"
+command ${_make:-/usr/bin/make} "$@"
