@@ -504,6 +504,8 @@ map K :call ReadMan()<CR>
 " source $VIMRUNTIME/ftplugin/man.vim
 " nmap K :Man <cword><CR>
 
+au BufReadCmd   *.pkg                   call tar#Browse(expand("<amatch>"))
+
 if filereadable(glob("~/.vim-freebsd")) 
   source ~/.vim/scripts/freebsd.vim
   au Filetype c,cpp call FreeBSD_Style()
