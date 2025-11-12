@@ -1,0 +1,4 @@
+#! /bin/sh
+
+# https://superuser.com/a/380778/34747
+sed -e 's/\x1b\[[0-9;]*m//g'
