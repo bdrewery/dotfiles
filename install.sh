@@ -18,7 +18,7 @@ chmod 0700 ~/.viminfo > /dev/null 2>&1
 rm -rf ~/.zsh 2>/dev/null
 ln -fs ${REPO}/dot.zsh ~/.zsh
 
-if [ -f ~/.ssh/authorized_keys ]; then
+if [ -f ~/.ssh/authorized_keys ] && ! [ -d /usr/local/share/system ]; then
 	# Don't overwrite it, just ensure all keys are added, and alert
 	# on unknown keys
 	installed_keys=$(mktemp -t keys.XXXXXXXXXX)
@@ -31,7 +31,7 @@ if [ -f ~/.ssh/authorized_keys ]; then
 	comm -1 -3 ${installed_keys} ${wanted_keys} >> ~/.ssh/authorized_keys
 	rm -f ${installed_keys} ${wanted_keys}
 	chmod 0600 ~/.ssh/authorized_keys
-else
+elif ! [ -f ~/.ssh/authorized_keys ]; then
 	install -v -m 0600 ${REPO}/dot.ssh/authorized_keys ~/.ssh/authorized_keys
 fi
 
