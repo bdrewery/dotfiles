@@ -24,10 +24,10 @@ then
         # Find the option for using colors in ls, depending on the version: Linux or BSD
         ls --color -d . &>/dev/null 2>&1 && alias ls='ls -aF --color=auto' || alias ls='ls -GFa'
 fi
-alias grep='grep --color=auto'
-alias egrep='egrep --color=auto'
-alias fgrep='fgrep --color=auto'
-alias rgrep='rgrep --color=auto'
+for gname in gname egrep fgrep rgrep; do
+	alias "${gname}"="${gname} --color=auto"
+done
+unset gname
 alias nopaste='printf "\e[?2004l"'
 alias penv='eval $(env MAKE=/usr/bin/make SCRIPTSDIR=${PORTSDIR}/Mk/Scripts sh ${PORTSDIR}/Mk/Scripts/ports_env.sh)'
 
