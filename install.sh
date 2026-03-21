@@ -7,6 +7,7 @@ chmod 0700 "${REPO}"
 install -v -m 0700 -d ~/.generate-tagsd
 install -v -m 0700 -d ~/.screen
 install -v -m 0700 -d ~/.ssh
+install -v -m 0700 -d ~/.claude
 install -v -m 0700 -d ~/.vimundo
 install -v -m 0700 -d ~/bin
 
@@ -69,6 +70,7 @@ ln -fs ${REPO}/dot.tmux.conf ~/.tmux.conf
 ln -fs ${REPO}/dot.valgrindrc ~/.valgrindrc
 ln -fs ${REPO}/dot.vimrc ~/.vimrc
 ln -fs ${REPO}/dot.zlogout ~/.zlogout
+ln -fs ../${REPO}/dot.claude/statusline-command.sh ~/.claude/
 
 ln -fs ${REPO}/dot.rc.common ~/.rc.common
 ln -fs ${REPO}/dot.env.common ~/.env.common
