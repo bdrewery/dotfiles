@@ -90,6 +90,24 @@ if [ -f ~/.zshrc ] && [ ! -L ~/.zshrc ] && [ ! -L ~/.zshrc.local ] &&
 fi
 ln -fs ${REPO}/dot.zshrc ~/.zshrc
 
+if which npm >/dev/null 2>&1 && [ "$(id -u)" != "0" ]; then
+	mkdir -p ~/.npm-global
+	# npm gets confused if HOME contains symlinks and complains about
+	# not being able to change the config.
+	npm() {
+		local HOME
+
+		export HOME="$(realpath "${HOME}")"
+		command npm "$@"
+	}
+	case "$(npm config get prefix)" in
+	undefined)
+		npm config get prefix
+		npm config set prefix ~/.npm-global
+		;;
+	esac
+fi
+
 #if which pip >/dev/null 2>&1; then
 #	pip install tmuxomatic --upgrade --user
 #fi
