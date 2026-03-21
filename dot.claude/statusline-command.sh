@@ -9,6 +9,10 @@ pwd_val=$(echo "$input" | jq -r '.workspace.current_dir // .cwd')
 model=$(echo "$input" | jq -r '.model.display_name // empty')
 session_name=$(echo "$input" | jq -r '.session_name // empty')
 used=$(echo "$input" | jq -r '.context_window.used_percentage // empty')
+limit_five_hour=$(echo "$input" | jq -r '.rate_limits.five_hour.used_percentage // empty')
+limit_five_hour_resets_at=$(echo "$input" | jq -r '.rate_limits.five_hour.resets_at // empty')
+limit_seven_day=$(echo "$input" | jq -r '.rate_limits.seven_day.used_percentage // empty')
+limit_seven_day_resets_at=$(echo "$input" | jq -r '.rate_limits.seven_day.resets_at // empty')
 
 # [user@host]
 printf '\033[31m[\033[0m\033[32m%s\033[37m@\033[32m%s\033[31m]\033[0m' "$user" "$host"
@@ -37,6 +41,26 @@ fi
 # [ctx: N% used] if available
 if [ -n "$used" ]; then
   printf ' \033[37m[\033[33mctx: %s%%\033[37m]\033[0m' "$(printf '%.0f' "$used")"
+fi
+
+# [limit: N%(Xh)/N%(Xd)] if available
+if [ -n "$limit_five_hour" ] && [ -n "$limit_seven_day" ]; then
+  now=$(date +%s)
+  five_hr_pct=$(printf '%.0f' "$limit_five_hour")
+  seven_day_pct=$(printf '%.0f' "$limit_seven_day")
+  if [ -n "$limit_five_hour_resets_at" ]; then
+    five_hr_left=$(( (limit_five_hour_resets_at - now + 3599) / 3600 ))
+    five_hr_label="${five_hr_pct}%(${five_hr_left}h)"
+  else
+    five_hr_label="${five_hr_pct}%"
+  fi
+  if [ -n "$limit_seven_day_resets_at" ]; then
+    seven_day_left=$(( (limit_seven_day_resets_at - now + 86399) / 86400 ))
+    seven_day_label="${seven_day_pct}%(${seven_day_left}d)"
+  else
+    seven_day_label="${seven_day_pct}%"
+  fi
+  printf ' \033[37m[\033[38;5;183mlimit: %s/%s\033[37m]\033[0m' "$five_hr_label" "$seven_day_label"
 fi
 
 printf '\n'
