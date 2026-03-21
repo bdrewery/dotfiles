@@ -95,8 +95,7 @@ if which npm >/dev/null 2>&1 && [ "$(id -u)" != "0" ]; then
 	# npm gets confused if HOME contains symlinks and complains about
 	# not being able to change the config.
 	npm() {
-		local HOME
-
+		local HOME="${HOME}"
 		export HOME="$(realpath "${HOME}")"
 		command npm "$@"
 	}
