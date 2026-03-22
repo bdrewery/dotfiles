@@ -45,7 +45,6 @@
 # ===============================================================
 # Uncomment one/some following lines to automatically let
 # SCREEN start some programs in the given window numbers:
-# screen -t viper        0 ssh -l shatow viper.falcon-networks.com
 # screen -t ROOT         3 su -
 # screen 2 bash
 # screen -t GOOGLE      2 links http://www.google.com
