@@ -8,6 +8,7 @@ install -v -m 0700 -d ~/.generate-tagsd
 install -v -m 0700 -d ~/.screen
 install -v -m 0700 -d ~/.ssh
 install -v -m 0700 -d ~/.claude
+install -v -m 0700 -d ~/.claude/skills
 install -v -m 0700 -d ~/.vimundo
 install -v -m 0700 -d ~/bin
 
@@ -71,6 +72,38 @@ ln -fs ${REPO}/dot.valgrindrc ~/.valgrindrc
 ln -fs ${REPO}/dot.vimrc ~/.vimrc
 ln -fs ${REPO}/dot.zlogout ~/.zlogout
 ln -fs ../${REPO}/dot.claude/statusline-command.sh ~/.claude/
+ln -fs ../${REPO}/dot.claude/CLAUDE.md ~/.claude/CLAUDE.md
+for skill in ${REPO}/dot.claude/skills/*; do
+	case "${skill}" in
+	# empty
+	"${REPO}/dot.claude/skills/*") continue ;;
+	esac
+	if [ -d ~/.claude/skills/"${skill##*/}" ] && \
+	    [ ! -L ~/.claude/skills/"${skill##*/}" ]; then
+		rm -rf ~/.claude/skills/"${skill##*/}"
+	fi
+	ln -nfs ../../"${skill}" ~/.claude/skills/"${skill##*/}"
+done
+# Remove skills that no longer exist
+for skill in ${HOME}/.claude/skills/*; do
+	case "${skill}" in
+	# empty
+	"${HOME}/.claude/skills/*") continue ;;
+	esac
+	if [ ! -L "${skill}" ]; then
+		continue
+	fi
+	linkdest="$(readlink "${skill}")"
+	case "${linkdest}" in
+	"../../${REPO}/dot.claude/skills/"*) ;;
+	*) continue ;;
+	esac
+	if [ ! -r "${skill}" ]; then
+		echo "Removing stale profile-repo skill: ${skill##*/}"
+		rm -f "${skill}"
+	fi
+done
+ln -fs ../${REPO}/dot.claude/CLAUDE.md ~/.claude/CLAUDE.md
 
 ln -fs ${REPO}/dot.rc.common ~/.rc.common
 ln -fs ${REPO}/dot.env.common ~/.env.common
