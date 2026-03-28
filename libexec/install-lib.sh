@@ -38,11 +38,11 @@ ensure_dir() {
 	install -v -m "${2:-0700}" -d "$1"
 }
 
-# link_dotfile <src> [dest]
+# link_file <src> [dest]
 # Symlink ${REPO}/<src> to ~/<dest> using a relative target.
 # If dest is omitted, it is derived from the basename of src by stripping
 # the "dot." prefix: dot.bashrc -> .bashrc
-link_dotfile() {
+link_file() {
 	local _src="$1" _dest="${2:-}" _depth _prefix
 	if [ -z "${_dest}" ]; then
 		_dest=".${_src#dot.}"
@@ -52,22 +52,22 @@ link_dotfile() {
 	ln -nfs "${_prefix}${REPO}/${_src}" "${HOME}/${_dest}"
 }
 
-# link_dotdir <src> [dest]
-# Like link_dotfile but removes the target first (needed when replacing a
+# link_dir <src> [dest]
+# Like link_file but removes the target first (needed when replacing a
 # real directory with a symlink, e.g. ~/.vim, ~/.zsh).
-link_dotdir() {
+link_dir() {
 	local _src="$1" _dest="${2:-}"
 	if [ -z "${_dest}" ]; then
 		_dest=".${_src#dot.}"
 	fi
 	rm -rf "${HOME}/${_dest}" 2>/dev/null
-	link_dotfile "${_src}" "${_dest}"
+	link_file "${_src}" "${_dest}"
 }
 
-# copy_dotfile <src> <dest>
+# copy_file <src> <dest>
 # Copy (not symlink) ${REPO}/<src> to ~/<dest>.
 # Removes a stale symlink at dest first.
-copy_dotfile() {
+copy_file() {
 	local _src="$1" _dest="$2"
 	[ -L "${HOME}/${_dest}" ] && rm -f "${HOME}/${_dest}"
 	install -C -v "${REPO}/${_src}" "${HOME}/${_dest}"

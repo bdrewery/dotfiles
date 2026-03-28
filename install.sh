@@ -22,9 +22,9 @@ ${D} ensure_dir ~/.claude/skills
 ${D} ensure_dir ~/.vimundo
 ${D} ensure_dir ~/bin
 
-${D} link_dotdir dot.vim
+${D} link_dir dot.vim
 ${D} chmod 0700 ~/.viminfo > /dev/null 2>&1
-${D} link_dotdir dot.zsh
+${D} link_dir dot.zsh
 
 if [ -z "${D}" ]; then
 	if [ -f ~/.ssh/authorized_keys ] && ! [ -d /usr/local/share/system ]; then
@@ -58,40 +58,40 @@ if [ -L ~/.supp ]; then
 	${D} rm -f ~/.supp
 fi
 
-${D} link_dotfile dot.bash_logout
-${D} link_dotfile dot.bash_profile
-${D} link_dotfile dot.bashrc
-${D} link_dotfile dot.ctags
-${D} link_dotfile dot.git-prompt.conf
+${D} link_file dot.bash_logout
+${D} link_file dot.bash_profile
+${D} link_file dot.bashrc
+${D} link_file dot.ctags
+${D} link_file dot.git-prompt.conf
 ${D} preserve_as_local .gitconfig
-${D} link_dotfile dot.gitconfig
-${D} link_dotfile dot.gitignore
-${D} link_dotfile dot.inputrc
-${D} link_dotfile dot.lessfilter
-${D} copy_dotfile dot.login_conf .login_conf
-${D} link_dotfile dot.nanorc
-${D} link_dotfile dot.profile.common
-${D} link_dotfile dot.logout.common
-${D} link_dotfile dot.screenrc
-${D} link_dotfile dot.tmux.conf
-${D} link_dotfile dot.valgrindrc
-${D} link_dotfile dot.vimrc
-${D} link_dotfile dot.zlogout
-${D} link_dotfile dot.claude/statusline-command.sh
-${D} link_dotfile dot.claude/CLAUDE.md
+${D} link_file dot.gitconfig
+${D} link_file dot.gitignore
+${D} link_file dot.inputrc
+${D} link_file dot.lessfilter
+${D} copy_file dot.login_conf .login_conf
+${D} link_file dot.nanorc
+${D} link_file dot.profile.common
+${D} link_file dot.logout.common
+${D} link_file dot.screenrc
+${D} link_file dot.tmux.conf
+${D} link_file dot.valgrindrc
+${D} link_file dot.vimrc
+${D} link_file dot.zlogout
+${D} link_file dot.claude/statusline-command.sh
+${D} link_file dot.claude/CLAUDE.md
 ${D} install_claude_skills
-${D} link_dotfile dot.rc.common
-${D} link_dotfile dot.env.common
-${D} link_dotfile dot.zprofile
-${D} link_dotfile dot.zshenv
+${D} link_file dot.rc.common
+${D} link_file dot.env.common
+${D} link_file dot.zprofile
+${D} link_file dot.zshenv
 ${D} preserve_as_local .zshrc
-${D} link_dotfile dot.zshrc
+${D} link_file dot.zshrc
 
 ${D} sync_dir dot.config .config
 
 ${D} mkdir -p ~/.tmux/plugins
-${D} link_dotfile dot.tmux/plugins/tpm
-${D} link_dotfile dot.zpool.d
+${D} link_file dot.tmux/plugins/tpm
+${D} link_file dot.zpool.d
 
 # Process private/local dotfile repos listed in ~/.local.profile-repo
 if [ -f ~/.local.profile-repo ]; then
