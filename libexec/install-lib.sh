@@ -34,33 +34,46 @@ _link_prefix() {
 
 # ensure_dir <path> [mode]
 # Create directory with permissions (default 0700).
+# No-op if the directory already exists with the correct mode.
 ensure_dir() {
-	install -v -m "${2:-0700}" -d "$1"
+	local _mode="${2:-0700}"
+	if [ -d "$1" ] && [ -n "$(find "$1" -prune -perm "${_mode}" -print)" ]; then
+		return
+	fi
+	install -v -m "${_mode}" -d "$1"
 }
 
 # link_file <src> [dest]
 # Symlink ${REPO}/<src> to ~/<dest> using a relative target.
 # If dest is omitted, it is derived from the basename of src by stripping
 # the "dot." prefix: dot.bashrc -> .bashrc
+# No-op if the symlink already points to the correct target.
 link_file() {
-	local _src="$1" _dest="${2:-}" _depth _prefix
+	local _src="$1" _dest="${2:-}" _depth _prefix _target
 	if [ -z "${_dest}" ]; then
 		_dest=".${_src#dot.}"
 	fi
 	_depth="$(_link_depth "${_dest}")"
 	_prefix="$(_link_prefix "${_depth}")"
-	ln -nfs "${_prefix}${REPO}/${_src}" "${HOME}/${_dest}"
+	_target="${_prefix}${REPO}/${_src}"
+	if [ "$(readlink "${HOME}/${_dest}")" = "${_target}" ]; then
+		return
+	fi
+	ln -nfs "${_target}" "${HOME}/${_dest}"
 }
 
 # link_dir <src> [dest]
-# Like link_file but removes the target first (needed when replacing a
-# real directory with a symlink, e.g. ~/.vim, ~/.zsh).
+# Like link_file but removes a real-directory target first (needed when
+# replacing a real directory with a symlink, e.g. ~/.vim, ~/.zsh).
+# No-op if the symlink already points to the correct target.
 link_dir() {
 	local _src="$1" _dest="${2:-}"
 	if [ -z "${_dest}" ]; then
 		_dest=".${_src#dot.}"
 	fi
-	rm -rf "${HOME}/${_dest}" 2>/dev/null
+	if [ -d "${HOME}/${_dest}" ] && [ ! -L "${HOME}/${_dest}" ]; then
+		rm -rf "${HOME}/${_dest}"
+	fi
 	link_file "${_src}" "${_dest}"
 }
 
@@ -109,7 +122,9 @@ install_claude_skills() {
 		    [ ! -L "${HOME}/.claude/skills/${_skill_name}" ]; then
 			rm -rf "${HOME}/.claude/skills/${_skill_name}"
 		fi
-		ln -nfs "../../${_skill}" "${HOME}/.claude/skills/${_skill_name}"
+		if [ "$(readlink "${HOME}/.claude/skills/${_skill_name}")" != "../../${_skill}" ]; then
+			ln -nfs "../../${_skill}" "${HOME}/.claude/skills/${_skill_name}"
+		fi
 	done
 
 	# Remove skills owned by this REPO that no longer exist in source
