@@ -2,39 +2,38 @@
 
 cd ~
 REPO=.profile-repo
+REPO_DIR="${HOME}/${REPO}"
+export REPO_DIR
 chmod 0700 "${REPO}"
+. "${REPO}/libexec/install-lib.sh"
 
-install -v -m 0700 -d ~/.generate-tagsd
-install -v -m 0700 -d ~/.screen
-install -v -m 0700 -d ~/.ssh
-install -v -m 0700 -d ~/.claude
-install -v -m 0700 -d ~/.claude/skills
-install -v -m 0700 -d ~/.vimundo
-install -v -m 0700 -d ~/bin
+ensure_dir ~/.generate-tagsd
+ensure_dir ~/.screen
+ensure_dir ~/.ssh
+ensure_dir ~/.claude
+ensure_dir ~/.claude/skills
+ensure_dir ~/.vimundo
+ensure_dir ~/bin
 
-rm -rf ~/.vim 2>/dev/null
-ln -s ${REPO}/dot.vim ~/.vim
-
+link_dotdir dot.vim
 chmod 0700 ~/.viminfo > /dev/null 2>&1
-
-rm -rf ~/.zsh 2>/dev/null
-ln -fs ${REPO}/dot.zsh ~/.zsh
+link_dotdir dot.zsh
 
 if [ -f ~/.ssh/authorized_keys ] && ! [ -d /usr/local/share/system ]; then
 	# Don't overwrite it, just ensure all keys are added, and alert
 	# on unknown keys
 	installed_keys=$(mktemp -t keys.XXXXXXXXXX)
 	wanted_keys=$(mktemp -t keys.XXXXXXXXXX)
-	sort -u ~/.ssh/authorized_keys | egrep -v '(^$|^#)' > ${installed_keys}
-	sort -u ${REPO}/dot.ssh/authorized_keys | egrep -v '(^$|^#)' > ${wanted_keys}
+	sort -u ~/.ssh/authorized_keys | egrep -v '(^$|^#)' > "${installed_keys}"
+	sort -u "${REPO}/dot.ssh/authorized_keys" | egrep -v '(^$|^#)' > "${wanted_keys}"
 	echo "### Unknown SSH Keys" >&2
-	comm -2 -3 ${installed_keys} ${wanted_keys} >&2
+	comm -2 -3 "${installed_keys}" "${wanted_keys}" >&2
 	# Add missing keys
-	comm -1 -3 ${installed_keys} ${wanted_keys} >> ~/.ssh/authorized_keys
-	rm -f ${installed_keys} ${wanted_keys}
+	comm -1 -3 "${installed_keys}" "${wanted_keys}" >> ~/.ssh/authorized_keys
+	rm -f "${installed_keys}" "${wanted_keys}"
 	chmod 0600 ~/.ssh/authorized_keys
 elif ! [ -f ~/.ssh/authorized_keys ]; then
-	install -v -m 0600 ${REPO}/dot.ssh/authorized_keys ~/.ssh/authorized_keys
+	install -v -m 0600 "${REPO}/dot.ssh/authorized_keys" ~/.ssh/authorized_keys
 fi
 
 for f in alert-on-exit benv.sh generate-tags generate-tagsd \
@@ -49,79 +48,41 @@ done
 if [ -L ~/.supp ]; then
 	rm -f ~/.supp
 fi
-ln -fs ${REPO}/dot.bash_logout ~/.bash_logout
-ln -fs ${REPO}/dot.bash_profile ~/.bash_profile
-ln -fs ${REPO}/dot.bashrc ~/.bashrc
-ln -fs ${REPO}/dot.ctags ~/.ctags
-ln -fs ${REPO}/dot.git-prompt.conf ~/.git-prompt.conf
-if [ -f ~/.gitconfig ] && [ ! -L ~/.gitconfig ]; then
-	mv ~/.gitconfig ~/.gitconfig.local
-fi
-ln -fs ${REPO}/dot.gitconfig ~/.gitconfig
-ln -fs ${REPO}/dot.gitignore ~/.gitignore
-ln -fs ${REPO}/dot.inputrc ~/.inputrc
-ln -fs ${REPO}/dot.lessfilter ~/.lessfilter
-[ -L ~/.login_conf ] && rm -f ~/.login_conf
-install -C -v ${REPO}/dot.login_conf ~/.login_conf
-ln -fs ${REPO}/dot.nanorc ~/.nanorc
-ln -fs ${REPO}/dot.profile.common ~/.profile.common
-ln -fs ${REPO}/dot.logout.common ~/.logout.common
-ln -fs ${REPO}/dot.screenrc ~/.screenrc
-ln -fs ${REPO}/dot.tmux.conf ~/.tmux.conf
-ln -fs ${REPO}/dot.valgrindrc ~/.valgrindrc
-ln -fs ${REPO}/dot.vimrc ~/.vimrc
-ln -fs ${REPO}/dot.zlogout ~/.zlogout
-ln -fs ../${REPO}/dot.claude/statusline-command.sh ~/.claude/
-ln -fs ../${REPO}/dot.claude/CLAUDE.md ~/.claude/CLAUDE.md
-for skill in ${REPO}/dot.claude/skills/*; do
-	case "${skill}" in
-	# empty
-	"${REPO}/dot.claude/skills/*") continue ;;
-	esac
-	if [ -d ~/.claude/skills/"${skill##*/}" ] && \
-	    [ ! -L ~/.claude/skills/"${skill##*/}" ]; then
-		rm -rf ~/.claude/skills/"${skill##*/}"
-	fi
-	ln -nfs ../../"${skill}" ~/.claude/skills/"${skill##*/}"
-done
-# Remove skills that no longer exist
-for skill in ${HOME}/.claude/skills/*; do
-	case "${skill}" in
-	# empty
-	"${HOME}/.claude/skills/*") continue ;;
-	esac
-	if [ ! -L "${skill}" ]; then
-		continue
-	fi
-	linkdest="$(readlink "${skill}")"
-	case "${linkdest}" in
-	"../../${REPO}/dot.claude/skills/"*) ;;
-	*) continue ;;
-	esac
-	if [ ! -r "${skill}" ]; then
-		echo "Removing stale profile-repo skill: ${skill##*/}"
-		rm -f "${skill}"
-	fi
-done
-ln -fs ../${REPO}/dot.claude/CLAUDE.md ~/.claude/CLAUDE.md
 
-ln -fs ${REPO}/dot.rc.common ~/.rc.common
-ln -fs ${REPO}/dot.env.common ~/.env.common
-ln -fs ${REPO}/dot.zprofile ~/.zprofile
-ln -fs ${REPO}/dot.zshenv ~/.zshenv
+link_dotfile dot.bash_logout
+link_dotfile dot.bash_profile
+link_dotfile dot.bashrc
+link_dotfile dot.ctags
+link_dotfile dot.git-prompt.conf
+preserve_as_local .gitconfig
+link_dotfile dot.gitconfig
+link_dotfile dot.gitignore
+link_dotfile dot.inputrc
+link_dotfile dot.lessfilter
+copy_dotfile dot.login_conf .login_conf
+link_dotfile dot.nanorc
+link_dotfile dot.profile.common
+link_dotfile dot.logout.common
+link_dotfile dot.screenrc
+link_dotfile dot.tmux.conf
+link_dotfile dot.valgrindrc
+link_dotfile dot.vimrc
+link_dotfile dot.zlogout
+link_dotfile dot.claude/statusline-command.sh .claude/statusline-command.sh
+link_dotfile dot.claude/CLAUDE.md .claude/CLAUDE.md
+install_claude_skills
+link_dotfile dot.rc.common
+link_dotfile dot.env.common
+link_dotfile dot.zprofile
+link_dotfile dot.zshenv
+preserve_as_local .zshrc
+link_dotfile dot.zshrc
 
-rsync -avH ${REPO}/dot.config/ ~/.config/
+sync_dir dot.config .config
 
 mkdir -p ~/.tmux/plugins
-# XXX: Need a reldir install
-ln -nfs ../../${REPO}/dot.tmux/plugins/tpm ~/.tmux/plugins/tpm
-ln -nfs ${REPO}/dot.zpool.d ~/.zpool.d
-
-if [ -f ~/.zshrc ] && [ ! -L ~/.zshrc ] && [ ! -L ~/.zshrc.local ] &&
-    [ ! -f ~/.zshrc.local ]; then
-	mv ~/.zshrc ~/.zshrc.local
-fi
-ln -fs ${REPO}/dot.zshrc ~/.zshrc
+link_dotfile dot.tmux/plugins/tpm .tmux/plugins/tpm
+link_dotfile dot.zpool.d
 
 # Process private/local dotfile repos listed in ~/.local.profile-repo
 if [ -f ~/.local.profile-repo ]; then
@@ -143,7 +104,7 @@ if [ -f ~/.local.profile-repo ]; then
 		fi
 		if [ -x "${_repo_dir}/install.sh" ]; then
 			echo "Running ${_repo_name}/install.sh"
-			(cd "${_repo_dir}" && ./install.sh)
+			REPO="${_repo_dir}" sh "${_repo_dir}/install.sh"
 		fi
 	done < ~/.local.profile-repo
 fi
