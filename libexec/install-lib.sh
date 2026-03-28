@@ -118,13 +118,7 @@ install_claude_skills() {
 		"${REPO}/${_skills_dir}/*") continue ;;
 		esac
 		_skill_name="${_skill##*/}"
-		if [ -d "${HOME}/.claude/skills/${_skill_name}" ] && \
-		    [ ! -L "${HOME}/.claude/skills/${_skill_name}" ]; then
-			rm -rf "${HOME}/.claude/skills/${_skill_name}"
-		fi
-		if [ "$(readlink "${HOME}/.claude/skills/${_skill_name}")" != "../../${_skill}" ]; then
-			ln -nfs "../../${_skill}" "${HOME}/.claude/skills/${_skill_name}"
-		fi
+		link_dir "${_skills_dir}/${_skill_name}"
 	done
 
 	# Remove skills owned by this REPO that no longer exist in source
