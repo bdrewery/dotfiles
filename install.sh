@@ -113,7 +113,7 @@ if [ -f ~/.local.profile-repo ]; then
 				git clone --depth=1 "${_repo_url}" "${_repo_dir}"
 			fi
 		fi
-		if [ -x "${_repo_dir}/install.sh" ]; then
+		if [ -r "${_repo_dir}/install.sh" ]; then
 			echo "==> Running ${_repo_name}/install.sh"
 			REPO="${_repo_dir}" sh "${_repo_dir}/install.sh" ${D:+-n}
 		fi
