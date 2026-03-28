@@ -43,10 +43,9 @@ ensure_dir() {
 # If dest is omitted, it is derived from the basename of src by stripping
 # the "dot." prefix: dot.bashrc -> .bashrc
 link_dotfile() {
-	local _src="$1" _dest="${2:-}" _base _depth _prefix
+	local _src="$1" _dest="${2:-}" _depth _prefix
 	if [ -z "${_dest}" ]; then
-		_base="${_src##*/}"
-		_dest=".${_base#dot.}"
+		_dest=".${_src#dot.}"
 	fi
 	_depth="$(_link_depth "${_dest}")"
 	_prefix="$(_link_prefix "${_depth}")"

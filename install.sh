@@ -77,8 +77,8 @@ ${D} link_dotfile dot.tmux.conf
 ${D} link_dotfile dot.valgrindrc
 ${D} link_dotfile dot.vimrc
 ${D} link_dotfile dot.zlogout
-${D} link_dotfile dot.claude/statusline-command.sh .claude/statusline-command.sh
-${D} link_dotfile dot.claude/CLAUDE.md .claude/CLAUDE.md
+${D} link_dotfile dot.claude/statusline-command.sh
+${D} link_dotfile dot.claude/CLAUDE.md
 ${D} install_claude_skills
 ${D} link_dotfile dot.rc.common
 ${D} link_dotfile dot.env.common
@@ -90,7 +90,7 @@ ${D} link_dotfile dot.zshrc
 ${D} sync_dir dot.config .config
 
 ${D} mkdir -p ~/.tmux/plugins
-${D} link_dotfile dot.tmux/plugins/tpm .tmux/plugins/tpm
+${D} link_dotfile dot.tmux/plugins/tpm
 ${D} link_dotfile dot.zpool.d
 
 # Process private/local dotfile repos listed in ~/.local.profile-repo
