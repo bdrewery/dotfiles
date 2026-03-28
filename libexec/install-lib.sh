@@ -55,7 +55,7 @@ link_file() {
 	fi
 	_depth="$(_link_depth "${_dest}")"
 	_prefix="$(_link_prefix "${_depth}")"
-	_target="${_prefix}${REPO}/${_src}"
+	_target="${_prefix}${REPO:?}/${_src}"
 	if [ "$(readlink "${HOME}/${_dest}")" = "${_target}" ]; then
 		return
 	fi
@@ -74,7 +74,7 @@ link_dir() {
 	fi
 	if [ -L "${HOME}/${_dest}" ]; then
 		case "$(readlink "${HOME}/${_dest}")" in
-		*"${REPO}/"*) ;; # ours — link_file handles idempotently
+		*"${REPO:?}/"*) ;; # ours — link_file handles idempotently
 		*)
 			mv "${HOME}/${_dest}" "${HOME}/${_dest}.profile-repo-replaced"
 			;;
@@ -91,14 +91,14 @@ link_dir() {
 copy_file() {
 	local _src="$1" _dest="$2"
 	[ -L "${HOME}/${_dest}" ] && rm -f "${HOME}/${_dest}"
-	install -C -v "${REPO}/${_src}" "${HOME}/${_dest}"
+	install -C -v "${REPO:?}/${_src}" "${HOME}/${_dest}"
 }
 
 # sync_dir <src> <dest>
 # rsync ${REPO}/<src>/ into ~/<dest>/.
 sync_dir() {
 	local _src="$1" _dest="$2"
-	rsync -avH "${REPO}/${_src}/" "${HOME}/${_dest}/"
+	rsync -avH "${REPO:?}/${_src}/" "${HOME}/${_dest}/"
 }
 
 # preserve_as_local <file>
@@ -121,9 +121,9 @@ install_claude_skills() {
 	local _skills_dir="${1:-dot.claude/skills}"
 	local _skill _skill_name _linkdest
 
-	for _skill in "${REPO}/${_skills_dir}/"*; do
+	for _skill in "${REPO:?}/${_skills_dir}/"*; do
 		case "${_skill}" in
-		"${REPO}/${_skills_dir}/*") continue ;;
+		"${REPO:?}/${_skills_dir}/*") continue ;;
 		esac
 		_skill_name="${_skill##*/}"
 		link_dir "${_skills_dir}/${_skill_name}"
@@ -137,7 +137,7 @@ install_claude_skills() {
 		[ ! -L "${_skill}" ] && continue
 		_linkdest="$(readlink "${_skill}")"
 		case "${_linkdest}" in
-		"../../${REPO}/${_skills_dir}/"*) ;;
+		"../../${REPO:?}/${_skills_dir}/"*) ;;
 		*) continue ;;
 		esac
 		if [ ! -r "${_skill}" ]; then
