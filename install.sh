@@ -123,6 +123,31 @@ if [ -f ~/.zshrc ] && [ ! -L ~/.zshrc ] && [ ! -L ~/.zshrc.local ] &&
 fi
 ln -fs ${REPO}/dot.zshrc ~/.zshrc
 
+# Process private/local dotfile repos listed in ~/.local.profile-repo
+if [ -f ~/.local.profile-repo ]; then
+	install -v -m 0700 -d "${REPO}/local.d"
+	while read -r _repo_url; do
+		case "${_repo_url}" in
+		""|\#*) continue ;;
+		esac
+		_repo_name="${_repo_url##*/}"
+		_repo_name="${_repo_name%.git}"
+		_repo_dir="${REPO}/local.d/${_repo_name}"
+		if [ -d "${_repo_dir}/.git" ]; then
+			echo "Updating local repo: ${_repo_name}"
+			git -C "${_repo_dir}" fetch origin --depth=1
+			git -C "${_repo_dir}" reset --hard origin/HEAD
+		else
+			echo "Cloning local repo: ${_repo_name}"
+			git clone --depth=1 "${_repo_url}" "${_repo_dir}"
+		fi
+		if [ -x "${_repo_dir}/install.sh" ]; then
+			echo "Running ${_repo_name}/install.sh"
+			(cd "${_repo_dir}" && ./install.sh)
+		fi
+	done < ~/.local.profile-repo
+fi
+
 if which npm >/dev/null 2>&1 && [ "$(id -u)" != "0" ]; then
 	mkdir -p ~/.npm-global
 	# npm gets confused if HOME contains symlinks and complains about
