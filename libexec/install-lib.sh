@@ -63,16 +63,24 @@ link_file() {
 }
 
 # link_dir <src> [dest]
-# Like link_file but removes a real-directory target first (needed when
-# replacing a real directory with a symlink, e.g. ~/.vim, ~/.zsh).
+# Like link_file but handles an existing target that is a real directory
+# or a symlink not owned by this repo.  Displaced targets are moved to
+# <dest>.profile-repo-replaced rather than deleted.
 # No-op if the symlink already points to the correct target.
 link_dir() {
 	local _src="$1" _dest="${2:-}"
 	if [ -z "${_dest}" ]; then
 		_dest=".${_src#dot.}"
 	fi
-	if [ -d "${HOME}/${_dest}" ] && [ ! -L "${HOME}/${_dest}" ]; then
-		rm -rf "${HOME}/${_dest}"
+	if [ -L "${HOME}/${_dest}" ]; then
+		case "$(readlink "${HOME}/${_dest}")" in
+		*"${REPO}/"*) ;; # ours — link_file handles idempotently
+		*)
+			mv "${HOME}/${_dest}" "${HOME}/${_dest}.profile-repo-replaced"
+			;;
+		esac
+	elif [ -e "${HOME}/${_dest}" ]; then
+		mv "${HOME}/${_dest}" "${HOME}/${_dest}.profile-repo-replaced"
 	fi
 	link_file "${_src}" "${_dest}"
 }
