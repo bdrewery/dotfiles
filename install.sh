@@ -9,10 +9,10 @@ done
 
 cd ~
 REPO=.profile-repo
-REPO_DIR="${HOME}/${REPO}"
-export REPO_DIR
-${D} chmod 0700 "${REPO_DIR}"
-. "${REPO}/libexec/install-lib.sh"
+PROFILE_REPO="${HOME}/${REPO:?}"
+export PROFILE_REPO
+${D} chmod 0700 "${PROFILE_REPO}"
+. "${PROFILE_REPO}/libexec/install-lib.sh"
 
 ${D} ensure_dir ~/.generate-tagsd
 ${D} ensure_dir ~/.screen
@@ -33,7 +33,7 @@ if [ -z "${D}" ]; then
 		installed_keys=$(mktemp -t keys.XXXXXXXXXX)
 		wanted_keys=$(mktemp -t keys.XXXXXXXXXX)
 		sort -u ~/.ssh/authorized_keys | egrep -v '(^$|^#)' > "${installed_keys}"
-		sort -u "${REPO}/dot.ssh/authorized_keys" | egrep -v '(^$|^#)' > "${wanted_keys}"
+		sort -u "${PROFILE_REPO:?}/dot.ssh/authorized_keys" | egrep -v '(^$|^#)' > "${wanted_keys}"
 		echo "### Unknown SSH Keys" >&2
 		comm -2 -3 "${installed_keys}" "${wanted_keys}" >&2
 		# Add missing keys
@@ -41,7 +41,7 @@ if [ -z "${D}" ]; then
 		rm -f "${installed_keys}" "${wanted_keys}"
 		chmod 0600 ~/.ssh/authorized_keys
 	elif ! [ -f ~/.ssh/authorized_keys ]; then
-		install -v -m 0600 "${REPO}/dot.ssh/authorized_keys" ~/.ssh/authorized_keys
+		install -v -m 0600 "${PROFILE_REPO}/dot.ssh/authorized_keys" ~/.ssh/authorized_keys
 	fi
 fi
 
@@ -95,14 +95,14 @@ ${D} link_file dot.zpool.d
 
 # Process private/local dotfile repos listed in ~/.local.profile-repo
 if [ -f ~/.local.profile-repo ]; then
-	${D} install -v -m 0700 -d "${REPO_DIR}/local.d"
+	${D} install -v -m 0700 -d "${PROFILE_REPO}/local.d"
 	while read -r _repo_url; do
 		case "${_repo_url}" in
 		""|\#*) continue ;;
 		esac
 		_repo_name="${_repo_url##*/}"
 		_repo_name="${_repo_name%.git}"
-		_repo_dir="${REPO}/local.d/${_repo_name}"
+		_repo_dir="${REPO:?}/local.d/${_repo_name}"
 		if [ -z "${D}" ]; then
 			if [ -d "${_repo_dir}/.git" ]; then
 				echo "Updating local repo: ${_repo_name}"
