@@ -28,7 +28,7 @@ then
         # Find the option for using colors in ls, depending on the version: Linux or BSD
         ls --color -d . &>/dev/null 2>&1 && alias ls='ls -aF --color=auto' || alias ls='ls -GFa'
 fi
-for gname in gname egrep fgrep rgrep; do
+for gname in grep egrep fgrep rgrep; do
 	alias "${gname}"="${gname} --color=auto"
 done
 unset gname
