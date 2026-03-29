@@ -1,0 +1,38 @@
+#!/bin/sh
+# grep-profile - grep across shell profile files only
+# Avoids false matches from non-profile files when searching ~/.*
+
+files=""
+for f in \
+    ~/.zshenv ~/.zprofile ~/.zshrc \
+    ~/.bash_profile ~/.bashrc ~/.bash_completion \
+    ~/.zlogout ~/.bash_logout \
+    ~/.env.common ~/.profile.common ~/.rc.common ~/.logout.common \
+    ~/.zshenv.local ~/.zprofile.local ~/.zshrc.local \
+    ~/.bash_profile.local ~/.bashrc.local \
+    ~/.env.common.local ~/.profile.common.local ~/.rc.common.local
+do
+	[ -f "$f" ] && files="$files $f"
+done
+
+# local.d nested profile files (same basenames as ~/dot.*, no .local variants)
+_repo="${PROFILE_REPO:-${HOME}/.profile-repo}"
+for _dir in "${_repo}"/local.d/*; do
+	[ -d "$_dir" ] || continue
+	for _base in \
+	    dot.zshenv dot.zprofile dot.zshrc \
+	    dot.bash_profile dot.bashrc dot.bash_completion \
+	    dot.zlogout dot.bash_logout \
+	    dot.env.common dot.profile.common dot.rc.common dot.logout.common
+	do
+		[ -f "$_dir/$_base" ] && files="$files $_dir/$_base"
+	done
+done
+
+if [ -z "$files" ]; then
+	echo "grep-profile: no profile files found" >&2
+	exit 1
+fi
+
+# shellcheck disable=SC2086
+grep "$@" $files
