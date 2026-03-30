@@ -1,0 +1,2 @@
+- This a dotfiles repository.
+- Files are installed by `./install.sh` which symlinks most files back into a local checkout in `~/.profile-repo`.
