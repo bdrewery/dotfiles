@@ -78,7 +78,6 @@ ${D} link_file dot.valgrindrc
 ${D} link_file dot.vimrc
 ${D} link_file dot.zlogout
 ${D} link_file dot.claude/statusline-command.sh
-${D} link_file dot.claude/CLAUDE.md
 ${D} install_claude_skills
 ${D} link_file dot.rc.common
 ${D} link_file dot.env.common
