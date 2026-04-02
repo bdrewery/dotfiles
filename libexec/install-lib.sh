@@ -113,12 +113,16 @@ preserve_as_local() {
 	fi
 }
 
-# install_claude_skills [skills_dir]
-# Install all skills from ${REPO}/<skills_dir> into ~/.claude/skills/.
+# install_claude_skills
+# Install all skills/agents from ${REPO}/<type_dir> into ~/.claude/(skills|agent)/.
 # Removes stale skills that were previously installed from this REPO.
-# Default skills_dir: dot.claude/skills
 install_claude_skills() {
-	local _skills_dir="${1:-dot.claude/skills}"
+	_install_claude_skills skills
+	_install_claude_skills agents
+}
+_install_claude_skills() {
+	local _skills_type="${1:?}"
+	local _skills_dir="dot.claude/${_skills_type}"
 	local _skill _skill_name _linkdest
 
 	for _skill in "${REPO:?}/${_skills_dir}/"*; do
@@ -130,9 +134,9 @@ install_claude_skills() {
 	done
 
 	# Remove skills owned by this REPO that no longer exist in source
-	for _skill in "${HOME}/.claude/skills/"*; do
+	for _skill in "${HOME}/.claude/${_skills_type}/"*; do
 		case "${_skill}" in
-		"${HOME}/.claude/skills/*") continue ;;
+		"${HOME}/.claude/${_skills_type}/*") continue ;;
 		esac
 		[ ! -L "${_skill}" ] && continue
 		_linkdest="$(readlink "${_skill}")"

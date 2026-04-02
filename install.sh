@@ -18,6 +18,7 @@ ${D} ensure_dir ~/.generate-tagsd
 ${D} ensure_dir ~/.screen
 ${D} ensure_dir ~/.ssh
 ${D} ensure_dir ~/.claude
+${D} ensure_dir ~/.claude/agents
 ${D} ensure_dir ~/.claude/skills
 ${D} ensure_dir ~/.vimundo
 ${D} ensure_dir ~/bin
