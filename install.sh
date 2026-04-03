@@ -35,8 +35,13 @@ if [ -z "${D}" ]; then
 		wanted_keys=$(mktemp -t keys.XXXXXXXXXX)
 		sort -u ~/.ssh/authorized_keys | egrep -v '(^$|^#)' > "${installed_keys}"
 		sort -u "${PROFILE_REPO:?}/dot.ssh/authorized_keys" | egrep -v '(^$|^#)' > "${wanted_keys}"
-		echo "### Unknown SSH Keys" >&2
-		comm -2 -3 "${installed_keys}" "${wanted_keys}" >&2
+		unknown_keys="$(mktemp -ut badkeys.XXXXXXXXX)"
+		comm -2 -3 "${installed_keys}" "${wanted_keys}" > "${unknown_keys:?}"
+		if [ -s "${unknown_keys:?}" ]; then
+			echo "### Unknown SSH Keys" >&2
+			cat "${unknown_keys:?}" >&2
+		fi
+		rm -f "${unknown_keys:?}"
 		# Add missing keys
 		comm -1 -3 "${installed_keys}" "${wanted_keys}" >> ~/.ssh/authorized_keys
 		rm -f "${installed_keys}" "${wanted_keys}"
