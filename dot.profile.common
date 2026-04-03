@@ -86,7 +86,5 @@ case "${UID}" in
 	;;
 esac
 
-if [ -f ${HOME}/.profile.common.local ]; then
-	. ${HOME}/.profile.common.local
-fi
+source_local "${HOME}/.profile.common"
 # vim: set filetype=sh:

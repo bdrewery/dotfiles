@@ -9,7 +9,5 @@ if which direnv >/dev/null 2>&1; then
 fi
 
 . ${HOME}/.profile.common
-if [ -f ~/.bash_profile.local ]; then
-  . ~/.bash_profile.local
-fi
+source_local "${HOME}/.bash_profile"
 # vim: set filetype=bash:

@@ -2,7 +2,5 @@
 : ${PROFILE_REPO:=${HOME}/.profile-repo}
 
 . ${HOME}/.profile.common
-if [ -f ${HOME}/.zprofile.local ]; then
-	. ${HOME}/.zprofile.local
-fi
+source_local "${HOME}/.zprofile"
 # vim: set filetype=zsh:

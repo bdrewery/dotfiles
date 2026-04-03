@@ -12,7 +12,5 @@ case "${BUILDENV-}" in
 esac
 
 
-if [ -f ${HOME}/.rc.common.local ]; then
-	. ${HOME}/.rc.common.local
-fi
+source_local "${HOME}/.rc.common"
 # vim: set filetype=sh:

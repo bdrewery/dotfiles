@@ -77,7 +77,5 @@ fi
 if [ -f "${HOME}/.rc.common" ]; then
 	. "${HOME}/.rc.common"
 fi
-if [ -f ${HOME}/.zshrc.local ]; then
-	. ${HOME}/.zshrc.local
-fi
+source_local "${HOME}/.zshrc"
 # vim: set filetype=zsh:

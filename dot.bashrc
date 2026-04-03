@@ -2,9 +2,7 @@
 # .bashrc
 : ${PROFILE_REPO:=${HOME}/.profile-repo}
 
-if [ -r "${HOME}/.env.common" ]; then
-	. ${HOME}/.env.common
-fi
+. "${HOME}/.env.common"
 
 # User specific aliases and functions
 
@@ -36,7 +34,5 @@ fi
 if [ -f ~/.rc.common ]; then
 	. ~/.rc.common
 fi
-if [ -f ~/.bashrc.local ]; then
-	. ~/.bashrc.local
-fi
+source_local "${HOME}/.bashrc"
 # vim: set filetype=bash:
