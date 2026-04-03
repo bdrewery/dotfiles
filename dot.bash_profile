@@ -8,6 +8,6 @@ if which direnv >/dev/null 2>&1; then
 	eval "$(direnv hook bash)"
 fi
 
-. ${HOME}/.profile.common
+. "${HOME}/.profile.common"
 source_local "${HOME}/.bash_profile"
 # vim: set filetype=bash:
