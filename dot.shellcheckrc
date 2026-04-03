@@ -1,0 +1,4 @@
+# always quote vars
+enable=quote-safe-variables
+# Allow `local`
+disable=SC3043

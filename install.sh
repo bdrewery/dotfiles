@@ -74,6 +74,7 @@ ${D} link_file dot.nanorc
 ${D} link_file dot.profile.common
 ${D} link_file dot.logout.common
 ${D} link_file dot.screenrc
+${D} link_file dot.shellcheckrc
 ${D} link_file dot.tmux.conf
 ${D} link_file dot.valgrindrc
 ${D} link_file dot.vimrc
