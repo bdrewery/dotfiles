@@ -12,27 +12,27 @@ fi
 # past this point for scp and rcp, and it's important to refrain from
 # outputting anything in those cases.
 if [[ $- != *i* ]] ; then
-        # Shell is non-interactive.  Be done now!
-        return
+	# Shell is non-interactive.  Be done now!
+	return
 fi
 
 
 # Source global definitions
 if [ -f /etc/bashrc ]; then
-        . /etc/bashrc
+	. /etc/bashrc
 fi
 
 if [ -f ~/.bash_completion ]; then
-		. ~/.bash_completion
+	. ~/.bash_completion
 fi
 
 # . ~/.profile-repo/git-prompt/git-prompt.sh
 
 [[ -f "/etc/bash_completion.d/git" ]] &&
-     . /etc/bash_completion.d/git
+	. /etc/bash_completion.d/git
 
 [[ -f "/usr/share/bash-completion/git" ]] &&
-     . /usr/share/bash-completion/git
+	. /usr/share/bash-completion/git
 if [ -f ~/.rc.common ]; then
 	. ~/.rc.common
 fi
