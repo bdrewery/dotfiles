@@ -3,9 +3,6 @@
 : ${PROFILE_REPO:=${HOME}/.profile-repo}
 
 . "${HOME}/.env.common"
-if which mise >/dev/null 2>&1; then
-	eval "$(mise activate bash)"
-fi
 # User specific aliases and functions
 
 # Test for an interactive shell.  There is no need to set anything
