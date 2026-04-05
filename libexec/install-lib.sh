@@ -107,10 +107,13 @@ sync_dir() {
 preserve_as_local() {
 	local _src="$1"
 	local _file=".${_src#dot.}"
-	if [ -f "${HOME}/${_file}" ] && [ ! -L "${HOME}/${_file}" ] && \
-	    [ ! -L "${HOME}/${_file}.local" ] && \
-	    [ ! -f "${HOME}/${_file}.local" ]; then
-		mv "${HOME}/${_file}" "${HOME}/${_file}.local"
+	if [ -f "${HOME}/${_file}" ] && [ ! -L "${HOME}/${_file}" ]; then
+		if [ ! -L "${HOME}/${_file}.local" ] &&
+		    [ ! -f "${HOME}/${_file}.local" ]; then
+			mv "${HOME}/${_file}" "${HOME}/${_file}.local"
+		else
+			mv "${HOME}/${_file}" "${HOME}/${_file}.profile-repo-replaced"
+		fi
 	fi
 }
 
