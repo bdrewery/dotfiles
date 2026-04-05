@@ -32,6 +32,12 @@ _link_prefix() {
 	printf '%s' "${_prefix}"
 }
 
+_replace() {
+	local _file="${_file}"
+	mv "${HOME}/${_file}" \
+	    "${HOME}/${_file}.profile-repo-$(date +"%Y%m%dT%H%M%S")"
+}
+
 # ensure_dir <path> [mode]
 # Create directory with permissions (default 0700).
 # No-op if the directory already exists with the correct mode.
@@ -79,11 +85,11 @@ link_dir() {
 		case "$(readlink "${HOME}/${_dest}")" in
 		*"${REPO:?}/"*) ;; # ours — link_file handles idempotently
 		*)
-			mv "${HOME}/${_dest}" "${HOME}/${_dest}.profile-repo-replaced"
+			_replace "${HOME}/${_dest}"
 			;;
 		esac
 	elif [ -e "${HOME}/${_dest}" ]; then
-		mv "${HOME}/${_dest}" "${HOME}/${_dest}.profile-repo-replaced"
+		_replace "${HOME}/${_dest}"
 	fi
 	link_file "${_src}" "${_dest}"
 }
@@ -116,7 +122,7 @@ preserve_as_local() {
 		    [ ! -f "${HOME}/${_file}.local" ]; then
 			mv "${HOME}/${_file}" "${HOME}/${_file}.local"
 		else
-			mv "${HOME}/${_file}" "${HOME}/${_file}.profile-repo-replaced"
+			_replace "${HOME}/${_dest}"
 		fi
 	fi
 }
