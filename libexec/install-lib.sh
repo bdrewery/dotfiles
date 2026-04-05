@@ -50,6 +50,7 @@ ensure_dir() {
 # No-op if the symlink already points to the correct target.
 link_file() {
 	local _src="$1" _dest="${2:-}" _depth _prefix _target
+	preserve_as_local "${_src}"
 	if [ -z "${_dest}" ]; then
 		_dest=".${_src#dot.}"
 	fi
@@ -69,6 +70,7 @@ link_file() {
 # No-op if the symlink already points to the correct target.
 link_dir() {
 	local _src="$1" _dest="${2:-}"
+	# preserve_as_local "${_src}"
 	if [ -z "${_dest}" ]; then
 		_dest=".${_src#dot.}"
 	fi
@@ -91,6 +93,7 @@ link_dir() {
 copy_file() {
 	local _src="$1" _dest="$2"
 	[ -L "${HOME}/${_dest}" ] && rm -f "${HOME}/${_dest}"
+	# preserving this file would be too complex
 	install -C -v "${REPO:?}/${_src}" "${HOME}/${_dest}"
 }
 
