@@ -155,7 +155,7 @@ _install_claude_skills() {
 		[ ! -L "${_skill}" ] && continue
 		_linkdest="$(readlink "${_skill}")"
 		case "${_linkdest}" in
-		"../../${REPO:?}/${_skills_dir}/"*) ;;
+		*"/${REPO:?}/${_skills_dir}/"*) ;;
 		*) continue ;;
 		esac
 		if [ ! -r "${_skill}" ]; then
