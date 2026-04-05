@@ -61,6 +61,7 @@ link_file() {
 	"${_target}") return ;;
 	esac
 	ln -nfs "${_target}" "${HOME}/${_dest}"
+	chmod 0400 "${HOME}/${_dest}"
 }
 
 # link_dir <src> [dest]
