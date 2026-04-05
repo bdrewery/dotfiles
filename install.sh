@@ -65,7 +65,6 @@ if [ -L ~/.supp ]; then
 fi
 
 # Profile files
-${D} preserve_as_local .zshrc
 ${D} link_file dot.bash_logout
 ${D} link_file dot.bash_profile
 ${D} link_file dot.bashrc
@@ -77,11 +76,12 @@ ${D} link_file dot.rc.common
 ${D} link_file dot.zlogout
 ${D} link_file dot.zprofile
 ${D} link_file dot.zshenv
+${D} preserve_as_local dot.zshrc
 ${D} link_file dot.zshrc
 # Misc
 ${D} link_file dot.ctags
 ${D} link_file dot.git-prompt.conf
-${D} preserve_as_local .gitconfig
+${D} preserve_as_local dot.gitconfig
 ${D} link_file dot.gitconfig
 ${D} link_file dot.gitignore
 ${D} link_file dot.inputrc

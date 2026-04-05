@@ -105,7 +105,8 @@ sync_dir() {
 # If ~/<file> is a regular file (not a symlink) and ~/<file>.local does not
 # exist, rename it to ~/<file>.local before symlinking over it.
 preserve_as_local() {
-	local _file="$1"
+	local _src="$1"
+	local _file=".${_src#dot.}"
 	if [ -f "${HOME}/${_file}" ] && [ ! -L "${HOME}/${_file}" ] && \
 	    [ ! -L "${HOME}/${_file}.local" ] && \
 	    [ ! -f "${HOME}/${_file}.local" ]; then
