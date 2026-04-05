@@ -69,7 +69,7 @@ ${D} link_file dot.bash_logout
 ${D} link_file dot.bash_profile
 ${D} link_file dot.bashrc
 ${D} link_file dot.env.common
-${D} copy_file dot.login_conf .login_conf
+${D} copy_file dot.login_conf .login_conf # FreeBSD requires not a symlink
 ${D} link_file dot.logout.common
 ${D} link_file dot.profile.common
 ${D} link_file dot.rc.common
