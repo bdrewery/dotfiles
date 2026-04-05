@@ -1,8 +1,15 @@
 : ${PROFILE_REPO:=${HOME}/.profile-repo}
 
-. "${HOME}/.env.common"
-if which mise >/dev/null 2>&1; then
-  eval "$(mise activate zsh)"
-fi
+# .env.common is included in .zprofile to avoid macOS /etc/zprofile path_helper
+# moving /usr/local/bin to the front. For non-login this is not a problem.
+
+case $- in
+# login shell handled in dot.zprofile
+*l*) ;;
+*)
+	. "${HOME}/.env.common"
+	;;
+esac
+. "${PROFILE_REPO}/libexec/local.sh"
 source_local "${HOME}/.zshenv"
 # vim: set filetype=zsh:
