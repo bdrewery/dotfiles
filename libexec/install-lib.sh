@@ -34,7 +34,7 @@ _link_prefix() {
 
 _replace() {
 	local _file="${_file}"
-	mv "${HOME}/${_file}" \
+	mv -v "${HOME}/${_file}" \
 	    "${HOME}/${_file}.profile-repo-$(date +"%Y%m%dT%H%M%S")"
 }
 
@@ -99,7 +99,7 @@ link_dir() {
 # Removes a stale symlink at dest first.
 copy_file() {
 	local _src="$1" _dest="$2"
-	[ -L "${HOME}/${_dest}" ] && rm -f "${HOME}/${_dest}"
+	[ -L "${HOME}/${_dest}" ] && rm -fv "${HOME}/${_dest}"
 	# preserving this file would be too complex
 	install -C -v "${REPO:?}/${_src}" "${HOME}/${_dest}"
 }
@@ -120,7 +120,7 @@ preserve_as_local() {
 	if [ -f "${HOME}/${_file}" ] && [ ! -L "${HOME}/${_file}" ]; then
 		if [ ! -L "${HOME}/${_file}.local" ] &&
 		    [ ! -f "${HOME}/${_file}.local" ]; then
-			mv "${HOME}/${_file}" "${HOME}/${_file}.local"
+			mv -v "${HOME}/${_file}" "${HOME}/${_file}.local"
 		else
 			_replace "${HOME}/${_dest}"
 		fi
