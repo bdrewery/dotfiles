@@ -64,9 +64,21 @@ if [ -L ~/.supp ]; then
 	${D} rm -f ~/.supp
 fi
 
+# Profile files
+${D} preserve_as_local .zshrc
 ${D} link_file dot.bash_logout
 ${D} link_file dot.bash_profile
 ${D} link_file dot.bashrc
+${D} link_file dot.env.common
+${D} copy_file dot.login_conf .login_conf
+${D} link_file dot.logout.common
+${D} link_file dot.profile.common
+${D} link_file dot.rc.common
+${D} link_file dot.zlogout
+${D} link_file dot.zprofile
+${D} link_file dot.zshenv
+${D} link_file dot.zshrc
+# Misc
 ${D} link_file dot.ctags
 ${D} link_file dot.git-prompt.conf
 ${D} preserve_as_local .gitconfig
@@ -74,27 +86,15 @@ ${D} link_file dot.gitconfig
 ${D} link_file dot.gitignore
 ${D} link_file dot.inputrc
 ${D} link_file dot.lessfilter
-${D} copy_file dot.login_conf .login_conf
 ${D} link_file dot.nanorc
-${D} link_file dot.profile.common
-${D} link_file dot.logout.common
 ${D} link_file dot.screenrc
 ${D} link_file dot.shellcheckrc
 ${D} link_file dot.tmux.conf
 ${D} link_file dot.valgrindrc
 ${D} link_file dot.vimrc
-${D} link_file dot.zlogout
 ${D} link_file dot.claude/statusline-command.sh
 ${D} install_claude_skills
-${D} link_file dot.rc.common
-${D} link_file dot.env.common
-${D} link_file dot.zprofile
-${D} link_file dot.zshenv
-${D} preserve_as_local .zshrc
-${D} link_file dot.zshrc
-
 ${D} sync_dir dot.config .config
-
 ${D} mkdir -p ~/.tmux/plugins
 ${D} link_file dot.tmux/plugins/tpm
 ${D} link_file dot.zpool.d
