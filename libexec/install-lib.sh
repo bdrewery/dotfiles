@@ -57,9 +57,9 @@ link_file() {
 	_depth="$(_link_depth "${_dest}")"
 	_prefix="$(_link_prefix "${_depth}")"
 	_target="${_prefix}${REPO:?}/${_src}"
-	if [ "$(readlink "${HOME}/${_dest}")" = "${_target}" ]; then
-		return
-	fi
+	case "$(readlink "${HOME}/${_dest}")" in
+	"${_target}") return ;;
+	esac
 	ln -nfs "${_target}" "${HOME}/${_dest}"
 }
 
