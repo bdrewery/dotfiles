@@ -101,7 +101,7 @@ copy_file() {
 	local _src="$1" _dest="$2"
 	[ -L "${HOME}/${_dest}" ] && rm -fv "${HOME}/${_dest}"
 	# preserving this file would be too complex
-	install -C -v "${REPO:?}/${_src}" "${HOME}/${_dest}"
+	install -C -v -m 0400 "${REPO:?}/${_src}" "${HOME}/${_dest}"
 }
 
 # sync_dir <src> <dest>
