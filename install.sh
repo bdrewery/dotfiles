@@ -34,20 +34,19 @@ if [ -z "${D}" ]; then
 	if [ -f ~/.ssh/authorized_keys ] && ! [ -d /usr/local/share/system ]; then
 		# Don't overwrite it, just ensure all keys are added, and alert
 		# on unknown keys
-		installed_keys=$(mktemp -t keys.XXXXXXXXXX)
-		wanted_keys=$(mktemp -t keys.XXXXXXXXXX)
+		installed_keys="$(mktemp -p "${TMPDIR:-/tmp}" -u keys.XXXXXX)"
+		wanted_keys="$(mktemp -p "${TMPDIR:-/tmp}" -u keys.XXXXXX)"
 		sort -u ~/.ssh/authorized_keys | egrep -v '(^$|^#)' > "${installed_keys}"
 		sort -u "${PROFILE_REPO:?}/dot.ssh/authorized_keys" | egrep -v '(^$|^#)' > "${wanted_keys}"
-		unknown_keys="$(mktemp -ut badkeys.XXXXXXXXX)"
+		unknown_keys="$(mktemp -p "${TMPDIR:-/tmp}" -u badkeys.XXXXXX)"
 		comm -2 -3 "${installed_keys}" "${wanted_keys}" > "${unknown_keys:?}"
 		if [ -s "${unknown_keys:?}" ]; then
 			echo "### Unknown SSH Keys" >&2
 			cat "${unknown_keys:?}" >&2
 		fi
-		rm -f "${unknown_keys:?}"
 		# Add missing keys
 		comm -1 -3 "${installed_keys}" "${wanted_keys}" >> ~/.ssh/authorized_keys
-		rm -f "${installed_keys}" "${wanted_keys}"
+		rm -f "${installed_keys}" "${wanted_keys}" "${unknown_keys}"
 		chmod 0600 ~/.ssh/authorized_keys
 	elif ! [ -f ~/.ssh/authorized_keys ]; then
 		install -v -m 0600 "${PROFILE_REPO}/dot.ssh/authorized_keys" ~/.ssh/authorized_keys
