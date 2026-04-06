@@ -174,7 +174,7 @@ _install_claude_skills() {
 
 # bootstrap and sync a vim python venv
 setup_venv() {
-	local _src="$1" _dest _venv _req
+	local _src="$1" _dest _venv _req _sync_req
 
 	_dest=".${_src#dot.}"
 	_venv="${HOME}/${_dest}"
@@ -182,11 +182,19 @@ setup_venv() {
 	if [ ! -f "${_venv}/pyvenv.cfg" ]; then
 		${D} python3 -m venv "${_venv}"
 	fi
-	# Ensure pip is up to date (avoids old-system issues)
-	${D} "${_venv}/bin/python3" -m ensurepip --upgrade >/dev/null 2>&1 || :
-	${D} "${_venv}/bin/pip" install --upgrade pip setuptools wheel >/dev/null 2>&1 || :
-	if [ -x "${_venv}"/bin/pip ] && [ -s "${_req}" ]; then
-		${D} "${_venv}"/bin/pip install \
-		    --upgrade -r "${_req}"
+	if [ ! -x "${_venv}/bin/pip-sync" ]; then
+		# Ensure pip is up to date (avoids old-system issues)
+		${D} "${_venv}/bin/python3" -m ensurepip --upgrade >/dev/null 2>&1 || :
+		${D} "${_venv}/bin/pip" install --upgrade pip pip-tools >/dev/null 2>&1 || :
+	fi
+	if [ -x "${_venv}/bin/pip-sync" ]; then
+		if [ -f "${_req}" ]; then
+			_sync_req="${_req}"
+		else
+			_sync_req=
+		fi
+		${D} "${_venv}/bin/pip-sync" /dev/stdin ${_sync_req:+"${_sync_req}"} <<-EOF
+			pip-tools
+		EOF
 	fi
 }
