@@ -64,11 +64,11 @@ link_file() {
 	_prefix="$(_link_prefix "${_depth}")"
 	_target="${_prefix}${REPO:?}/${_src}"
 	case "$(readlink "${HOME}/${_dest}")" in
-	"${_target}")
-		chmod a-w "${HOME}/${_dest}"
-		return ;;
+	"${_target}") ;;
+	*)
+		ln -nfs "${_target}" "${HOME}/${_dest}"
+		;;
 	esac
-	ln -nfs "${_target}" "${HOME}/${_dest}"
 	if [ -d "${HOME}/${_dest}" ]; then
 		_mode="og-w,u+w"
 	else
