@@ -55,7 +55,7 @@ ensure_dir() {
 # the "dot." prefix: dot.bashrc -> .bashrc
 # No-op if the symlink already points to the correct target.
 link_file() {
-	local _src="$1" _dest="${2:-}" _depth _prefix _target
+	local _src="$1" _dest="${2:-}" _depth _prefix _target _mode
 	preserve_as_local "${_src}"
 	if [ -z "${_dest}" ]; then
 		_dest=".${_src#dot.}"
@@ -69,7 +69,12 @@ link_file() {
 		return ;;
 	esac
 	ln -nfs "${_target}" "${HOME}/${_dest}"
-	chmod a-w "${HOME}/${_dest}"
+	if [ -d "${HOME}/${_dest}" ]; then
+		_mode="og-w,u+w"
+	else
+		_mode="a-w"
+	fi
+	chmod "${_mode}" "${HOME}/${_dest}"
 }
 
 # link_dir <src> [dest]
