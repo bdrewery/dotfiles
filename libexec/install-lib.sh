@@ -64,7 +64,9 @@ link_file() {
 	_prefix="$(_link_prefix "${_depth}")"
 	_target="${_prefix}${REPO:?}/${_src}"
 	case "$(readlink "${HOME}/${_dest}")" in
-	"${_target}") return ;;
+	"${_target}")
+		chmod 0400 "${HOME}/${_dest}"
+		return ;;
 	esac
 	ln -nfs "${_target}" "${HOME}/${_dest}"
 	chmod 0400 "${HOME}/${_dest}"
