@@ -65,11 +65,11 @@ link_file() {
 	_target="${_prefix}${REPO:?}/${_src}"
 	case "$(readlink "${HOME}/${_dest}")" in
 	"${_target}")
-		chmod 0400 "${HOME}/${_dest}"
+		chmod a-w "${HOME}/${_dest}"
 		return ;;
 	esac
 	ln -nfs "${_target}" "${HOME}/${_dest}"
-	chmod 0400 "${HOME}/${_dest}"
+	chmod a-w "${HOME}/${_dest}"
 }
 
 # link_dir <src> [dest]
