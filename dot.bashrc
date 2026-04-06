@@ -1,6 +1,6 @@
 # Loaded for interactive shells
 # .bashrc
-: ${PROFILE_REPO:=${HOME}/.profile-repo}
+: "${PROFILE_REPO:=${HOME}/.profile-repo}"
 
 . "${HOME}/.env.common"
 # User specific aliases and functions

@@ -1,4 +1,4 @@
-: ${PROFILE_REPO:=${HOME}/.profile-repo}
+: "${PROFILE_REPO:=${HOME}/.profile-repo}"
 
 # .env.common is included in .zprofile to avoid macOS /etc/zprofile path_helper
 # moving /usr/local/bin to the front. For non-login this is not a problem.

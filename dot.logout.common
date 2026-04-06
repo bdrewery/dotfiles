@@ -1,4 +1,4 @@
 clear
-: ${PROFILE_REPO:=${HOME}/.profile-repo}
+: "${PROFILE_REPO:=${HOME}/.profile-repo}"
 . "${PROFILE_REPO}/libexec/local.sh"
 source_local "${HOME}/.logout.common"

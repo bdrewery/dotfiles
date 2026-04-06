@@ -1,5 +1,5 @@
 # Loaded for login shells
-: ${PROFILE_REPO:=${HOME}/.profile-repo}
+: "${PROFILE_REPO:=${HOME}/.profile-repo}"
 
 # See dot.zshenv comment.
 case $- in
