@@ -180,21 +180,20 @@ setup_venv() {
 	_venv="${HOME}/${_dest}"
 	_req="${_venv}-requirements.txt"
 	if [ ! -f "${_venv}/pyvenv.cfg" ]; then
+		echo "setup_venv [${_src}]: Setting up" >&2
 		${D} python3 -m venv "${_venv}"
 	fi
 	if [ ! -x "${_venv}/bin/pip-sync" ]; then
-		# Ensure pip is up to date (avoids old-system issues)
-		${D} "${_venv}/bin/python3" -m ensurepip --upgrade >/dev/null 2>&1 || :
-		${D} "${_venv}/bin/pip" install --upgrade pip pip-tools >/dev/null 2>&1 || :
+		${D} "${_venv}/bin/pip" install pip-tools
 	fi
-	if [ -x "${_venv}/bin/pip-sync" ]; then
-		if [ -f "${_req}" ]; then
-			_sync_req="${_req}"
-		else
-			_sync_req=
-		fi
-		${D} "${_venv}/bin/pip-sync" /dev/stdin ${_sync_req:+"${_sync_req}"} <<-EOF
-			pip-tools
-		EOF
+	if [ ! -x "${_venv}/bin/pip-sync" ]; then
+		echo "setup_venv [${_src}]: Failed to install pip-sync" >&2
+		return 1
 	fi
+	_sync_req=
+	[ -f "${_req}" ] && _sync_req="${_req}"
+	echo "setup_venv [${_src}]: Syncing" >&2
+	${D} "${_venv}/bin/pip-sync" /dev/stdin ${_sync_req:+"${_sync_req}"} <<-EOF
+		pip-tools
+	EOF
 }
