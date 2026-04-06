@@ -174,21 +174,27 @@ _install_claude_skills() {
 
 # bootstrap and sync a vim python venv
 setup_venv() {
-	local _src="$1" _dest _venv _req _sync_req
+	local _src="$1" _dest _venv _req _reqin _sync_req
 
 	_dest=".${_src#dot.}"
 	_venv="${HOME}/${_dest}"
-	_req="${_venv}-requirements.txt"
+	_reqin="${_venv}-requirements.txt"
+	_req="${_venv}-requirements.txt.compiled"
 	if [ ! -f "${_venv}/pyvenv.cfg" ]; then
 		echo "setup_venv [${_src}]: Setting up" >&2
 		${D} python3 -m venv "${_venv}"
 	fi
+	${D} "${_venv}/bin/pip" install --upgrade pip
 	if [ ! -x "${_venv}/bin/pip-sync" ]; then
-		${D} "${_venv}/bin/pip" install pip-tools
+		${D} "${_venv}/bin/pip" install --upgrade pip-tools
 	fi
 	if [ ! -x "${_venv}/bin/pip-sync" ]; then
 		echo "setup_venv [${_src}]: Failed to install pip-sync" >&2
 		return 1
+	fi
+	if [ -f "${_reqin}" ] && [ ! -f "${_req}" -o "${_reqin}" -nt "${_req}" ]; then
+		echo "setup_venv [${_src}]: Compiling requirements" >&2
+		${D} "${_venv}/bin/pip-compile" --quiet --output-file="${_req}" "${_reqin}"
 	fi
 	_sync_req=
 	[ -f "${_req}" ] && _sync_req="${_req}"
