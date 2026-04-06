@@ -10,6 +10,16 @@ runtime bundle/vim-plug/plug.vim
 call plug#begin('~/.vim/plugged')
 call plug#end()
 
+" :python3 import sys; print(sys.executable)
+" :python3 import sys; print(sys.path)
+let s:python3_venv = expand('~/.vim/python-venv/bin/python3')
+if filereadable(s:python3_venv)
+  let $PATH = expand('~/.vim/python-venv/bin') . ':' . $PATH
+  " This is neovim-specific.
+  let g:python3_host_prog = s:python3_venv
+endif
+unlet s:python3_venv
+
 " Switch syntax highlighting on, when the terminal has colors
 if &t_Co > 2 || has("gui_running")
   syntax on

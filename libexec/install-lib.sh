@@ -171,3 +171,22 @@ _install_claude_skills() {
 		fi
 	done
 }
+
+# bootstrap and sync a vim python venv
+setup_venv() {
+	local _src="$1" _dest _venv _req
+
+	_dest=".${_src#dot.}"
+	_venv="${HOME}/${_dest}"
+	_req="${_venv}-requirements.txt"
+	if [ ! -f "${_venv}/pyvenv.cfg" ]; then
+		${D} python3 -m venv "${_venv}"
+	fi
+	# Ensure pip is up to date (avoids old-system issues)
+	${D} "${_venv}/bin/python3" -m ensurepip --upgrade >/dev/null 2>&1 || :
+	${D} "${_venv}/bin/pip" install --upgrade pip setuptools wheel >/dev/null 2>&1 || :
+	if [ -x "${_venv}"/bin/pip ] && [ -s "${_req}" ]; then
+		${D} "${_venv}"/bin/pip install \
+		    --upgrade -r "${_req}"
+	fi
+}

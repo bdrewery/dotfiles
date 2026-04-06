@@ -25,6 +25,9 @@ ${D} ensure_dir ~/bin
 
 ${D} link_dir dot.vim
 ${D} chmod 0700 ~/.viminfo > /dev/null 2>&1
+if python3 -m venv --help >/dev/null 2>&1; then
+	setup_venv dot.vim/python-venv
+fi
 ${D} link_dir dot.zsh
 
 if [ -z "${D}" ]; then
