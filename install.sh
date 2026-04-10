@@ -126,7 +126,7 @@ if [ -f ~/.local.profile-repo ]; then
 	done < ~/.local.profile-repo
 fi
 
-if [ -z "${D}" ] && which npm >/dev/null 2>&1 && [ "$(id -u)" != "0" ]; then
+if [ -z "${D}" ] && which npm >/dev/null 2>&1; then
 	mkdir -p ~/.npm-global
 	# npm gets confused if HOME contains symlinks and complains about
 	# not being able to change the config.
