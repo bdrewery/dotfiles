@@ -2,7 +2,7 @@
 
 update() {
 	cd ~/.profile-repo
-	git fetch origin --depth=1
+	git fetch --no-recurse-submodules origin --depth=1
 	git submodule update --init --depth=1
 	git reset --hard origin/master
 	git reflog expire --expire-unreachable=all --all
