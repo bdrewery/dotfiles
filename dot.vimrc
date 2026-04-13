@@ -204,7 +204,6 @@ let mapleader = ","
 let g:mapleader = ","
 
 augroup filetypedetect
-au BufRead,BufNewFile .envrc,.env :set filetype=sh
 au BufRead,BufNewFile *.tcl setf tcl
 au BufNewFile,BufRead *.xt  setf xt
 au BufRead,BufNewFile *.tpl setf smarty
