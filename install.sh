@@ -34,11 +34,11 @@ if [ -z "${D}" ]; then
 	if [ -f ~/.ssh/authorized_keys ] && ! [ -d /usr/local/share/system ]; then
 		# Don't overwrite it, just ensure all keys are added, and alert
 		# on unknown keys
-		installed_keys="$(mktemp -p "${TMPDIR:-/tmp}" -u keys.XXXXXX)"
-		wanted_keys="$(mktemp -p "${TMPDIR:-/tmp}" -u keys.XXXXXX)"
+		installed_keys="$(mktemp -ut keys.XXXXXX)"
+		wanted_keys="$(mktemp -ut keys.XXXXXX)"
 		sort -u ~/.ssh/authorized_keys | egrep -v '(^$|^#)' > "${installed_keys}"
 		sort -u "${PROFILE_REPO:?}/dot.ssh/authorized_keys" | egrep -v '(^$|^#)' > "${wanted_keys}"
-		unknown_keys="$(mktemp -p "${TMPDIR:-/tmp}" -u badkeys.XXXXXX)"
+		unknown_keys="$(mktemp -ut badkeys.XXXXXX)"
 		comm -2 -3 "${installed_keys}" "${wanted_keys}" > "${unknown_keys:?}"
 		if [ -s "${unknown_keys:?}" ]; then
 			echo "### Unknown SSH Keys" >&2
