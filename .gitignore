@@ -3,3 +3,5 @@ local.d/
 docs/superpowers
 TODO.md
 .todo/
+dot.vim/python-venv-requirements.txt.compiled
+dot.vim/python-venv/
