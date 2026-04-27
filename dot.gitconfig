@@ -47,5 +47,3 @@
 	default = matching
 #[blame]
 #	ignoreRevsFile = .git-blame-ignore-revs
-[submodule]
-        recurse = true
