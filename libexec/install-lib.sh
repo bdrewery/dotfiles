@@ -67,13 +67,13 @@ link_file() {
 	if [ -z "${_dest}" ]; then
 		_dest=".${_src#dot.}"
 	fi
-	_depth="$(_link_depth "${_dest}")"
-	_prefix="$(_link_prefix "${_depth}")"
-	_target="${_prefix}${REPO:?}/${_src}"
+	_depth="$(_link_depth "${_dest:?}")"
+	_prefix="$(_link_prefix "${_depth:?}")"
+	_target="${_prefix}${REPO:?}/${_src:?}"
 	case "$(readlink "${HOME}/${_dest}")" in
 	"${_target}") ;;
 	*)
-		ln -nfs "${_target}" "${HOME}/${_dest}"
+		ln -nfs "${_target:?}" "${HOME:?}/${_dest:?}"
 		;;
 	esac
 	if [ -d "${HOME}/${_dest}" ]; then
@@ -99,13 +99,13 @@ link_dir() {
 		case "$(readlink "${HOME}/${_dest}")" in
 		*"${REPO:?}/"*) ;; # ours — link_file handles idempotently
 		*)
-			_replace "${HOME}/${_dest}"
+			_replace "${HOME:?}/${_dest:?}"
 			;;
 		esac
-	elif [ -e "${HOME}/${_dest}" ]; then
-		_replace "${HOME}/${_dest}"
+	elif [ -e "${HOME:?}/${_dest:?}" ]; then
+		_replace "${HOME:?}/${_dest:?}"
 	fi
-	link_file "${_src}" "${_dest}"
+	link_file "${_src:?}" "${_dest:?}"
 }
 
 # copy_file <src> <dest>
@@ -113,7 +113,7 @@ link_dir() {
 # Removes a stale symlink at dest first.
 copy_file() {
 	local _src="$1" _dest="$2"
-	[ -L "${HOME}/${_dest}" ] && rm -fv "${HOME}/${_dest}"
+	[ -L "${HOME:?}/${_dest:?}" ] && rm -fv "${HOME:?}/${_dest:?}"
 	# preserving this file would be too complex
 	install -C -v -m 0400 "${REPO:?}/${_src}" "${HOME}/${_dest}"
 }
@@ -122,7 +122,7 @@ copy_file() {
 # rsync ${REPO}/<src>/ into ~/<dest>/.
 sync_dir() {
 	local _src="$1" _dest="$2"
-	rsync -avH "${REPO:?}/${_src}/" "${HOME}/${_dest}/"
+	rsync -avH "${REPO:?}/${_src:?}/" "${HOME:?}/${_dest:?}/"
 }
 
 # preserve_as_local <file>
@@ -134,9 +134,9 @@ preserve_as_local() {
 	if [ -f "${HOME}/${_file}" ] && [ ! -L "${HOME}/${_file}" ]; then
 		if [ ! -L "${HOME}/${_file}.local" ] &&
 		    [ ! -f "${HOME}/${_file}.local" ]; then
-			mv -v "${HOME}/${_file}" "${HOME}/${_file}.local"
+			mv -v "${HOME:?}/${_file:?}" "${HOME:?}/${_file:?}.local"
 		else
-			_replace "${HOME}/${_dest}"
+			_replace "${HOME:?}/${_dest:?}"
 		fi
 	fi
 }
@@ -158,7 +158,7 @@ _install_claude_skills() {
 		"${REPO:?}/${_skills_dir}/*") continue ;;
 		esac
 		_skill_name="${_skill##*/}"
-		link_dir "${_skills_dir}/${_skill_name}"
+		link_dir "${_skills_dir:?}/${_skill_name:?}"
 	done
 
 	# Remove skills owned by this REPO that no longer exist in source
@@ -174,7 +174,7 @@ _install_claude_skills() {
 		esac
 		if [ ! -r "${_skill}" ]; then
 			echo "Removing stale skill: ${_skill##*/}"
-			rm -f "${_skill}"
+			rm -f "${_skill:?}"
 		fi
 	done
 }
