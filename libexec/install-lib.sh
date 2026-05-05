@@ -33,9 +33,16 @@ _link_prefix() {
 }
 
 _replace() {
-	local _file="${_file}"
-	mv -v "${HOME}/${_file}" \
-	    "${HOME}/${_file}.profile-repo-$(date +"%Y%m%dT%H%M%S")"
+	local _file="${1:?}"
+	case "${_file:?}" in
+	"${HOME}"/*) ;;
+	*)
+		echo "_replace: Invalid param: ${_file}" >&2
+		return 1
+		;;
+	esac
+	mv -v "${_file:?}" \
+	    "${_file:?}.profile-repo-$(date +"%Y%m%dT%H%M%S")"
 }
 
 # ensure_dir <path> [mode]
