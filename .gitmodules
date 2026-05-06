@@ -91,3 +91,6 @@
 [submodule "dot.vim/bundle/vim-commentary"]
 	path = dot.vim/bundle/vim-commentary
 	url = https://github.com/tpope/vim-commentary
+[submodule "dot.vim/bundle/frr-syntax"]
+	path = dot.vim/bundle/frr-syntax
+	url = https://github.com/rampxxxx/frr-syntax
