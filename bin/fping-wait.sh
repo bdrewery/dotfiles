@@ -71,7 +71,7 @@ PERIOD=1
 INCREMENT="1.5"
 TRIES=0
 backoff() {
-	if read -t "${PERIOD}" _; then
+	if read -t "${PERIOD%.*}" _; then
 		return
 	fi
 	# ZSH supports decimals but sh/bash do not so use bc(1).
