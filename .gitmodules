@@ -94,3 +94,6 @@
 [submodule "dot.vim/bundle/frr-syntax"]
 	path = dot.vim/bundle/frr-syntax
 	url = https://github.com/rampxxxx/frr-syntax
+[submodule "dot.vim/bundle/Vim-Jinja2-Syntax"]
+	path = dot.vim/bundle/Vim-Jinja2-Syntax
+	url = https://github.com/Glench/Vim-Jinja2-Syntax.git
