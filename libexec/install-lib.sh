@@ -136,7 +136,7 @@ preserve_as_local() {
 		    [ ! -f "${HOME}/${_file}.local" ]; then
 			mv -v "${HOME:?}/${_file:?}" "${HOME:?}/${_file:?}.local"
 		else
-			_replace "${HOME:?}/${_dest:?}"
+			_replace "${HOME:?}/${_file:?}"
 		fi
 	fi
 }
