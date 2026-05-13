@@ -188,7 +188,7 @@ setup_venv() {
 	_venv="${HOME}/${_dest}"
 	_reqin="${_venv}-requirements.txt"
 	_req="${_venv}-requirements.txt.compiled"
-	if [ ! -f "${_venv}/pyvenv.cfg" ]; then
+	if [ ! -f "${_venv}/pyvenv.cfg" -o ! -x "${_venv}/bin/pip" ]; then
 		echo "setup_venv [${_src}]: Setting up" >&2
 		${D} python3 -m venv "${_venv}"
 	fi
