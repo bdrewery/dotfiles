@@ -141,4 +141,6 @@ if [ -z "${D}" ] && which npm >/dev/null 2>&1; then
 		npm config set prefix ~/.npm-global
 		;;
 	esac
+	npm config set ignore-scripts true
+	npm config set min-release-age 2
 fi
