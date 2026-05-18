@@ -111,16 +111,14 @@ if [ -f ~/.local.profile-repo ]; then
 		_repo_dir="${REPO:?}/local.d/${_repo_name}"
 		if [ -z "${D}" ]; then
 			if [ -d "${_repo_dir}/.git" ]; then
-				echo "Updating local repo: ${_repo_name}"
-				git -C "${_repo_dir}" fetch origin --depth=1
-				git -C "${_repo_dir}" reset --hard origin/HEAD
+				git_update "${_repo_name:?}" "${_repo_dir:?}"
 			else
-				echo "Cloning local repo: ${_repo_name}"
-				git clone --depth=1 "${_repo_url}" "${_repo_dir}"
+				echo "==> ${_repo_name:?}: Cloning"
+				git clone --quiet --depth=1 "${_repo_url}" "${_repo_dir}"
 			fi
 		fi
 		if [ -r "${_repo_dir}/install.sh" ]; then
-			echo "==> Running ${_repo_name}/install.sh"
+			echo "==> ${_repo_name:?}: Installing"
 			REPO="${_repo_dir}" sh "${_repo_dir}/install.sh" ${D:+-n}
 		fi
 	done < ~/.local.profile-repo

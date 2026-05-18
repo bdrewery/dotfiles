@@ -211,3 +211,16 @@ setup_venv() {
 		pip-tools
 	EOF
 }
+
+git_update() {
+	local _repo_name="${1:?repo_name}"
+	local _repo_dir="${2:?repo_dir}"
+	echo "==> ${_repo_name:?}: Fetching"
+	git -C "${_repo_dir:?}" fetch --quiet \
+	    --no-recurse-submodules origin --depth=1
+	git -C "${_repo_dir:?}" reset --hard origin/HEAD
+	echo "==> ${_repo_name:?}: Updating submodules"
+	git -C "${_repo_dir:?}" submodule --quiet update --init --depth=1
+	git -C "${_repo_dir:?}" reflog expire --expire-unreachable=all --all
+	git -C "${_repo_dir:?}" gc --quiet --prune=all
+}

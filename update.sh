@@ -1,12 +1,14 @@
 #! /bin/sh
+: "${PROFILE_REPO:=$(realpath "$(dirname "$0")")}"
+. "${PROFILE_REPO:?}/libexec/install-lib.sh"
 
 update() {
-	cd ~/.profile-repo
-	git fetch -q --no-recurse-submodules origin --depth=1
-	git reset --hard origin/master
-	git submodule -q update --init --depth=1
-	git reflog expire --expire-unreachable=all --all
-	git gc --prune=all --quiet
+	local repo_name=".profile-repo"
+	local repo_dir="${PROFILE_REPO:?}"
+
+	git_update "${repo_name:?}" "${repo_dir:?}"
+	cd "${repo_dir:?}"
+	echo "==> ${repo_name:?}: Installing"
 	exec ./install.sh
 }
 update
