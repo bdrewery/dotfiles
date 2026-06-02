@@ -205,7 +205,7 @@ setup_venv() {
 	fi
 	if [ -f "${_reqin}" ] && [ ! -f "${_req}" -o "${_reqin}" -nt "${_req}" ]; then
 		echo "setup_venv [${_src}]: Compiling requirements" >&2
-		${D} "${_venv}/bin/pip-compile" --quiet --output-file="${_req}" "${_reqin}"
+		${D} "${_venv}/bin/pip-compile" --no-color --quiet --output-file="${_req}" "${_reqin}"
 	fi
 	_sync_req=
 	[ -f "${_req}" ] && _sync_req="${_req}"
