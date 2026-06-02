@@ -181,8 +181,11 @@ _install_claude_skills() {
 
 # bootstrap and sync a vim python venv
 setup_venv() {
-	local _src="$1" _dest _venv _req _reqin _sync_req PIP_NO_COLOR=1 PIP_PROGRESS_BAR=off
-	export PIP_NO_COLOR PIP_PROGRESS_BAR
+	local _src="$1" _dest _venv _req _reqin _sync_req
+	local PIP_NO_COLOR PIP_PROGRESS_BAR
+
+	export PIP_NO_COLOR=1
+	export PIP_PROGRESS_BAR=off
 
 	_dest=".${_src#dot.}"
 	_venv="${HOME}/${_dest}"
