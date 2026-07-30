@@ -183,7 +183,9 @@ _install_claude_skills() {
 setup_venv() {
 	local _src="$1" _dest _venv _req _reqin _sync_req
 	local PIP_NO_COLOR PIP_PROGRESS_BAR
+	local _need_venv
 
+	_need_venv=0
 	export PIP_NO_COLOR=1
 	export PIP_PROGRESS_BAR=off
 
@@ -192,6 +194,16 @@ setup_venv() {
 	_reqin="${_venv}-requirements.txt"
 	_req="${_venv}-requirements.txt.compiled"
 	if [ ! -f "${_venv}/pyvenv.cfg" -o ! -x "${_venv}/bin/pip" ]; then
+		_need_venv=1
+	elif [ -x "${_venv}/bin/pip" ] &&
+	    ! "${_venv}/bin/pip" --version >/dev/null 2>&1; then
+		# Major version upgrade probably
+		echo "setup_venv [${_src}]: Must reinstall for upgrade" >&2
+		${D} rm -rf "${_venv}"
+		${D} rm -rf "${_req}"
+		_need_venv=1
+	fi
+	if [ "${_need_venv}" -eq 1 ] ;then
 		echo "setup_venv [${_src}]: Setting up" >&2
 		${D} python3 -m venv "${_venv}"
 	fi
