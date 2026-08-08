@@ -6,13 +6,11 @@ fping() {
 	ret=0
 	command timeout --preserve-status 5 fping -q "$@" || ret="$?"
 	case "${ret}" in
-	2|3)
-		error="$(command fping "$@" 2>&1 || :)"
-		echo "[!] fping: ${error}" >&2
+	2)
+		# Some error like DNS failure.
+		echo "[!] fping error" >&2
 		backoff
 		;;
-	esac
-	case "${ret}" in
 	3)
 		# Invalid arguments
 		exit 1
@@ -81,20 +79,6 @@ backoff() {
 		#exit 1
 		PERIOD=1
 	fi
-}
-
-fping() {
-	local ret
-
-	ret=0
-	command fping "$@" || ret="$?"
-	case "${ret}" in
-	2)
-		# Some error like DNS failure.
-		sleep 1
-		;;
-	esac
-	return "${ret}"
 }
 
 while :; do
