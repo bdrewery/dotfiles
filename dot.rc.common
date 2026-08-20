@@ -1,7 +1,10 @@
 # Loaded for interactive shells
-export HISTSIZE=1000000
-export HISTFILESIZE=$HISTSIZE
-export SAVEHIST=$HISTSIZE
+
+# In-memory size
+export HISTSIZE=5000
+# File size
+export HISTFILESIZE=1000000
+export SAVEHIST="${HISTFILESIZE}"
 readonly HISTFILESIZE SAVEHIST HISTSIZE 2>/dev/null
 
 case "${BUILDENV-}" in
