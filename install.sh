@@ -97,6 +97,7 @@ ${D} install_claude_skills
 ${D} sync_dir dot.config .config
 ${D} mkdir -p ~/.tmux/plugins
 ${D} link_dir dot.tmux/plugins/tpm
+${D} link_dir dot.tmux/plugins/tmux-resurrect
 ${D} link_dir dot.zpool.d
 
 # Process private/local dotfile repos listed in ~/.local.profile-repo
