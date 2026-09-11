@@ -3,5 +3,8 @@ local.d/
 docs/superpowers
 TODO.md
 .todo/
+LESSONS_LEARNED.md
+.lessons-learned/
 dot.vim/python-venv-requirements.txt.compiled
 dot.vim/python-venv/
+.claude/settings.local.json
