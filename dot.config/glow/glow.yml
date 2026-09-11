@@ -4,7 +4,8 @@ style: "dracula"
 mouse: true
 # use pager to display markdown
 pager: false
-# word-wrap at width
-width: 160
+# word-wrap at width -- intentionally unset.  A fixed value here overflows any
+# narrower terminal; the glow wrapper in dot.profile.common passes the live
+# width instead.
 # show all files, including hidden and ignored.
 all: false

@@ -38,6 +38,24 @@ unset gname
 alias nopaste='printf "\e[?2004l"'
 alias penv='eval $(env MAKE=/usr/bin/make SCRIPTSDIR=${PORTSDIR}/Mk/Scripts sh ${PORTSDIR}/Mk/Scripts/ports_env.sh)'
 
+# glow ignores the terminal width and word-wraps at its configured width, so
+# anything wider than the pane spills a few columns onto the next row.  It also
+# renders to width-2, so a bare `width:` in glow.yml that merely matches the
+# terminal still overflows.  Pass the real width per invocation instead.
+# See https://github.com/charmbracelet/glow/issues/942
+glow() {
+	local _cols=""
+
+	# Only when attached to a terminal: tput reports 80 without one, which
+	# would silently reformat piped output.  stderr is deliberately not
+	# redirected -- inside this command substitution stdout is a pipe, so
+	# tput locates the terminal through stderr, and discarding it gives 80.
+	if [ -t 1 ]; then
+		_cols="$(tput cols)"
+	fi
+	command glow ${_cols:+-w "${_cols}"} "$@"
+}
+
 zfs() {
 	local ZFS_COLOR
 
