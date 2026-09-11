@@ -207,10 +207,12 @@ setup_venv() {
 		echo "setup_venv [${_src}]: Setting up" >&2
 		${D} python3 -m venv "${_venv}"
 	fi
-	${D} "${_venv}/bin/pip" install --upgrade pip
-	if [ ! -x "${_venv}/bin/pip-sync" ]; then
-		${D} "${_venv}/bin/pip" install --upgrade pip-tools
-	fi
+	# pip-tools reaches into pip's private API, so upgrading pip on every run
+	# while pip-tools stays at whatever first got installed drifts them into
+	# an ImportError.  They have to move together.  pip-sync below cannot do
+	# this itself: it is handed pip-tools unpinned, and any installed version
+	# already satisfies that.
+	${D} "${_venv}/bin/pip" install --upgrade pip pip-tools
 	if [ ! -x "${_venv}/bin/pip-sync" ]; then
 		echo "setup_venv [${_src}]: Failed to install pip-sync" >&2
 		return 1
