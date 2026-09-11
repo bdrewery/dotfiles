@@ -18,7 +18,7 @@ while true;
 do
 	sleep="${n}"
 	echo "# screen-wrapper.sh $@";
-	fixscreen "$@";
+	fixscreen --exec "$@";
 	ret="$?"
 	echo "Program terminated ${ret}..sleeping"
 	case "${ret}" in

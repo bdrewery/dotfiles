@@ -7,4 +7,21 @@ if [ "${TERM}" = "screen-256color" ]; then
 	export TERM="xterm-256color"
 fi
 
-exec "$@"
+# --exec: replace this wrapper with the command, as before.  For callers that
+# only want the environment fixed up and do not need to appear in a process
+# listing.
+#
+# Without it the wrapper deliberately stays in the process tree, because
+# tmux-resurrect records the pane shell's *direct child*: exec'ing away leaves
+# the wrapped command in the save file instead, and the TERM adjustment above
+# is then lost when the pane is restored.  Costs one lingering sh.  The child
+# remains in the foreground process group, so terminal signals still reach it,
+# and its exit status is passed through either way.
+case "${1:-}" in
+--exec)
+	shift
+	exec "$@"
+	;;
+esac
+
+"$@"
