@@ -96,8 +96,8 @@ ${D} link_file dot.claude/statusline-command.sh
 ${D} install_claude_skills
 ${D} sync_dir dot.config .config
 ${D} mkdir -p ~/.tmux/plugins
-${D} link_file dot.tmux/plugins/tpm
-${D} link_file dot.zpool.d
+${D} link_dir dot.tmux/plugins/tpm
+${D} link_dir dot.zpool.d
 
 # Process private/local dotfile repos listed in ~/.local.profile-repo
 if [ -f ~/.local.profile-repo ]; then
