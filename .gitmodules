@@ -102,4 +102,4 @@
 	url = https://github.com/tpope/vim-obsession
 [submodule "dot.tmux/plugins/tmux-resurrect"]
 	path = dot.tmux/plugins/tmux-resurrect
-	url = https://github.com/tmux-plugins/tmux-resurrect
+	url = https://github.com/bdrewery/tmux-resurrect
