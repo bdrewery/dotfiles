@@ -97,3 +97,6 @@
 [submodule "dot.vim/bundle/Vim-Jinja2-Syntax"]
 	path = dot.vim/bundle/Vim-Jinja2-Syntax
 	url = https://github.com/Glench/Vim-Jinja2-Syntax.git
+[submodule "dot.vim/bundle/vim-obsession"]
+	path = dot.vim/bundle/vim-obsession
+	url = https://github.com/tpope/vim-obsession
