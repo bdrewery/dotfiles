@@ -70,7 +70,7 @@ fi
 
 # [ctx: N% used] if available
 if [ -n "$used" ]; then
-  printf ' \033[37m[\033[33mctx: %s%%\033[37m]\033[0m' "$(printf '%.0f' "$used")"
+  printf ' \n\033[37m[\033[33mctx: %s%%\033[37m]\033[0m' "$(printf '%.0f' "$used")"
 fi
 
 # [limit: N%(Xh)/N%(Xd)] if available
