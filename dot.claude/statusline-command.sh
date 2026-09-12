@@ -14,6 +14,36 @@ limit_five_hour_resets_at=$(echo "$input" | jq -r '.rate_limits.five_hour.resets
 limit_seven_day=$(echo "$input" | jq -r '.rate_limits.seven_day.used_percentage // empty')
 limit_seven_day_resets_at=$(echo "$input" | jq -r '.rate_limits.seven_day.resets_at // empty')
 
+# Publish this blob for hooks to read.
+#
+# The status line is the only place Claude Code hands over
+# .context_window.used_percentage and .session_name; hook payloads carry
+# neither. Without this, anything wanting to know how full the window is has
+# to infer it from transcript byte growth, which needs a learned window size
+# and is simply wrong until the first compaction happens.
+#
+# Written whole rather than picked apart, so this script encodes nothing about
+# what any consumer wants -- a reader takes the fields it needs and this stays
+# a dumb pipe. Landed in the worktree's git dir: per-worktree, never
+# committed, and already where hook state lives.
+#
+# Best-effort by construction. Every failure path is silent, because a status
+# line that breaks a prompt over a diagnostic file is worse than no file.
+if [ -n "${pwd_val:-}" ] && [ -d "${pwd_val:-}" ]; then
+	_gitdir=$(cd "$pwd_val" 2>/dev/null && git rev-parse --git-dir 2>/dev/null) || _gitdir=""
+	case "${_gitdir:-}" in
+	"") ;;
+	/*) ;;
+	*) _gitdir="${pwd_val}/${_gitdir}" ;;
+	esac
+	if [ -n "${_gitdir:-}" ] && [ -d "${_gitdir:-}" ]; then
+		printf '%s' "$input" >"${_gitdir}/claude-statusline.json.tmp" 2>/dev/null &&
+			mv -f "${_gitdir}/claude-statusline.json.tmp" \
+				"${_gitdir}/claude-statusline.json" 2>/dev/null
+	fi
+	unset _gitdir
+fi
+
 # [user@host]
 printf '\033[31m[\033[0m\033[32m%s\033[37m@\033[32m%s\033[31m]\033[0m' "$user" "$host"
 
