@@ -6,6 +6,7 @@ while getopts n flag; do
 	n) D=echo ;;
 	esac
 done
+export D
 
 cd ~
 REPO=.profile-repo
