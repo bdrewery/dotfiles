@@ -89,7 +89,8 @@ setup_remote() {
 
 # assert_updated <dir> <message> <branch>
 # Assert file "f" in <dir> contains <message>, local <branch> is checked
-# out and tracks origin/<branch>, and origin/HEAD points at origin/<branch>.
+# out, is the only local branch and tracks origin/<branch>, and origin/HEAD
+# points at origin/<branch>.
 assert_updated() {
 	local _dir="${1:?}" _msg="${2:?}" _branch="${3:?}" _head _local
 	case "$(cat "${_dir}/f")" in
@@ -100,6 +101,12 @@ assert_updated() {
 	case "${_local}" in
 	"${_branch}") ;;
 	*) fail "${_dir##*/}: on branch '${_local}' != '${_branch}'" ;;
+	esac
+	_local="$(git -C "${_dir}" for-each-ref --format='%(refname)' \
+	    refs/heads | tr '\n' ' ')"
+	case "${_local}" in
+	"refs/heads/${_branch} ") ;;
+	*) fail "${_dir##*/}: local branches '${_local}' != '${_branch}'" ;;
 	esac
 	_local="$(git -C "${_dir}" for-each-ref --format='%(upstream)' \
 	    "refs/heads/${_branch}")"
@@ -210,8 +217,8 @@ test_fresh_clone_after_rename() {
 	assert_updated "${_d}" c2 main
 }
 
-# Local refs named like the remote-tracking ones must not change what is
-# checked out or reported.
+# Local refs named like the remote-tracking ones, or like options, must not
+# change what is checked out or reported.
 test_ambiguous_ref_name() {
 	local _d="${WORK:?}/ambiguous" _out
 	setup_remote || return 1
@@ -219,6 +226,7 @@ test_ambiguous_ref_name() {
 	git clone --quiet --depth=1 "${REMOTE_URL}" "${_d}" || return 1
 	git -C "${_d}" branch origin/main || return 1
 	git -C "${_d}" branch origin/HEAD || return 1
+	git -C "${_d}" update-ref refs/heads/-x HEAD || return 1
 	commit_remote main c2 || return 1
 	_out="$(git_update ambiguous "${_d}" 2>&1)" ||
 	    fail "ambiguous: git_update returned $?"
