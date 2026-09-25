@@ -229,15 +229,72 @@ setup_venv() {
 	EOF
 }
 
+# git_follows_remote_head
+# True if git can update refs/remotes/<remote>/HEAD from the remote during
+# a fetch (remote.<name>.followRemoteHEAD, git 2.48+).
+git_follows_remote_head() {
+	local _v _major _minor
+	_v="$(git version)" || return
+	_v="${_v#git version }"
+	_major="${_v%%.*}"
+	_v="${_v#*.}"
+	_minor="${_v%%.*}"
+	case "${_major:-x}${_minor:-x}" in
+	*[!0-9]*) return 1 ;;
+	esac
+	[ "${_major}" -gt 2 ] ||
+	    { [ "${_major}" -eq 2 ] && [ "${_minor}" -ge 48 ]; }
+}
+
+# git_fetch_origin <repo_dir>
+# Fetch every branch of origin into the shallow clone at <repo_dir> and
+# point origin/HEAD at the remote's default branch: during the fetch where
+# git supports it, otherwise with a separate "remote set-head" query.
+git_fetch_origin() {
+	local _dir="${1:?repo_dir}" _followhead=
+	if git_follows_remote_head; then
+		_followhead="remote.origin.followRemoteHEAD=always"
+	fi
+	git -C "${_dir}" ${_followhead:+-c "${_followhead}"} fetch --quiet \
+	    --prune --no-recurse-submodules origin --depth=1 || return
+	case "${_followhead:+set}" in
+	set) ;;
+	*) git -C "${_dir}" remote set-head origin --auto >/dev/null ;;
+	esac
+}
+
+# git_update <repo_name> <repo_dir>
+# Reset the clone at <repo_dir> to a shallow copy of origin's default
+# branch, discarding local changes.  origin/HEAD is re-read from the remote
+# each time (see git_fetch_origin) so a renamed default branch (e.g.
+# master -> main) is followed, with the local branch of the same name
+# checked out and tracking it.  A failed fetch, such as on an offline host,
+# is reported and leaves the checkout as it is; a failed submodule update
+# is reported too.  Any other failure returns non-zero.
 git_update() {
 	local _repo_name="${1:?repo_name}"
 	local _repo_dir="${2:?repo_dir}"
+	local _branch
 	echo "==> ${_repo_name:?}: Fetching"
-	git -C "${_repo_dir:?}" fetch --quiet \
-	    --no-recurse-submodules origin --depth=1
-	git -C "${_repo_dir:?}" reset --hard origin/HEAD
+	git -C "${_repo_dir:?}" remote set-branches origin '*' || return
+	if ! git_fetch_origin "${_repo_dir:?}"; then
+		echo "==> ${_repo_name:?}: Fetch failed;" \
+		    "keeping the current checkout" >&2
+		return 0
+	fi
+	_branch="$(git -C "${_repo_dir:?}" symbolic-ref \
+	    refs/remotes/origin/HEAD)" || return
+	_branch="${_branch#refs/remotes/origin/}"
+	git -C "${_repo_dir:?}" reset --hard refs/remotes/origin/HEAD || return
+	git -C "${_repo_dir:?}" checkout --quiet --track \
+	    -B "${_branch:?}" "refs/remotes/origin/${_branch:?}" || return
 	echo "==> ${_repo_name:?}: Updating submodules"
-	git -C "${_repo_dir:?}" submodule --quiet update --init --depth=1
-	git -C "${_repo_dir:?}" reflog expire --expire-unreachable=all --all
-	git -C "${_repo_dir:?}" gc --quiet --prune=all
+	if ! git -C "${_repo_dir:?}" submodule --quiet update --init \
+	    --depth=1; then
+		echo "==> ${_repo_name:?}: Submodule update failed;" \
+		    "continuing" >&2
+	fi
+	git -C "${_repo_dir:?}" reflog expire --expire-unreachable=all --all ||
+	    return
+	git -C "${_repo_dir:?}" gc --quiet --prune=all || return
 }
