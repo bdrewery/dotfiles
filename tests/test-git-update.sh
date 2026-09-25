@@ -310,6 +310,35 @@ test_fetch_failure() {
 	assert_fetch_skipped "${_d}" "${_out}"
 }
 
+# assert_exported_revision <label>
+# Assert a child process, like the install.sh that update.sh execs, sees
+# PROFILE_GIT_UPDATE_REVISION set to GIT_UPDATE_REVISION.
+assert_exported_revision() {
+	local _rev
+	# shellcheck disable=SC2016 # expanded by the child shell
+	_rev="$(sh -c 'printf %s "${PROFILE_GIT_UPDATE_REVISION:-unset}"')"
+	case "${_rev}" in
+	"${GIT_UPDATE_REVISION:?}") ;;
+	*) fail "revision: child sees '${_rev}' ${1:?}" ;;
+	esac
+}
+
+# install.sh re-runs git_update unless the revision that ran matches its
+# own, so git_update must export its revision even when the fetch fails.
+test_exports_revision() {
+	local _d="${WORK:?}/revision"
+	setup_remote || return 1
+	git clone --quiet --depth=1 "${REMOTE_URL}" "${_d}" || return 1
+	unset PROFILE_GIT_UPDATE_REVISION
+	run_update "${_d}"
+	assert_exported_revision "after update"
+	unset PROFILE_GIT_UPDATE_REVISION
+	mv "${REMOTE}" "${REMOTE}.gone" || return 1
+	run_update "${_d}"
+	mv "${REMOTE}.gone" "${REMOTE}" || return 1
+	assert_exported_revision "after failed fetch"
+}
+
 # A detached HEAD is drift like any other: it ends up on the default branch.
 test_detached_head() {
 	local _d="${WORK:?}/detached"
@@ -373,7 +402,8 @@ for t in test_no_rename test_rename_single_branch test_rename_full_clone \
     test_fresh_clone_after_rename test_ambiguous_ref_name test_reports_head \
     test_discards_local_changes \
     test_prunes_deleted_branches \
-    test_unreachable_remote test_fetch_failure test_detached_head \
+    test_unreachable_remote test_fetch_failure test_exports_revision \
+    test_detached_head \
     test_update_failure_is_error test_submodule_failure; do
 	_failures_before="${FAILURES}"
 	if ! "${t}"; then

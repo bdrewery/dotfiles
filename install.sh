@@ -15,6 +15,25 @@ export PROFILE_REPO
 ${D} chmod 0700 "${PROFILE_REPO}"
 . "${PROFILE_REPO}/libexec/install-lib.sh"
 
+# update.sh runs the git_update from the checkout as it was before fetching.
+# If that was not this checkout's revision of git_update, update again with
+# this one so a single update-profile run lands on the latest default branch.
+case "${D:+set}" in
+set) ;;
+*)
+	case "${PROFILE_GIT_UPDATE_REVISION:-none}" in
+	"${GIT_UPDATE_REVISION:?}") ;;
+	*)
+		if ! git_update "${REPO}" "${PROFILE_REPO}"; then
+			echo "==> ${REPO}: Update failed" >&2
+			exit 1
+		fi
+		exec "${PROFILE_REPO}/install.sh" "$@"
+		;;
+	esac
+	;;
+esac
+
 ${D} ensure_dir ~/.generate-tagsd
 ${D} ensure_dir ~/.screen
 ${D} ensure_dir ~/.ssh

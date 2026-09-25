@@ -263,6 +263,11 @@ git_fetch_origin() {
 	esac
 }
 
+# Revision of git_update.  Bump it whenever git_update changes: install.sh
+# updates again when the git_update that ran before it, as recorded in
+# PROFILE_GIT_UPDATE_REVISION, was a different revision.
+GIT_UPDATE_REVISION=1
+
 # git_update <repo_name> <repo_dir>
 # Reset the clone at <repo_dir> to a shallow copy of origin's default
 # branch, discarding local changes.  origin/HEAD is re-read from the remote
@@ -271,10 +276,15 @@ git_fetch_origin() {
 # checked out and tracking it.  A failed fetch, such as on an offline host,
 # is reported and leaves the checkout as it is; a failed submodule update
 # is reported too.  Any other failure returns non-zero.
+# Exports PROFILE_GIT_UPDATE_REVISION set to GIT_UPDATE_REVISION on entry, so
+# install.sh can tell which revision ran even if it only reported a failed
+# fetch.
 git_update() {
 	local _repo_name="${1:?repo_name}"
 	local _repo_dir="${2:?repo_dir}"
 	local _branch
+	PROFILE_GIT_UPDATE_REVISION="${GIT_UPDATE_REVISION:?}"
+	export PROFILE_GIT_UPDATE_REVISION
 	echo "==> ${_repo_name:?}: Fetching"
 	git -C "${_repo_dir:?}" remote set-branches origin '*' || return
 	if ! git_fetch_origin "${_repo_dir:?}"; then
