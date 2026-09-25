@@ -229,13 +229,72 @@ setup_venv() {
 	EOF
 }
 
+# git_update <repo_name> <repo_dir>
+# Update the clone at <repo_dir> to a shallow copy of the tip of origin's
+# default branch, discarding local changes.  The default branch is looked up
+# on each run so a rename on the remote (e.g. master -> main) is followed;
+# the fetch refspec is narrowed to that branch and refs for any other branch
+# are removed.
+# Returns non-zero if origin's default branch cannot be determined or
+# fetched, leaving the checkout and its config unchanged, or if switching
+# to it fails.
 git_update() {
 	local _repo_name="${1:?repo_name}"
 	local _repo_dir="${2:?repo_dir}"
+	local _branch _ref _stale
 	echo "==> ${_repo_name:?}: Fetching"
-	git -C "${_repo_dir:?}" fetch --quiet \
-	    --no-recurse-submodules origin --depth=1
-	git -C "${_repo_dir:?}" reset --hard origin/HEAD
+	_branch="$(git -C "${_repo_dir:?}" ls-remote --symref origin HEAD |
+	    sed -n 's,^ref: refs/heads/\([^	]*\)	HEAD$,\1,p')"
+	case "${_branch}" in
+	"")
+		echo "git_update: ${_repo_name:?}: Cannot determine default" \
+		    "branch of origin" >&2
+		return 1
+		;;
+	esac
+	if ! git -C "${_repo_dir:?}" fetch --quiet \
+	    --no-recurse-submodules origin --depth=1 \
+	    "+refs/heads/${_branch:?}:refs/remotes/origin/${_branch:?}"; then
+		echo "git_update: ${_repo_name:?}: git fetch origin" \
+		    "${_branch:?} failed" >&2
+		return 1
+	fi
+	if ! git -C "${_repo_dir:?}" remote set-branches origin "${_branch:?}"; then
+		echo "git_update: ${_repo_name:?}: git remote set-branches" \
+		    "origin ${_branch:?} failed" >&2
+		return 1
+	fi
+	if ! git -C "${_repo_dir:?}" remote set-head origin "${_branch:?}"; then
+		echo "git_update: ${_repo_name:?}: git remote set-head" \
+		    "origin ${_branch:?} failed" >&2
+		return 1
+	fi
+	if ! git -C "${_repo_dir:?}" checkout --quiet --force \
+	    -B "${_branch:?}" origin/HEAD; then
+		echo "git_update: ${_repo_name:?}: git checkout" \
+		    "${_branch:?} failed" >&2
+		return 1
+	fi
+	_stale="$(git -C "${_repo_dir:?}" for-each-ref --format='%(refname)' \
+	    refs/heads refs/remotes/origin)"
+	for _ref in ${_stale}; do
+		case "${_ref}" in
+		"refs/heads/${_branch:?}"|"refs/remotes/origin/${_branch:?}"|\
+		refs/remotes/origin/HEAD)
+			;;
+		refs/heads/*)
+			git -C "${_repo_dir:?}" branch --quiet -D \
+			    "${_ref#refs/heads/}" ||
+			    echo "git_update: ${_repo_name:?}: Failed to" \
+			    "delete stale branch ${_ref}" >&2
+			;;
+		*)
+			git -C "${_repo_dir:?}" update-ref -d "${_ref:?}" ||
+			    echo "git_update: ${_repo_name:?}: Failed to" \
+			    "delete stale ref ${_ref}" >&2
+			;;
+		esac
+	done
 	echo "==> ${_repo_name:?}: Updating submodules"
 	git -C "${_repo_dir:?}" submodule --quiet update --init --depth=1
 	git -C "${_repo_dir:?}" reflog expire --expire-unreachable=all --all

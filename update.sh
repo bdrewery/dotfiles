@@ -6,7 +6,10 @@ update() {
 	local repo_name=".profile-repo"
 	local repo_dir="${PROFILE_REPO:?}"
 
-	git_update "${repo_name:?}" "${repo_dir:?}"
+	if ! git_update "${repo_name:?}" "${repo_dir:?}"; then
+		echo "==> ${repo_name:?}: Update failed;" \
+		    "installing the current checkout" >&2
+	fi
 	cd "${repo_dir:?}"
 	echo "==> ${repo_name:?}: Installing"
 	exec ./install.sh
