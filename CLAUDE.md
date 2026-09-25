@@ -1,3 +1,4 @@
 - This a dotfiles repository.
 - Files are installed by `./install.sh` which symlinks most files back into a local checkout in `~/.profile-repo`.
 - `~/.profile-repo` is the installed copy of this repo, not this working checkout. It is updated only by running `update-profile`; do not modify it or manage it from here.
+- Any behavior change to `git_update` or its helpers must bump `GIT_UPDATE_REVISION` (see its comment in `libexec/install-lib.sh`).
