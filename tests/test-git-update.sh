@@ -13,6 +13,11 @@ TESTS_DIR="$(cd "$(dirname "$0")" && pwd -P)" || exit 1
 # shellcheck source=libexec/install-lib.sh
 . "${TESTS_DIR:?}/../libexec/install-lib.sh" || exit 1
 
+# Keep the caller's git environment out, such as GIT_DIR from a hook, so
+# git commands act only on the repos named here.
+# shellcheck disable=SC2046 # one variable name per word
+unset $(git rev-parse --local-env-vars) GIT_TEMPLATE_DIR
+
 WORK="$(mktemp -d "${TMPDIR:-/tmp}/test-git-update.XXXXXX")" || exit 1
 trap 'rm -rf "${WORK:?}"' EXIT
 trap 'exit 1' INT TERM HUP
