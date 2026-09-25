@@ -41,6 +41,8 @@
         autoSquash = true
 [rerere]
 	enabled = true
+[init]
+	defaultBranch = main
 [include]
 	path = ~/.gitconfig.local
 [push]
