@@ -113,7 +113,10 @@ if [ -f ~/.local.profile-repo ]; then
 		_repo_dir="${REPO:?}/local.d/${_repo_name}"
 		if [ -z "${D}" ]; then
 			if [ -d "${_repo_dir}/.git" ]; then
-				git_update "${_repo_name:?}" "${_repo_dir:?}"
+				if ! git_update "${_repo_name:?}" "${_repo_dir:?}"; then
+					echo "==> ${_repo_name:?}: Update failed" >&2
+					exit 1
+				fi
 			else
 				echo "==> ${_repo_name:?}: Cloning"
 				git clone --quiet --depth=1 "${_repo_url}" "${_repo_dir}"
