@@ -34,8 +34,9 @@
 #   current      already at main's tip.  Must fetch .profile-repo only once.
 #   no-update    install.sh -N, as Ansible runs it after checking out
 #                .profile-repo itself, with no revision marker: must install
-#                that checkout without fetching or changing it, and so must
-#                -n -N.
+#                that checkout without fetching or changing it.  An unknown
+#                option must fail without doing anything, and -n -N must not
+#                fetch.
 #
 # Usage: sh tests/test-update-e2e.sh
 # To test another git, put it first in PATH; it must not live under $HOME,
@@ -331,7 +332,13 @@ test_install_no_update() {
 	    -m "test: main moved on")" || return 1
 	remote_set "${_newer}:main" || return 1
 	_before="$(refs_state "${_repo}")" || return 1
-	sandbox "${S}" /bin/sh "${_repo}/install.sh" -n -N > "${S}/log" 2>&1 ||
+	sandbox "${S}" /bin/sh "${_repo}/install.sh" -x > "${S}/log" 2>&1
+	_rc=$?
+	case "${_rc}" in
+	64) ;;
+	*) fail "no-update: install.sh -x exited ${_rc}, want 64" ;;
+	esac
+	sandbox "${S}" /bin/sh "${_repo}/install.sh" -n -N >> "${S}/log" 2>&1 ||
 	    fail "no-update: install.sh -n -N exited $?"
 	# Ansible runs it with bash.
 	sandbox "${S}" /bin/bash "${_repo}/install.sh" -N >> "${S}/log" 2>&1

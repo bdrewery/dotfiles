@@ -11,6 +11,10 @@ while getopts nN flag; do
 	case "${flag}" in
 	n) D=echo ;;
 	N) NO_SELF_UPDATE=1 ;;
+	*)
+		echo "Usage: install.sh [-n] [-N]" >&2
+		exit 64
+		;;
 	esac
 done
 export D
