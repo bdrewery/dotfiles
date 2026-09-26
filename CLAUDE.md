@@ -1,3 +1,5 @@
 - This a dotfiles repository.
 - Files are installed by `./install.sh` which symlinks most files back into a local checkout in `~/.profile-repo`.
 - `~/.profile-repo` is the installed copy of this repo, not this working checkout. It is updated only by running `update-profile`; do not modify it or manage it from here.
+- Tests: `sh tests/test-git-update.sh` (fast, `git_update` in `libexec/install-lib.sh`) and `sh tests/test-update-e2e.sh` (slow, runs `update.sh`/`install.sh` end to end in a `bwrap` sandbox). Never run `update.sh` or `install.sh` against a fake `HOME` outside that sandbox: `update.sh` keeps an inherited `PROFILE_REPO`, which points it at the real `~/.profile-repo`, and other inherited settings (npm/pip config, `ZDOTDIR`, `XDG_*`) leak into the install too.
+- Any behavior change to `git_update` or its helpers must bump `GIT_UPDATE_REVISION` (see its comment in `libexec/install-lib.sh`).

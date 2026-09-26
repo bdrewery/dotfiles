@@ -232,6 +232,7 @@ setup_venv() {
 # git_follows_remote_head
 # True if git can update refs/remotes/<remote>/HEAD from the remote during
 # a fetch (remote.<name>.followRemoteHEAD, git 2.48+).
+# Part of git_update: a behavior change here must bump GIT_UPDATE_REVISION.
 git_follows_remote_head() {
 	local _v _major _minor
 	_v="$(git version)" || return
@@ -250,6 +251,7 @@ git_follows_remote_head() {
 # Fetch every branch of origin into the shallow clone at <repo_dir> and
 # point origin/HEAD at the remote's default branch: during the fetch where
 # git supports it, otherwise with a separate "remote set-head" query.
+# Part of git_update: a behavior change here must bump GIT_UPDATE_REVISION.
 git_fetch_origin() {
 	local _dir="${1:?repo_dir}" _followhead=
 	if git_follows_remote_head; then
@@ -263,26 +265,33 @@ git_fetch_origin() {
 	esac
 }
 
-# Revision of git_update.  Bump it whenever git_update changes: install.sh
-# updates again when the git_update that ran before it, as recorded in
-# PROFILE_GIT_UPDATE_REVISION, was a different revision.
-GIT_UPDATE_REVISION=1
+# Revision of git_update.  Bump it with any behavior change to git_update or
+# the helpers it calls (git_fetch_origin, git_follows_remote_head); comment
+# or formatting changes need no bump.  update.sh runs the git_update that
+# was installed before it fetched, and install.sh runs git_update again when
+# that one's revision, as recorded in PROFILE_GIT_UPDATE_REVISION, differs
+# from this one.  So a bump makes the change take effect in the same
+# update-profile run rather than the next one.
+GIT_UPDATE_REVISION=2
 
 # git_update <repo_name> <repo_dir>
 # Reset the clone at <repo_dir> to a shallow copy of origin's default
 # branch, discarding local changes.  origin/HEAD is re-read from the remote
 # each time (see git_fetch_origin) so a renamed default branch (e.g.
 # master -> main) is followed, with the local branch of the same name
-# checked out and tracking it.  A failed fetch, such as on an offline host,
-# is reported and leaves the checkout as it is; a failed submodule update
-# is reported too.  Any other failure returns non-zero.
+# checked out and tracking it; other local branches are deleted.  A failed
+# fetch, such as on an offline host, is reported and leaves the checkout as
+# it is; a failed submodule update is reported too.  Any other failure
+# returns non-zero.
 # Exports PROFILE_GIT_UPDATE_REVISION set to GIT_UPDATE_REVISION on entry, so
 # install.sh can tell which revision ran even if it only reported a failed
 # fetch.
 git_update() {
 	local _repo_name="${1:?repo_name}"
 	local _repo_dir="${2:?repo_dir}"
-	local _branch
+	local _branch _ref _refs
+	# A behavior change in this function or its helpers must bump
+	# GIT_UPDATE_REVISION; see there.
 	PROFILE_GIT_UPDATE_REVISION="${GIT_UPDATE_REVISION:?}"
 	export PROFILE_GIT_UPDATE_REVISION
 	echo "==> ${_repo_name:?}: Fetching"
@@ -298,6 +307,17 @@ git_update() {
 	git -C "${_repo_dir:?}" reset --hard refs/remotes/origin/HEAD || return
 	git -C "${_repo_dir:?}" checkout --quiet --track \
 	    -B "${_branch:?}" "refs/remotes/origin/${_branch:?}" || return
+	_refs="$(git -C "${_repo_dir:?}" for-each-ref --format='%(refname)' \
+	    refs/heads)" || return
+	for _ref in ${_refs}; do
+		case "${_ref}" in
+		"refs/heads/${_branch:?}") ;;
+		*)
+			git -C "${_repo_dir:?}" branch --quiet -D -- \
+			    "${_ref#refs/heads/}" || return
+			;;
+		esac
+	done
 	echo "==> ${_repo_name:?}: Updating submodules"
 	if ! git -C "${_repo_dir:?}" submodule --quiet update --init \
 	    --depth=1; then
