@@ -180,5 +180,5 @@ if [ -z "${D}" ] && which npm >/dev/null 2>&1; then
 fi
 
 if command -v zsh >/dev/null 2>&1; then
-	zsh -ic 'autoload -Uz compinit; compinit' || :
+	${D} zsh -ic 'autoload -Uz compinit; compinit' || :
 fi

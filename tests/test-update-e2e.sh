@@ -35,8 +35,8 @@
 #   no-update    install.sh -N, as Ansible runs it after checking out
 #                .profile-repo itself, with no revision marker: must install
 #                that checkout without fetching or changing it.  An unknown
-#                option must fail without doing anything, and -n -N must not
-#                fetch.
+#                option must fail without doing anything, and -n -N must
+#                neither fetch nor rebuild zsh completions.
 #
 # Usage: sh tests/test-update-e2e.sh
 # To test another git, put it first in PATH; it must not live under $HOME,
@@ -340,6 +340,8 @@ test_install_no_update() {
 	esac
 	sandbox "${S}" /bin/sh "${_repo}/install.sh" -n -N >> "${S}/log" 2>&1 ||
 	    fail "no-update: install.sh -n -N exited $?"
+	[ -e "${S}/home/.zcompdump" ] &&
+	    fail "no-update: install.sh -n rebuilt zsh completions"
 	# Ansible runs it with bash.
 	sandbox "${S}" /bin/bash "${_repo}/install.sh" -N >> "${S}/log" 2>&1
 	_rc=$?
