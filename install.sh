@@ -1,9 +1,16 @@
 #! /bin/sh
+# Usage: install.sh [-n] [-N]
+#   -n  Dry run: print the install steps instead of running them.
+#   -N  Do not update ~/.profile-repo itself; install it as checked out.
+#       For callers that manage that checkout themselves, such as Ansible.
+#       Private local.d repos are still updated.
 
 D=
-while getopts n flag; do
+NO_SELF_UPDATE=
+while getopts nN flag; do
 	case "${flag}" in
 	n) D=echo ;;
+	N) NO_SELF_UPDATE=1 ;;
 	esac
 done
 export D
@@ -18,8 +25,9 @@ ${D} chmod 0700 "${PROFILE_REPO}"
 # update.sh runs the git_update from the checkout as it was before fetching.
 # If that was not this checkout's revision of git_update, update again with
 # this one so a single update-profile run lands on the latest default branch.
-case "${D:+set}" in
-set) ;;
+# Skipped for -n and -N.
+case "${D:+set}${NO_SELF_UPDATE:+set}" in
+*set*) ;;
 *)
 	case "${PROFILE_GIT_UPDATE_REVISION:-none}" in
 	"${GIT_UPDATE_REVISION:?}") ;;

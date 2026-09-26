@@ -32,6 +32,10 @@
 #   workstation  on main at FROZEN_REV with the leftover local master that
 #                revision 1 of git_update kept.  Must end on main's tip.
 #   current      already at main's tip.  Must fetch .profile-repo only once.
+#   no-update    install.sh -N, as Ansible runs it after checking out
+#                .profile-repo itself, with no revision marker: must install
+#                that checkout without fetching or changing it, and so must
+#                -n -N.
 #
 # Usage: sh tests/test-update-e2e.sh
 # To test another git, put it first in PATH; it must not live under $HOME,
@@ -312,6 +316,51 @@ test_current() {
 	esac
 }
 
+# Ansible checks out .profile-repo itself and runs install.sh -N without
+# the revision marker update.sh would set.  install.sh must install the
+# checkout as it is: no fetch, and HEAD and every ref left alone, even with
+# main moved on upstream and a stray local branch present.
+test_install_no_update() {
+	local _rc _repo _newer _before _after
+	new_scenario no-update || return 1
+	remote_set "${FROZEN_REV}:master" "${TIP}:main" HEAD=main || return 1
+	install_clone || return 1
+	_repo="${S}/home/.profile-repo"
+	git -C "${_repo}" branch master || return 1
+	_newer="$(git -C "${WORK}/src" commit-tree "${TIP}^{tree}" -p "${TIP}" \
+	    -m "test: main moved on")" || return 1
+	remote_set "${_newer}:main" || return 1
+	_before="$(refs_state "${_repo}")" || return 1
+	sandbox "${S}" /bin/sh "${_repo}/install.sh" -n -N > "${S}/log" 2>&1 ||
+	    fail "no-update: install.sh -n -N exited $?"
+	# Ansible runs it with bash.
+	sandbox "${S}" /bin/bash "${_repo}/install.sh" -N >> "${S}/log" 2>&1
+	_rc=$?
+	case "${_rc}" in
+	0) ;;
+	*) fail "no-update: install.sh -N exited ${_rc}" ;;
+	esac
+	_after="$(refs_state "${_repo}")" || return 1
+	case "${_after}" in
+	"${_before}") ;;
+	*) fail "no-update: checkout changed: ${_before} -> ${_after}" ;;
+	esac
+	if grep -q ': Fetching$' "${S}/log"; then
+		fail "no-update: install.sh fetched"
+	fi
+	grep -qxF "${MARKER}" "${S}/home/.login_conf" ||
+	    fail "no-update: install.sh -N did not install"
+}
+
+# refs_state <repo>
+# Print HEAD and every ref of <repo> on one line.
+refs_state() {
+	printf '%s %s ' "$(git -C "${1:?}" symbolic-ref -q HEAD)" \
+	    "$(git -C "${1:?}" rev-parse HEAD)" &&
+	    git -C "${1:?}" for-each-ref --format='%(refname)=%(objectname)' |
+	    tr '\n' ' '
+}
+
 build_tip || { echo "FAIL: could not build the code under test" >&2; exit 1; }
 test_sandbox_isolation
 case "${FAILURES}" in
@@ -322,7 +371,7 @@ case "${FAILURES}" in
 	exit 1
 	;;
 esac
-for t in test_old test_workstation test_current; do
+for t in test_old test_workstation test_current test_install_no_update; do
 	_failures_before="${FAILURES}"
 	if ! "${t}"; then
 		fail "${t}: setup failed"
