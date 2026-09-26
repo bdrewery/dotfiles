@@ -3,14 +3,21 @@
 # across the master -> main rename.
 #
 # The real update.sh and install.sh run against a stand-in remote inside
-# bwrap: the real filesystem is mounted read-only apart from the scratch
-# directory, and there is no network.  Host sockets (e.g. under /run) and
-# processes are not isolated; nothing the installer runs uses them.
-# env -i keeps the caller's environment out; in particular an inherited
+# bwrap (see sandbox()), so that they cannot:
+#  - modify anything outside the scratch directory: the root, including the
+#    caller's $HOME, is read-only, and $HOME is hidden behind an empty
+#    read-only mount;
+#  - start services: /run, with the session bus and docker socket, is
+#    hidden;
+#  - leave anything running: the sandbox has its own process tree, and
+#    whatever is left in it is killed when the command exits.
+# test_sandbox_isolation checks all three before any scenario runs, and the
+# test stops if it fails.  The sandbox is also offline, and its environment
+# is cleared apart from HOME, PATH, TMPDIR, TERM and LANG; an inherited
 # PROFILE_REPO would otherwise point update.sh at the real ~/.profile-repo.
-# PATH entries under $HOME are dropped so no personal script can shadow a
-# tool.  Offline, submodule clones and pip installs fail; both are reported
-# and the install goes on, as on an offline host.
+# PATH entries under $HOME are dropped.  Offline, submodule clones and pip
+# installs fail; both are reported and the install goes on, as on an
+# offline host.
 #
 # The code under test is this checkout's HEAD plus any uncommitted changes
 # to tracked files, committed in a scratch clone as the remote's main, with
@@ -40,6 +47,13 @@ OLD_REV=70d3c12cebfe5b8c3dee24cbfba72bcfd1b5f08f
 FROZEN_REV=bba301dc17df056b470e18d764f23e973c0783a1
 
 TESTS_DIR="$(cd "$(dirname "$0")" && pwd -P)" || exit 1
+case "${HOME:-/}" in
+/)
+	echo "FAIL: HOME must be set to a directory other than /" >&2
+	exit 1
+	;;
+esac
+REAL_HOME="${HOME}"
 REPO_ROOT="$(cd "${TESTS_DIR:?}/.." && pwd -P)" || exit 1
 
 # Keep the caller's git environment out, such as GIT_DIR from a hook, so
@@ -50,10 +64,6 @@ unset $(git rev-parse --local-env-vars) GIT_TEMPLATE_DIR
 if ! command -v bwrap >/dev/null 2>&1; then
 	echo "skip: bwrap is not installed"
 	exit 0
-fi
-if ! bwrap --ro-bind / / --unshare-net --dev /dev --proc /proc true; then
-	echo "FAIL: bwrap is installed but cannot create a sandbox" >&2
-	exit 1
 fi
 for _rev in "${OLD_REV}" "${FROZEN_REV}"; do
 	if ! git -C "${REPO_ROOT}" cat-file -e "${_rev}^{commit}" 2>/dev/null
@@ -108,15 +118,21 @@ build_tip() {
 }
 
 # sandbox <dir> <command> [args]
-# Run <command> in bwrap with HOME=<dir>/home, only <dir> writable, no
-# network and a clean environment.
+# Run <command> (an absolute path) isolated as described at the top, with
+# HOME=<dir>/home and <dir> writable.  The tmpfs mounts come before the
+# bind so <dir> stays reachable even under /tmp or $HOME, and the empty
+# $HOME is made read-only after it.
 sandbox() {
 	local _s="${1:?}"
 	shift
-	bwrap --ro-bind / / --tmpfs /tmp --bind "${_s}" "${_s}" \
-	    --dev /dev --proc /proc --unshare-net --die-with-parent \
-	    /usr/bin/env -i HOME="${_s}/home" PATH="${SANDBOX_PATH}" \
-	    TMPDIR="${_s}/tmp" TERM=dumb LANG=C.UTF-8 "$@" </dev/null
+	bwrap --unshare-all --new-session --die-with-parent \
+	    --ro-bind / / --dev /dev --proc /proc \
+	    --tmpfs /run --tmpfs /tmp --tmpfs "${REAL_HOME:?}" \
+	    --bind "${_s}" "${_s}" --remount-ro "${REAL_HOME}" \
+	    --clearenv --setenv HOME "${_s}/home" \
+	    --setenv PATH "${SANDBOX_PATH}" --setenv TMPDIR "${_s}/tmp" \
+	    --setenv TERM dumb --setenv LANG C.UTF-8 \
+	    "$@" </dev/null
 }
 
 # new_scenario <name>
@@ -157,7 +173,8 @@ install_clone() {
 # run_update_sh
 # Run the installed update.sh once in the sandbox, logging to ${S}/log.
 run_update_sh() {
-	sandbox "${S}" sh "${S}/home/.profile-repo/update.sh" > "${S}/log" 2>&1
+	sandbox "${S}" /bin/sh "${S}/home/.profile-repo/update.sh" \
+	    > "${S}/log" 2>&1
 }
 
 # assert_on_tip <name> <update.sh exit status>
@@ -196,6 +213,59 @@ fetch_count() {
 	grep -c '^==> \.profile-repo: Fetching$' "${S}/log"
 }
 
+# The sandbox must keep writes inside the scratch directory, hide the
+# session bus and other /run sockets, and kill whatever is left running.
+test_sandbox_isolation() {
+	local _out _tag _i
+	S="${WORK:?}/isolation"
+	mkdir -p "${S}/home" "${S}/tmp" || return 1
+	_tag="299.$$"
+	# The background sleep must be seen running inside before the host
+	# checks that it is gone, so a sleep that never started cannot pass.
+	# shellcheck disable=SC2016 # expanded in the sandbox
+	_out="$(sandbox "${S}" /bin/sh -c '
+		( : > "$1/.test-update-e2e-probe" ) 2>/dev/null &&
+		    echo "real HOME writable"
+		( : > /usr/.test-update-e2e-probe ) 2>/dev/null &&
+		    echo "root filesystem writable"
+		[ -z "$(ls -A /run)" ] || echo "/run visible"
+		setsid sleep "$2" </dev/null >/dev/null 2>&1 &
+		i=0
+		until pgrep -f "sleep $2" >/dev/null; do
+			i=$((i + 1))
+			if [ "${i}" -gt 50 ]; then
+				echo "background probe did not start"
+				break
+			fi
+			sleep 0.1
+		done
+		echo "sandbox ok"
+	    ' sh "${REAL_HOME}" "${_tag}" 2>&1)" || {
+		fail "isolation: bwrap failed: ${_out}"
+		return 0
+	}
+	case "${_out}" in
+	"sandbox ok") ;;
+	*) fail "isolation: ${_out}" ;;
+	esac
+	[ -e "${REAL_HOME}/.test-update-e2e-probe" ] &&
+	    fail "isolation: probe file reached the real HOME"
+	[ -e /usr/.test-update-e2e-probe ] &&
+	    fail "isolation: probe file reached /usr"
+	# The kernel kills the namespace's processes as bwrap exits; allow
+	# a moment for them to go.
+	_i=0
+	while pgrep -f "sleep ${_tag}" >/dev/null 2>&1; do
+		_i=$((_i + 1))
+		if [ "${_i}" -gt 20 ]; then
+			fail "isolation: background process outlived the sandbox"
+			pkill -f "sleep ${_tag}"
+			break
+		fi
+		sleep 0.1
+	done
+}
+
 test_old() {
 	local _rc
 	new_scenario old || return 1
@@ -216,7 +286,7 @@ test_workstation() {
 	# Revision 1 of git_update, as a host ran it, moves to main and keeps
 	# the local master.
 	# shellcheck disable=SC2016 # expanded in the sandbox, with its HOME
-	sandbox "${S}" sh -c '. "$HOME/.profile-repo/libexec/install-lib.sh" &&
+	sandbox "${S}" /bin/sh -c '. "$HOME/.profile-repo/libexec/install-lib.sh" &&
 	    git_update prep "$HOME/.profile-repo"' > "${S}/prep.log" 2>&1 ||
 	    return 1
 	git -C "${S}/home/.profile-repo" rev-parse --quiet --verify \
@@ -243,6 +313,15 @@ test_current() {
 }
 
 build_tip || { echo "FAIL: could not build the code under test" >&2; exit 1; }
+test_sandbox_isolation
+case "${FAILURES}" in
+0) echo "ok test_sandbox_isolation" ;;
+*)
+	echo "not ok test_sandbox_isolation"
+	echo "FAIL: sandbox is not isolated; not running the installer" >&2
+	exit 1
+	;;
+esac
 for t in test_old test_workstation test_current; do
 	_failures_before="${FAILURES}"
 	if ! "${t}"; then
