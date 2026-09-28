@@ -53,6 +53,8 @@ if [ -n "${pwd_val:-}" ] && [ -d "${pwd_val:-}" ]; then
 				printf '%s' "$input" >"${_sdir}/${_sid}.json.tmp" 2>/dev/null &&
 				mv -f "${_sdir}/${_sid}.json.tmp" \
 					"${_sdir}/${_sid}.json" 2>/dev/null &&
+				[ -z "$(find "${_sdir}/.last-prune" -mtime -1 2>/dev/null)" ] &&
+				touch "${_sdir}/.last-prune" 2>/dev/null &&
 				find "$_sdir" -maxdepth 1 -type f \
 					\( -name '*.json' -o -name '*.json.tmp' \) \
 					-mtime +30 -delete 2>/dev/null
