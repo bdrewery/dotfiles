@@ -5,14 +5,14 @@ input=$(cat)
 
 user=$(whoami)
 host=$(hostname -s)
-pwd_val=$(echo "$input" | jq -r '.workspace.current_dir // .cwd')
-model=$(echo "$input" | jq -r '.model.display_name // empty')
-session_name=$(echo "$input" | jq -r '.session_name // empty')
-used=$(echo "$input" | jq -r '.context_window.used_percentage // empty')
-limit_five_hour=$(echo "$input" | jq -r '.rate_limits.five_hour.used_percentage // empty')
-limit_five_hour_resets_at=$(echo "$input" | jq -r '.rate_limits.five_hour.resets_at // empty')
-limit_seven_day=$(echo "$input" | jq -r '.rate_limits.seven_day.used_percentage // empty')
-limit_seven_day_resets_at=$(echo "$input" | jq -r '.rate_limits.seven_day.resets_at // empty')
+pwd_val=$(printf '%s' "$input" | jq -r '.workspace.current_dir // .cwd')
+model=$(printf '%s' "$input" | jq -r '.model.display_name // empty')
+session_name=$(printf '%s' "$input" | jq -r '.session_name // empty')
+used=$(printf '%s' "$input" | jq -r '.context_window.used_percentage // empty')
+limit_five_hour=$(printf '%s' "$input" | jq -r '.rate_limits.five_hour.used_percentage // empty')
+limit_five_hour_resets_at=$(printf '%s' "$input" | jq -r '.rate_limits.five_hour.resets_at // empty')
+limit_seven_day=$(printf '%s' "$input" | jq -r '.rate_limits.seven_day.used_percentage // empty')
+limit_seven_day_resets_at=$(printf '%s' "$input" | jq -r '.rate_limits.seven_day.resets_at // empty')
 
 # Publish this blob for hooks to read.
 #
