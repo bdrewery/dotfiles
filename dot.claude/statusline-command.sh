@@ -40,8 +40,23 @@ if [ -n "${pwd_val:-}" ] && [ -d "${pwd_val:-}" ]; then
 		printf '%s' "$input" >"${_gitdir}/claude-statusline.json.tmp" 2>/dev/null &&
 			mv -f "${_gitdir}/claude-statusline.json.tmp" \
 				"${_gitdir}/claude-statusline.json" 2>/dev/null
+		# The shared file above is one per worktree, so two sessions in one
+		# worktree overwrite each other on every render. A per-session copy
+		# lets a reader match its own session_id; the shared file stays as
+		# the fallback until every reader has moved over.
+		_sid=$(printf '%s' "$input" | jq -r '.session_id // empty' 2>/dev/null) || _sid=""
+		case "${_sid:-}" in
+		"" | *[!A-Za-z0-9._-]*) ;;
+		*)
+			_sdir="${_gitdir}/claude-statusline"
+			mkdir -p "$_sdir" 2>/dev/null &&
+				printf '%s' "$input" >"${_sdir}/${_sid}.json.tmp" 2>/dev/null &&
+				mv -f "${_sdir}/${_sid}.json.tmp" \
+					"${_sdir}/${_sid}.json" 2>/dev/null
+			;;
+		esac
 	fi
-	unset _gitdir
+	unset _gitdir _sid _sdir
 fi
 
 # [user@host]
