@@ -1,0 +1,6 @@
+# herdr plugins, installed by install_herdr_plugins (libexec/install-lib.sh).
+# Tab-separated: <plugin_id> <owner/repo> <ref> <state> [action]
+#   ref:    tag or full commit hash to install; reinstalled when it changes
+#   state:  enable|disable, applied on every run; manual leaves it to the host
+#   action: invoked after an install, to restart onto the new code
+herdr.auto-title	kryptamine/herdr-auto-title	v0.10.0	enable	restart
