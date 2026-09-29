@@ -205,6 +205,350 @@ _install_claude_skills() {
 	done
 }
 
+# herdr_server_running
+# Succeed if a herdr server is running.  Enabling, disabling, unlinking
+# and invoking plugin actions need one; install and uninstall do not.
+# Depends on: herdr, jq.
+herdr_server_running() {
+	herdr status server --json </dev/null 2>/dev/null |
+	    jq -e '.running == true' >/dev/null 2>&1
+}
+
+# herdr_plugin_state <plugin_id>
+# Print "<kind>\t<owner/repo>\t<requested_ref>\t<commit>\t<enabled>" for
+# the registered herdr plugin <plugin_id>, or nothing if it is not
+# registered.  Fields that do not apply to a plugin are "-".
+# Depends on: herdr, jq.
+herdr_plugin_state() {
+	local _id="${1:?}" _json=""
+
+	_json="$(herdr plugin list --json </dev/null)" || {
+		echo "herdr_plugin_state: herdr plugin list failed" >&2
+		return 1
+	}
+	printf '%s\n' "${_json}" | jq -r --arg id "${_id}" '
+		.result.plugins[] | select(.plugin_id == $id) |
+		[.source.kind,
+		 (if .source.kind == "github"
+		  then "\(.source.owner)/\(.source.repo)" else "-" end),
+		 (.source.requested_ref // "-"),
+		 (.source.resolved_commit // "-"),
+		 .enabled] | @tsv'
+}
+
+# _herdr_plugin_is <state-line> <owner/repo> <ref>
+# Succeed if herdr_plugin_state output <state-line> is a GitHub install
+# of <owner/repo> at <ref>: installed from <ref>, or, for installs that
+# predate herdr recording the ref, resolved to <ref> as a commit.
+_herdr_plugin_is() {
+	local _src="$2" _ref="$3" _tab="" _kind="" _have_src="" _req=""
+	local _commit="" _enabled=""
+
+	_tab="$(printf '\t')"
+	IFS="${_tab}" read -r _kind _have_src _req _commit _enabled <<-EOF
+		${1}
+	EOF
+	case "${_kind}:${_have_src}" in
+	"github:${_src}") ;;
+	*) return 1 ;;
+	esac
+	case "${_ref}" in
+	"${_req}"|"${_commit}") return 0 ;;
+	esac
+	return 1
+}
+
+# _herdr_plugin_entry_valid <id> <source> <ref> <state> <action> <extra>
+# Succeed if the fields form a valid plugins.list entry.  Otherwise print
+# why to stderr and fail.  Nothing may start with "-", so no field can be
+# taken as a herdr option.
+_herdr_plugin_entry_valid() {
+	local _id="$1" _src="$2" _ref="$3" _state="$4" _action="$5"
+	local _extra="$6" _src_ok=0
+
+	case "${_id}" in
+	""|-*|*[!A-Za-z0-9._-]*)
+		echo "invalid plugin id '${_id}'" >&2
+		return 1
+		;;
+	esac
+	case "${_src}" in
+	-*|*/*/*|*[!A-Za-z0-9._/-]*|/*|*/|*/-*) ;;
+	*/*) _src_ok=1 ;;
+	esac
+	case "${_src_ok}" in
+	0)
+		echo "${_id}: invalid source '${_src}';" \
+		    "expected <owner>/<repo>" >&2
+		return 1
+		;;
+	esac
+	case "${_ref}" in
+	""|-*|*[!A-Za-z0-9._/-]*)
+		echo "${_id}: invalid ref '${_ref}'" >&2
+		return 1
+		;;
+	esac
+	case "${_state}" in
+	enable|disable|manual) ;;
+	*)
+		echo "${_id}: invalid state '${_state}'" >&2
+		return 1
+		;;
+	esac
+	case "${_action}" in
+	-*|*[!A-Za-z0-9._-]*)
+		echo "${_id}: invalid action '${_action}'" >&2
+		return 1
+		;;
+	esac
+	case "${_extra:+set}" in
+	set)
+		echo "${_id}: unexpected fields '${_extra}'" >&2
+		return 1
+		;;
+	esac
+}
+
+# _herdr_run <caller> <herdr-args...>
+# Run herdr <herdr-args...> with stdin from /dev/null, keeping its output
+# unless it fails; then print it to stderr after saying which call failed.
+# Depends on: herdr.
+_herdr_run() {
+	local _caller="${1:?}" _out=""
+	shift
+
+	if _out="$(herdr "$@" </dev/null 2>&1)"; then
+		return 0
+	fi
+	echo "${_caller}: herdr $* failed:" >&2
+	printf '%s\n' "${_out}" >&2
+	return 1
+}
+
+# _herdr_sync_plugin <id> <owner/repo> <ref> <state> <action> <server>
+# Bring herdr plugin <id> to one plugins.list entry.  Unless <id> is
+# already a GitHub install of <owner/repo> at <ref> it is installed from
+# there, unlinking a local link of the same id first.  The state is then
+# applied (manual leaves it to the host), and <action>, if not empty, is
+# invoked after an install if the plugin is enabled.  <server> is 1 if a
+# herdr server is running.
+# Returns, having said why on failure:
+#   0  done
+#   1  installed at <ref>, but applying the state or <action> failed
+#   2  not installed at <ref>
+# Depends on: herdr_plugin_state, _herdr_plugin_is, _herdr_run, herdr, jq.
+_herdr_sync_plugin() {
+	local _id="$1" _src="$2" _ref="$3" _state="$4" _action="$5"
+	local _server="$6" _tab="" _line="" _enabled="" _installed=0 _rc=0
+
+	_tab="$(printf '\t')"
+	_line="$(herdr_plugin_state "${_id}")" || return 2
+	if ! _herdr_plugin_is "${_line}" "${_src}" "${_ref}"; then
+		case "${_line}:${_server}" in
+		local*:1)
+			echo "=> Unlinking herdr plugin: ${_id}"
+			_herdr_run _herdr_sync_plugin plugin unlink "${_id}" ||
+			    return 2
+			;;
+		local*)
+			echo "_herdr_sync_plugin: herdr server not running;" \
+			    "${_id} stays linked" >&2
+			return 2
+			;;
+		esac
+		echo "=> Installing herdr plugin: ${_id} (${_src} ${_ref})"
+		_herdr_run _herdr_sync_plugin plugin install "${_src}" \
+		    --ref "${_ref}" --yes || return 2
+		_installed=1
+		_line="$(herdr_plugin_state "${_id}")" || return 2
+		if ! _herdr_plugin_is "${_line}" "${_src}" "${_ref}"; then
+			echo "_herdr_sync_plugin: ${_id} is not registered" \
+			    "after installing ${_src}; is the id right?" >&2
+			return 2
+		fi
+	fi
+	_enabled="${_line##*"${_tab}"}"
+	case "${_state}:${_enabled}" in
+	enable:false|disable:true)
+		case "${_server}" in
+		1)
+			echo "=> Setting herdr plugin ${_state}: ${_id}"
+			if _herdr_run _herdr_sync_plugin plugin "${_state}" \
+			    "${_id}"; then
+				_enabled="$([ "${_state}" = enable ] &&
+				    echo true || echo false)"
+			else
+				_rc=1
+			fi
+			;;
+		*)
+			echo "herdr server not running; ${_id} is not" \
+			    "yet ${_state}d"
+			;;
+		esac
+		;;
+	esac
+	case "${_installed}:${_action:+set}:${_enabled}:${_server}" in
+	1:set:true:1)
+		echo "=> Invoking herdr plugin action: ${_id}.${_action}"
+		_herdr_run _herdr_sync_plugin plugin action invoke \
+		    "${_id}.${_action}" || _rc=1
+		;;
+	esac
+	return "${_rc}"
+}
+
+# _herdr_prune_plugin <id> <owner/repo> <ref>
+# Uninstall herdr plugin <id> if it is still the GitHub install of
+# <owner/repo> at <ref> that a previous run made; otherwise it has been
+# replaced since and is left alone.
+# Depends on: herdr_plugin_state, _herdr_plugin_is, _herdr_run, herdr, jq.
+_herdr_prune_plugin() {
+	local _id="$1" _src="$2" _ref="$3" _line=""
+
+	_line="$(herdr_plugin_state "${_id}")" || return 1
+	_herdr_plugin_is "${_line}" "${_src}" "${_ref}" || return 0
+	echo "=> Uninstalling herdr plugin: ${_id}"
+	_herdr_run _herdr_prune_plugin plugin uninstall "${_id}"
+}
+
+# _herdr_recorded_line <file> <id>
+# Print the entry for <id> in the recorded list <file>, if any.
+_herdr_recorded_line() {
+	[ -f "${1:?}" ] || return 0
+	awk -F "$(printf '\t')" -v id="${2:?}" \
+	    '$1 == id {print; exit}' "${1:?}"
+}
+
+# install_herdr_plugins
+# Sync herdr plugins with ${REPO}/dot.config/herdr/plugins.list, one
+# tab-separated entry per line ("#" starts a comment):
+#   <plugin_id> <owner/repo> <ref> <state> [action]
+# <ref> is a tag or full commit hash to install.  herdr records it, and
+# a plugin is reinstalled only when it changes, so a tag moved upstream
+# is not followed.
+# <state> is applied on every run:
+#   enable|disable  enable or disable the plugin
+#   manual          install only; the host owns the state
+# [action] is invoked after the plugin is (re)installed, for plugins
+# whose running processes must pick up the new code.
+# What is installed is recorded in ~/.config/herdr/profile-repo/
+# plugins.list: the listed entry once a plugin is at its <ref>, else its
+# previous record.  Recorded plugins no longer listed are uninstalled;
+# any whose uninstall fails stay recorded, to retry.
+# Returns non-zero if any plugin failed to sync.
+# Depends on: _herdr_sync_plugin, _herdr_prune_plugin,
+#     _herdr_recorded_line, herdr, jq.
+install_herdr_plugins() {
+	local _list="" _dir="" _recorded="" _tmp="" _record="" _want=""
+	local _tab="" _nl="" _line="" _sync_rc=0
+	local _id="" _src="" _ref="" _state="" _action="" _extra=""
+	local _server=0 _rc=0
+
+	_nl='
+'
+
+	if ! command -v herdr >/dev/null 2>&1; then
+		echo "Skipping install_herdr_plugins: herdr not installed"
+		return 0
+	fi
+	if ! command -v jq >/dev/null 2>&1; then
+		echo "Skipping install_herdr_plugins: need jq" >&2
+		return 1
+	fi
+	_list="${REPO:?}/dot.config/herdr/plugins.list"
+	_dir="${HOME:?}/.config/herdr/profile-repo"
+	_recorded="${_dir}/plugins.list"
+	_tab="$(printf '\t')"
+	for _line in "${_list}" "${_recorded}"; do
+		if [ -e "${_line}" ] && [ ! -r "${_line}" ]; then
+			echo "install_herdr_plugins: cannot read ${_line}" >&2
+			return 1
+		fi
+	done
+	if [ -f "${_list}" ]; then
+		_want="$(awk -F "${_tab}" '$1 !~ /^#/ && NF {print $1}' \
+		    "${_list}")" || {
+			echo "install_herdr_plugins: cannot read ${_list}" >&2
+			return 1
+		}
+	fi
+	if herdr_server_running; then
+		_server=1
+	fi
+	if [ -f "${_list}" ]; then
+		while IFS="${_tab}" read -r _id _src _ref _state _action \
+		    _extra; do
+			case "${_id}" in
+			"#"*|"") continue ;;
+			esac
+			_sync_rc=2
+			if _herdr_plugin_entry_valid "${_id}" "${_src}" \
+			    "${_ref}" "${_state}" "${_action}" "${_extra}"; then
+				_herdr_sync_plugin "${_id}" "${_src}" "${_ref}" \
+				    "${_state}" "${_action}" "${_server}"
+				_sync_rc=$?
+			else
+				echo "install_herdr_plugins: skipping invalid" \
+				    "entry in ${_list}" >&2
+			fi
+			case "${_sync_rc}" in
+			0|1)
+				_line="$(printf '%s\t%s\t%s\t%s%s' "${_id}" \
+				    "${_src}" "${_ref}" "${_state}" \
+				    "${_action:+${_tab}${_action}}")"
+				;;
+			*)
+				_line="$(_herdr_recorded_line "${_recorded}" \
+				    "${_id}")" || return 1
+				;;
+			esac
+			case "${_sync_rc}" in
+			0) ;;
+			*) _rc=1 ;;
+			esac
+			_record="${_record}${_line:+${_line}${_nl}}"
+		done < "${_list}"
+	fi
+	if [ -f "${_recorded}" ]; then
+		while IFS="${_tab}" read -r _id _src _ref _state _action \
+		    _extra; do
+			case "${_id}" in
+			"#"*|"") continue ;;
+			esac
+			case "${_nl}${_want}${_nl}" in
+			*"${_nl}${_id}${_nl}"*) continue ;;
+			esac
+			_herdr_plugin_entry_valid "${_id}" "${_src}" \
+			    "${_ref}" "${_state}" "${_action}" "${_extra}" \
+			    2>/dev/null || continue
+			if ! _herdr_prune_plugin "${_id}" "${_src}" "${_ref}"
+			then
+				_rc=1
+				_record="${_record}$(printf '%s\t%s\t%s\t%s%s' \
+				    "${_id}" "${_src}" "${_ref}" "${_state}" \
+				    "${_action:+${_tab}${_action}}")${_nl}"
+			fi
+		done < "${_recorded}"
+	fi
+	ensure_dir "${_dir}" || return 1
+	_tmp="$(mktemp "${_dir}/.plugins.list.XXXXXX")" || return 1
+	if ! printf '%s' "${_record}" > "${_tmp}"; then
+		echo "install_herdr_plugins: writing ${_tmp} failed" >&2
+		rm -f "${_tmp}"
+		return 1
+	fi
+	if cmp -s "${_tmp}" "${_recorded}"; then
+		rm -f "${_tmp}"
+	elif ! mv -f "${_tmp}" "${_recorded}"; then
+		echo "install_herdr_plugins: failed to record ${_recorded}" >&2
+		rm -f "${_tmp}"
+		return 1
+	fi
+	return "${_rc}"
+}
+
 # bootstrap and sync a vim python venv
 setup_venv() {
 	local _src="$1" _dest _venv _req _reqin _sync_req

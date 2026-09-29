@@ -126,7 +126,8 @@ ${D} link_file dot.valgrindrc
 ${D} link_file dot.vimrc
 ${D} link_file dot.claude/statusline-command.sh
 ${D} install_claude_skills
-${D} sync_dir dot.config .config
+${D} sync_dir --exclude /herdr/plugins.list dot.config .config
+${D} install_herdr_plugins
 ${D} mkdir -p ~/.tmux/plugins
 ${D} link_dir dot.tmux/plugins/tpm
 ${D} link_dir dot.tmux/plugins/tmux-resurrect
