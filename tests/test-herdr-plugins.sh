@@ -93,11 +93,16 @@ write_fake_herdr() {
 		}
 		case "$1 $2" in
 		"status server")
-			if [ -e "${D}/server" ]; then
-				echo '{"status":"running","running":true}'
-			else
-				echo '{"status":"not_running","running":false}'
-			fi
+			case "$3:$([ -e "${D}/server" ] && echo up)" in
+			--json:up) echo '{"status":"running","running":true}' ;;
+			--json:) echo '{"status":"not_running","running":false}' ;;
+			:up) printf 'status: running\nversion: 0.9.2\n' ;;
+			*) echo 'status: not running' ;;
+			esac
+			;;
+		"server reload-config")
+			need_server
+			echo '{"id":"cli:server:reload-config","result":{"status":"reloaded","diagnostics":["bad key"]}}'
 			;;
 		"plugin list")
 			if [ -e "${D}/fail-list" ]; then
@@ -238,18 +243,24 @@ server_down() {
 	rm -f "${FAKE_HERDR_DIR:?}/server"
 }
 
-# run_install [path]
-# Run install_herdr_plugins from HOME with PATH set to [path] (default:
-# the case's bin directory then system tools).  Sets RC; output is kept in
+# run_in_home <function> [path]
+# Run <function> from HOME with PATH set to [path] (default: the case's
+# bin directory then system tools).  Sets RC; output is kept in
 # ${CASE}/out.  stdin is /dev/null so the fake herdr's drain cannot block.
-run_install() {
-	local _path="${1:-${BIN:?}:${WORK:?}/sys}"
+run_in_home() {
+	local _fn="${1:?}" _path="${2:-${BIN:?}:${WORK:?}/sys}"
 	(
 		cd "${HOME:?}" || exit 1
 		PATH="${_path:?}"
-		install_herdr_plugins
+		"${_fn}"
 	) > "${CASE:?}/out" 2>&1 < /dev/null
 	RC=$?
+}
+
+# run_install [path]
+# Run install_herdr_plugins with run_in_home.
+run_install() {
+	run_in_home install_herdr_plugins "$@"
 }
 
 # called <call>
@@ -807,6 +818,36 @@ test_record_is_gitignored() {
 	    fail "record_is_gitignored: .state/ is not ignored by git"
 }
 
+test_reload_config_running() {
+	setup_case reload_running || return 1
+	run_in_home herdr_reload_config
+	assert_rc 0
+	assert_called "server reload-config"
+	grep -qxF "herdr: cli:server:reload-config: reloaded" \
+	    "${CASE:?}/out" ||
+	    fail "reload_running: no summary: $(cat "${CASE:?}/out")"
+	grep -qxF "herdr: diagnostic: bad key" "${CASE:?}/out" ||
+	    fail "reload_running: no diagnostic: $(cat "${CASE:?}/out")"
+}
+
+test_reload_config_not_running() {
+	setup_case reload_not_running || return 1
+	server_down
+	run_in_home herdr_reload_config
+	assert_rc 0
+	assert_not_called "server reload-config"
+}
+
+test_reload_config_without_jq() {
+	setup_case reload_no_jq || return 1
+	rm -f "${BIN:?}/jq" || return 1
+	run_in_home herdr_reload_config
+	assert_rc nonzero
+	assert_not_called "server reload-config"
+	grep -q 'need jq' "${CASE:?}/out" ||
+	    fail "reload_no_jq: skip not reported: $(cat "${CASE:?}/out")"
+}
+
 make_sys_path || exit 1
 
 for t in test_installs_missing test_up_to_date_is_noop \
@@ -826,7 +867,8 @@ for t in test_installs_missing test_up_to_date_is_noop \
     test_prune_absent_is_noop test_prune_failure_is_kept \
     test_list_failure test_missing_list_prunes_all test_comments_and_blanks \
     test_invalid_entries test_without_herdr test_without_jq \
-    test_record_is_gitignored; do
+    test_record_is_gitignored test_reload_config_running \
+    test_reload_config_not_running test_reload_config_without_jq; do
 	_failures_before="${FAILURES}"
 	if ! "${t}"; then
 		fail "${t}: setup failed"

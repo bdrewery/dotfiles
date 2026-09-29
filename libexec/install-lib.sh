@@ -183,14 +183,16 @@ _install_claude_skills() {
 # Reload a running herdr server's config and summarize the JSON result;
 # a running server does not watch config.toml for changes.
 # Requires jq. No-op if herdr is not installed or its server is not running.
+# Depends on: herdr_server_running, herdr, jq.
 herdr_reload_config() {
 	local _out=
 
 	command -v herdr >/dev/null 2>&1 || return 0
-	case "$(herdr status server 2>/dev/null)" in
-	"status: running"*) ;;
-	*) return 0 ;;
-	esac
+	if ! command -v jq >/dev/null 2>&1; then
+		echo "Skipping herdr_reload_config: need jq" >&2
+		return 1
+	fi
+	herdr_server_running || return 0
 	if ! _out="$(herdr server reload-config)"; then
 		printf '%s\n' "${_out}" >&2
 		echo "==> herdr: server reload-config failed" >&2
