@@ -179,6 +179,28 @@ _install_claude_skills() {
 	done
 }
 
+# herdr_reload_config
+# Reload a running herdr server's config and summarize the JSON result;
+# a running server does not watch config.toml for changes.
+# Requires jq. No-op if herdr is not installed or its server is not running.
+herdr_reload_config() {
+	local _out=
+
+	command -v herdr >/dev/null 2>&1 || return 0
+	case "$(herdr status server 2>/dev/null)" in
+	"status: running"*) ;;
+	*) return 0 ;;
+	esac
+	if ! _out="$(herdr server reload-config)"; then
+		printf '%s\n' "${_out}" >&2
+		echo "==> herdr: server reload-config failed" >&2
+		return 0
+	fi
+	printf '%s\n' "${_out}" | jq -r '"herdr: \(.id): \(.result.status)",
+	    (.result.diagnostics[]? |
+	    "herdr: diagnostic: \(if type == "string" then . else tojson end)")'
+}
+
 # bootstrap and sync a vim python venv
 setup_venv() {
 	local _src="$1" _dest _venv _req _reqin _sync_req
