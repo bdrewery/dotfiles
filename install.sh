@@ -128,6 +128,7 @@ ${D} link_file dot.claude/statusline-command.sh
 ${D} sync_dir dot.config .config
 ${D} install_claude_skills
 ${D} herdr_reload_config
+${D} install_herdr_plugins
 ${D} mkdir -p ~/.tmux/plugins
 ${D} link_dir dot.tmux/plugins/tpm
 ${D} link_dir dot.tmux/plugins/tmux-resurrect
