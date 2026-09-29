@@ -125,17 +125,9 @@ ${D} link_file dot.tmux.conf
 ${D} link_file dot.valgrindrc
 ${D} link_file dot.vimrc
 ${D} link_file dot.claude/statusline-command.sh
-${D} install_claude_skills
 ${D} sync_dir dot.config .config
-# A running herdr server does not watch config.toml for changes.
-if command -v herdr >/dev/null 2>&1; then
-	case "$(herdr status server 2>/dev/null)" in
-	"status: running"*)
-		${D} herdr server reload-config ||
-		    echo "==> herdr: server reload-config failed" >&2
-		;;
-	esac
-fi
+${D} install_claude_skills
+${D} herdr_reload_config
 ${D} mkdir -p ~/.tmux/plugins
 ${D} link_dir dot.tmux/plugins/tpm
 ${D} link_dir dot.tmux/plugins/tmux-resurrect
