@@ -118,11 +118,37 @@ copy_file() {
 	install -C -v -m 0400 "${REPO:?}/${_src}" "${HOME}/${_dest}"
 }
 
-# sync_dir <src> <dest>
+# sync_dir [--exclude <pattern>]... <src> <dest>
 # rsync ${REPO}/<src>/ into ~/<dest>/.
+# Each --exclude <pattern> is passed to rsync as --exclude=<pattern>;
+# patterns are relative to <src>, and a leading / anchors one there.
 sync_dir() {
-	local _src="$1" _dest="$2"
-	rsync -avH "${REPO:?}/${_src:?}/" "${HOME:?}/${_dest:?}/"
+	local _src="" _dest="" _pattern="" _nexcludes=0
+
+	# Rotate each option to the end of $@ in rsync's form, leaving
+	# <src> <dest> first.
+	while :; do
+		case "${1-}" in
+		--exclude) ;;
+		*) break ;;
+		esac
+		if [ "$#" -lt 2 ]; then
+			echo "sync_dir: --exclude requires a pattern" >&2
+			return 64
+		fi
+		_pattern="$2"
+		shift 2
+		set -- "$@" "--exclude=${_pattern}"
+		_nexcludes=$((_nexcludes + 1))
+	done
+	if [ "$(($# - _nexcludes))" -ne 2 ]; then
+		echo "Usage: sync_dir [--exclude <pattern>]... <src> <dest>" >&2
+		return 64
+	fi
+	_src="$1"
+	_dest="$2"
+	shift 2
+	rsync -avH "$@" "${REPO:?}/${_src:?}/" "${HOME:?}/${_dest:?}/"
 }
 
 # preserve_as_local <file>
