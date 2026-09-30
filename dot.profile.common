@@ -130,6 +130,8 @@ tmux_auto_attach() {
 			if [ -x "${tmux_resurrect}" ]; then
 				tmux run-shell "${tmux_resurrect}"
 			fi
+		else
+			tmux source-file "${HOME}/.tmux.conf" 2>/dev/null
 		fi
 		if tmux has-session \
 		    -t "${tmux_default_session}" 2>/dev/null; then
