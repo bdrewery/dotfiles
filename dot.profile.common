@@ -103,6 +103,9 @@ case "${UID}" in
 	if [ -f /var/run/reboot-required ]; then
 		echo "***** REBOOT REQUIRED *****" >&2
 		cat /var/run/reboot-required
+	elif command -v needrestart >/dev/null 2>&1 &&
+	    ! needrestart -k >/dev/null 2>&1; then
+		echo "***** REBOOT REQUIRED *****" >&2
 	fi
 	;;
 esac
