@@ -184,3 +184,8 @@ fi
 if command -v zsh >/dev/null 2>&1; then
 	${D} zsh -ic 'autoload -Uz compinit; compinit' || :
 fi
+
+if command -v tmux >/dev/null 2>&1 && tmux has-session 2>/dev/null; then
+	${D} tmux source-file "${HOME}/.tmux.conf"
+	${D} tmux display-message ".tmux.conf reloaded"
+fi
