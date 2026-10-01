@@ -60,13 +60,15 @@ ensure_dir() {
 # Symlink ${REPO}/<src> to ~/<dest> using a relative target.
 # If dest is omitted, it is derived from the basename of src by stripping
 # the "dot." prefix: dot.bashrc -> .bashrc
+# A regular file already at ~/<dest> is kept by preserve_as_local; a
+# symlink there is replaced.
 # No-op if the symlink already points to the correct target.
 link_file() {
 	local _src="$1" _dest="${2:-}" _depth _prefix _target _mode
-	preserve_as_local "${_src}"
 	if [ -z "${_dest}" ]; then
 		_dest=".${_src#dot.}"
 	fi
+	preserve_as_local "${_dest:?}"
 	_depth="$(_link_depth "${_dest:?}")"
 	_prefix="$(_link_prefix "${_depth:?}")"
 	_target="${_prefix}${REPO:?}/${_src:?}"
@@ -91,10 +93,10 @@ link_file() {
 # No-op if the symlink already points to the correct target.
 link_dir() {
 	local _src="$1" _dest="${2:-}"
-	# preserve_as_local "${_src}"
 	if [ -z "${_dest}" ]; then
 		_dest=".${_src#dot.}"
 	fi
+	# preserve_as_local "${_dest:?}"
 	if [ -L "${HOME}/${_dest}" ]; then
 		case "$(readlink "${HOME}/${_dest}")" in
 		*"${REPO:?}/"*) ;; # ours — link_file handles idempotently
@@ -126,11 +128,12 @@ sync_dir() {
 }
 
 # preserve_as_local <file>
+# <file> is relative to HOME (e.g. .bashrc, .claude/CLAUDE.md).
 # If ~/<file> is a regular file (not a symlink) and ~/<file>.local does not
-# exist, rename it to ~/<file>.local before symlinking over it.
+# exist, rename it to ~/<file>.local before symlinking over it; otherwise
+# move it aside with _replace.
 preserve_as_local() {
-	local _src="$1"
-	local _file=".${_src#dot.}"
+	local _file="${1:?}"
 	if [ -f "${HOME}/${_file}" ] && [ ! -L "${HOME}/${_file}" ]; then
 		if [ ! -L "${HOME}/${_file}.local" ] &&
 		    [ ! -f "${HOME}/${_file}.local" ]; then
