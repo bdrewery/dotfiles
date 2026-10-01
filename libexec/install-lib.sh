@@ -89,7 +89,7 @@ link_file() {
 # link_dir <src> [dest]
 # Like link_file but handles an existing target that is a real directory
 # or a symlink not owned by this repo.  Displaced targets are moved to
-# <dest>.profile-repo-replaced rather than deleted.
+# <dest>.profile-repo-YYYYMMDDTHHMMSS by _replace rather than deleted.
 # No-op if the symlink already points to the correct target.
 link_dir() {
 	local _src="$1" _dest="${2:-}"
