@@ -103,3 +103,6 @@
 [submodule "dot.tmux/plugins/tmux-resurrect"]
 	path = dot.tmux/plugins/tmux-resurrect
 	url = https://github.com/bdrewery/tmux-resurrect
+[submodule "dot.tmux/plugins/tmux-continuum"]
+	path = dot.tmux/plugins/tmux-continuum
+	url = https://github.com/bdrewery/tmux-continuum
