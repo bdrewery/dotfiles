@@ -115,6 +115,18 @@ source_local "${HOME}/.profile.common"
 tmux_auto_attach() {
 	local tmux_resurrect tmux_sname
 
+	case "$(hostname -s)" in
+	workstation)
+		case "$(id -u)" in
+		0) ;;
+		*)
+			start-screen local
+			;;
+		esac
+		return 0
+		;;
+	esac
+
 	tmux_resurrect="${HOME}/.tmux/plugins/tmux-resurrect/scripts/restore.sh"
 	tmux_default_session=0
 
