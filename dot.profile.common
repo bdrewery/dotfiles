@@ -98,17 +98,7 @@ halt() {
 	command halt "$@"
 }
 
-case "${UID}" in
-0)
-	if [ -f /var/run/reboot-required ]; then
-		echo "***** REBOOT REQUIRED *****" >&2
-		cat /var/run/reboot-required
-	elif command -v needrestart >/dev/null 2>&1 &&
-	    ! needrestart -k >/dev/null 2>&1; then
-		echo "***** REBOOT REQUIRED *****" >&2
-	fi
-	;;
-esac
+"${PROFILE_REPO}"/libexec/needrestart.sh >&2 || :
 
 source_local "${HOME}/.profile.common"
 
