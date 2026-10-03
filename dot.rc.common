@@ -1,7 +1,7 @@
 # Loaded for interactive shells
 
 # In-memory size
-export HISTSIZE=5000
+export HISTSIZE=10000
 # File size
 export HISTFILESIZE=1000000
 export SAVEHIST="${HISTFILESIZE}"
