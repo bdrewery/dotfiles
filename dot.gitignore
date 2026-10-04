@@ -18,3 +18,4 @@ cscope.po.out
 ctags
 tags
 .cscope-dir
+.handoff/
