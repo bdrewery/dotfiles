@@ -19,3 +19,6 @@ ctags
 tags
 .cscope-dir
 .handoff/
+CLAUDE.local.md
+AGENTS.local.md
+AGENTS.override.md
