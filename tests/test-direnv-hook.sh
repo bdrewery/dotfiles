@@ -1,11 +1,13 @@
 #! /bin/sh
-# Tests for the direnv block in dot.env.common: the hook it evals must keep
-# working after a brew upgrade replaces the versioned Cellar directory the
-# shell started on (zsh and bash).
+# Tests for the direnv block in dot.env.common: the hook it evals must load
+# an allowed .envrc at the first prompt and after "direnv allow" without a cd
+# (zsh), and must keep working after a brew upgrade replaces the versioned
+# Cellar directory the shell started on (zsh and bash).
 #
-# Each case drives a real interactive shell under a pty, with direnv's state
-# (HOME and XDG_*) under a temporary directory so the real allow database is
-# never touched.
+# The hook cases drive a real interactive shell under a pty; the sed cases
+# source the block in a non-interactive "zsh -f". direnv's state (HOME and
+# XDG_*) is under a temporary directory so the real allow database is never
+# touched.
 #
 # Usage: sh tests/test-direnv-hook.sh [path/to/dot.env.common]
 # Dependencies: direnv, zsh, bash and python3 (cases are skipped if absent).
@@ -226,6 +228,36 @@ assert_result() {
 	esac
 }
 
+# test_zsh_new_shell_loads_allowed
+# A new zsh started in a directory with an allowed .envrc has it loaded at
+# the first prompt, without any cd.
+test_zsh_new_shell_loads_allowed() {
+	local _d="${WORK:?}/new_shell"
+	make_envrc "${_d}" allowed1 || return 1
+	direnv allow "${_d}" || return 1
+	run_shell zsh_new_shell zsh "${_d}" "${WORK:?}/snippet.zsh" \
+	    "$(foo_cmd 1)" || return 0
+	assert_result zsh_new_shell 1 allowed1
+}
+
+# test_zsh_allow_without_cd
+# In a zsh sitting in a directory with a not-yet-allowed .envrc, "direnv
+# allow" loads it at the next prompt, and so does rewriting .envrc and
+# allowing again, all without a cd.
+test_zsh_allow_without_cd() {
+	local _d="${WORK:?}/allow_nocd"
+	make_envrc "${_d}" fresh1 || return 1
+	run_shell zsh_allow_nocd zsh "${_d}" "${WORK:?}/snippet.zsh" \
+	    "$(foo_cmd 0)" \
+	    'direnv allow' \
+	    "$(foo_cmd 1)" \
+	    "sleep 1; echo 'export FOO=fresh2' > .envrc; direnv allow" \
+	    "$(foo_cmd 2)" || return 0
+	assert_result zsh_allow_nocd 0 ""
+	assert_result zsh_allow_nocd 1 fresh1
+	assert_result zsh_allow_nocd 2 fresh2
+}
+
 # upgrade_case <zsh|bash>
 # Simulate "brew upgrade direnv" under a shell that started on the old
 # version: a fake prefix whose unversioned bin/direnv is a wrapper exec'ing
@@ -301,13 +333,96 @@ test_bash_alias_direnv() {
 	fi
 }
 
+# zsh_inert_case <name> <fixture-file>
+# Put a fake "direnv" first on PATH whose "hook zsh" prints <fixture-file>
+# and which execs the real direnv for anything else, source the zsh snippet
+# in "zsh -f", and fail unless the _direnv_hook it defines is identical to the
+# one defined by evaluating the fixture directly.
+zsh_inert_case() {
+	local _case="zsh_sed_inert_${1:?}" _fx="${2:?}" _b="${WORK:?}/inert_${1:?}"
+	local _real="" _want="" _got=""
+	_real="$(command -v direnv)" || return 1
+	mkdir -p "${_b}/bin" || return 1
+	cat > "${_b}/bin/direnv" <<-EOF || return 1
+		#!/bin/sh
+		case "\$*" in
+		"hook zsh") cat '${_fx}' ;;
+		*) exec '${_real}' "\$@" ;;
+		esac
+	EOF
+	chmod +x "${_b}/bin/direnv" || return 1
+	_want="$(zsh -f -c 'eval "$(cat "$1")"; functions _direnv_hook' _ "${_fx}")"
+	_got="$(zsh -f -c 'PATH="$2:$PATH"; . "$1"; functions _direnv_hook' \
+	    _ "${WORK:?}/snippet.zsh" "${_b}/bin")"
+	case "${_want}" in
+	"") fail "${_case}: fixture defines no _direnv_hook"; return 0 ;;
+	esac
+	case "${_got}" in
+	"${_want}") ;;
+	*)
+		fail "${_case}: sed changed the hook"
+		printf '%s\n' "want:" "${_want}" "got:" "${_got}" | sed 's/^/    | /' >&2
+		;;
+	esac
+}
+
+# test_zsh_sed_inert_on_other_guards
+# The zsh sed only matches 2.38.1's whole ZSH_EVAL_CONTEXT comparison line,
+# so it must leave a hook alone whose line differs: upstream PR 1634's, which
+# drops the comparison, one that rewords the pattern to "toplevel:*", one
+# that extends it, and ones with deeper indentation or text after "then",
+# which a sed not anchored at the line's start or end would still match.
+test_zsh_sed_inert_on_other_guards() {
+	local _d="${WORK:?}/inert_fixtures"
+	mkdir -p "${_d}" || return 1
+	cat > "${_d}/pr1634" <<-'EOF' || return 1
+		_direnv_hook() {
+		  setopt localoptions localtraps
+		  if [[ ! -o interactive || $ZSH_SUBSHELL -ne 0 ]]; then
+		    return
+		  fi
+		  vars="$(direnv export zsh)"
+		  trap -- '' SIGINT
+		  eval "$vars"
+		  trap - SIGINT
+		}
+	EOF
+	cat > "${_d}/reworded" <<-'EOF' || return 1
+		_direnv_hook() {
+		  setopt localoptions localtraps extendedglob
+		  if [[ ! -o interactive  || $ZSH_SUBSHELL -ne 0 || \
+		    ( -n $ZSH_EVAL_CONTEXT && \
+		    $ZSH_EVAL_CONTEXT != toplevel:* ) ]]; then
+		    return
+		  fi
+		  vars="$(direnv export zsh)"
+		  trap -- '' SIGINT
+		  eval "$vars"
+		  trap - SIGINT
+		}
+	EOF
+	sed 's/toplevel:\*/toplevel(:[a-z]#func|)#:[a-z]#func/' \
+	    "${_d}/reworded" > "${_d}/extended" || return 1
+	zsh_inert_case pr1634 "${_d}/pr1634" || return 1
+	sed 's/^    \(.*\)toplevel:\*/      \1toplevel(:[a-z]#func|)#/' \
+	    "${_d}/reworded" > "${_d}/indent" || return 1
+	sed 's/toplevel:\* ) ]]; then$/toplevel(:[a-z]#func|)# ) ]]; then # x/' \
+	    "${_d}/reworded" > "${_d}/trailing" || return 1
+	zsh_inert_case reworded "${_d}/reworded" || return 1
+	zsh_inert_case extended "${_d}/extended" || return 1
+	zsh_inert_case indent "${_d}/indent" || return 1
+	zsh_inert_case trailing "${_d}/trailing"
+}
+
 test_zsh_upgrade() { upgrade_case zsh; }
 test_bash_upgrade() { upgrade_case bash; }
 
 build_snippet zsh "${WORK:?}/snippet.zsh" || exit 1
 build_snippet bash "${WORK:?}/snippet.bash" || exit 1
 
-for t in test_zsh_upgrade test_bash_upgrade test_bash_alias_direnv; do
+for t in test_zsh_new_shell_loads_allowed test_zsh_allow_without_cd \
+    test_zsh_upgrade test_bash_upgrade test_bash_alias_direnv \
+    test_zsh_sed_inert_on_other_guards; do
 	_failures_before="${FAILURES}"
 	SKIPPED=
 	: > "${WORK:?}/transcript" || exit 1
