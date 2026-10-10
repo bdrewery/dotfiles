@@ -75,7 +75,7 @@ zpool() {
 }
 
 reboot() {
-	case "$(uname -r)" in
+	case "$(uname -s)" in
 	FreeBSD)
 		# FreeBSD <= 13 (as of 2022-06) does not have graceful 'reboot'
 		if [ "$#" -eq 0 ]; then
@@ -87,7 +87,7 @@ reboot() {
 }
 
 halt() {
-	case "$(uname -r)" in
+	case "$(uname -s)" in
 	FreeBSD)
 		# FreeBSD <= 13 (as of 2022-06) does not have graceful 'halt'
 		if [ "$#" -eq 0 ]; then
