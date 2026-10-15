@@ -564,7 +564,7 @@ setup_venv() {
 	_venv="${HOME}/${_dest}"
 	_reqin="${_venv}-requirements.txt"
 	_req="${_venv}-requirements.txt.compiled"
-	if [ ! -f "${_venv}/pyvenv.cfg" -o ! -x "${_venv}/bin/pip" ]; then
+	if [ ! -f "${_venv}/pyvenv.cfg" ] || [ ! -x "${_venv}/bin/pip" ]; then
 		_need_venv=1
 	elif [ -x "${_venv}/bin/pip" ] &&
 	    ! "${_venv}/bin/pip" --version >/dev/null 2>&1; then
@@ -588,7 +588,7 @@ setup_venv() {
 		echo "setup_venv [${_src}]: Failed to install pip-sync" >&2
 		return 1
 	fi
-	if [ -f "${_reqin}" ] && [ ! -f "${_req}" -o "${_reqin}" -nt "${_req}" ]; then
+	if [ -f "${_reqin}" ] && { [ ! -f "${_req}" ] || [ "${_reqin}" -nt "${_req}" ]; }; then
 		echo "setup_venv [${_src}]: Compiling requirements" >&2
 		${D} "${_venv}/bin/pip-compile" --no-color --quiet --output-file="${_req}" "${_reqin}"
 	fi

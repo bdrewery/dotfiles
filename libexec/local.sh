@@ -1,7 +1,9 @@
 # libexec/local.sh - Source .local file and .local.d directory for a given path
+# shellcheck shell=sh
 source_local() {
 	local _base="$1"
 	if [ -r "${_base}.local" ]; then
+		# shellcheck source=/dev/null
 		. "${_base}.local"
 	fi
 	if [ -d "${_base}.local.d" ]; then
@@ -13,6 +15,7 @@ source_local() {
 			"${_base}.local.d/*") break ;;
 			esac
 			[ -r "${_f}" ] || continue
+			# shellcheck source=/dev/null
 			. "${_f}"
 		done
 	fi

@@ -9,7 +9,7 @@ D=
 NO_SELF_UPDATE=
 while getopts nN flag; do
 	case "${flag}" in
-	n) D=echo ;;
+	n) D='echo' ;;
 	N) NO_SELF_UPDATE=1 ;;
 	*)
 		echo "Usage: install.sh [-n] [-N]" >&2
@@ -19,7 +19,7 @@ while getopts nN flag; do
 done
 export D
 
-cd ~
+cd ~ || exit
 REPO=.profile-repo
 PROFILE_REPO="${HOME}/${REPO:?}"
 export PROFILE_REPO
@@ -66,19 +66,23 @@ if [ -z "${D}" ]; then
 	if [ -f ~/.ssh/authorized_keys ] && ! [ -d /usr/local/share/system ]; then
 		# Don't overwrite it, just ensure all keys are added, and alert
 		# on unknown keys
-		installed_keys="$(mktemp -ut keys.XXXXXX)"
-		wanted_keys="$(mktemp -ut keys.XXXXXX)"
-		sort -u ~/.ssh/authorized_keys | egrep -v '(^$|^#)' > "${installed_keys}"
-		sort -u "${PROFILE_REPO:?}/dot.ssh/authorized_keys" | egrep -v '(^$|^#)' > "${wanted_keys}"
-		unknown_keys="$(mktemp -ut badkeys.XXXXXX)"
-		comm -2 -3 "${installed_keys}" "${wanted_keys}" > "${unknown_keys:?}"
-		if [ -s "${unknown_keys:?}" ]; then
-			echo "### Unknown SSH Keys" >&2
-			cat "${unknown_keys:?}" >&2
+		if tmpd=$(mktemp -d "${TMPDIR:-/tmp}/install.sh.XXXXXXXX"); then
+			installed_keys="${tmpd:?}/installed"
+			wanted_keys="${tmpd:?}/wanted"
+			unknown_keys="${tmpd:?}/unknown"
+			sort -u ~/.ssh/authorized_keys | grep -Ev '(^$|^#)' > "${installed_keys}"
+			sort -u "${PROFILE_REPO:?}/dot.ssh/authorized_keys" | grep -Ev '(^$|^#)' > "${wanted_keys}"
+			comm -2 -3 "${installed_keys}" "${wanted_keys}" > "${unknown_keys:?}"
+			if [ -s "${unknown_keys:?}" ]; then
+				echo "### Unknown SSH Keys" >&2
+				cat "${unknown_keys:?}" >&2
+			fi
+			# Add missing keys
+			comm -1 -3 "${installed_keys}" "${wanted_keys}" >> ~/.ssh/authorized_keys
+			rm -rf "${tmpd:?}"
+		else
+			echo "install.sh: authorized_keys sync: mktemp failed, skipping it" >&2
 		fi
-		# Add missing keys
-		comm -1 -3 "${installed_keys}" "${wanted_keys}" >> ~/.ssh/authorized_keys
-		rm -f "${installed_keys}" "${wanted_keys}" "${unknown_keys}"
 		chmod 0600 ~/.ssh/authorized_keys
 	elif ! [ -f ~/.ssh/authorized_keys ]; then
 		install -v -m 0600 "${PROFILE_REPO}/dot.ssh/authorized_keys" ~/.ssh/authorized_keys
@@ -90,8 +94,8 @@ for f in alert-on-exit benv.sh generate-tags generate-tagsd \
     fping-wait.sh \
     gen-ssh k \
     lscolors lscolors 24-bit-color.sh; do
-	if [ -L ~/bin/${f} ]; then
-		${D} rm -f ~/bin/${f}
+	if [ -L ~/bin/"${f}" ]; then
+		${D} rm -f ~/bin/"${f:?}"
 	fi
 done
 if [ -L ~/.supp ]; then
@@ -168,7 +172,8 @@ if [ -z "${D}" ] && which npm >/dev/null 2>&1; then
 	# not being able to change the config.
 	npm() {
 		local HOME="${HOME}"
-		export HOME="$(realpath "${HOME}")"
+		HOME="$(realpath "${HOME}")" || return
+		export HOME
 		command npm "$@"
 	}
 	case "$(npm config get prefix)" in
