@@ -124,7 +124,6 @@ ${D} link_file dot.shellcheckrc
 ${D} link_file dot.tmux.conf
 ${D} link_file dot.valgrindrc
 ${D} link_file dot.vimrc
-${D} link_file dot.claude/statusline-command.sh
 ${D} sync_dir dot.config .config
 ${D} install_claude_skills
 ${D} herdr_reload_config
