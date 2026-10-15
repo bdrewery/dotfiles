@@ -1,3 +1,4 @@
 #! /bin/sh
 
-exec ~/.profile-repo/update.sh
+: "${PROFILE_REPO:=$(realpath "$(dirname "$0")")}"
+exec "${PROFILE_REPO:?}"/update.sh
