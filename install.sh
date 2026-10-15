@@ -9,7 +9,7 @@ D=
 NO_SELF_UPDATE=
 while getopts nN flag; do
 	case "${flag}" in
-	n) D=echo ;;
+	n) D='echo' ;;
 	N) NO_SELF_UPDATE=1 ;;
 	*)
 		echo "Usage: install.sh [-n] [-N]" >&2
@@ -19,7 +19,7 @@ while getopts nN flag; do
 done
 export D
 
-cd ~
+cd ~ || exit
 REPO=.profile-repo
 PROFILE_REPO="${HOME}/${REPO:?}"
 export PROFILE_REPO
@@ -68,8 +68,8 @@ if [ -z "${D}" ]; then
 		# on unknown keys
 		installed_keys="$(mktemp -ut keys.XXXXXX)"
 		wanted_keys="$(mktemp -ut keys.XXXXXX)"
-		sort -u ~/.ssh/authorized_keys | egrep -v '(^$|^#)' > "${installed_keys}"
-		sort -u "${PROFILE_REPO:?}/dot.ssh/authorized_keys" | egrep -v '(^$|^#)' > "${wanted_keys}"
+		sort -u ~/.ssh/authorized_keys | grep -Ev '(^$|^#)' > "${installed_keys}"
+		sort -u "${PROFILE_REPO:?}/dot.ssh/authorized_keys" | grep -Ev '(^$|^#)' > "${wanted_keys}"
 		unknown_keys="$(mktemp -ut badkeys.XXXXXX)"
 		comm -2 -3 "${installed_keys}" "${wanted_keys}" > "${unknown_keys:?}"
 		if [ -s "${unknown_keys:?}" ]; then
@@ -90,8 +90,8 @@ for f in alert-on-exit benv.sh generate-tags generate-tagsd \
     fping-wait.sh \
     gen-ssh k \
     lscolors lscolors 24-bit-color.sh; do
-	if [ -L ~/bin/${f} ]; then
-		${D} rm -f ~/bin/${f}
+	if [ -L ~/bin/"${f}" ]; then
+		${D} rm -f ~/bin/"${f:?}"
 	fi
 done
 if [ -L ~/.supp ]; then
@@ -168,7 +168,8 @@ if [ -z "${D}" ] && which npm >/dev/null 2>&1; then
 	# not being able to change the config.
 	npm() {
 		local HOME="${HOME}"
-		export HOME="$(realpath "${HOME}")"
+		HOME="$(realpath "${HOME}")" || return
+		export HOME
 		command npm "$@"
 	}
 	case "$(npm config get prefix)" in
