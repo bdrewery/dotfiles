@@ -10,7 +10,7 @@ update() {
 		echo "==> ${repo_name:?}: Update failed" >&2
 		exit 1
 	fi
-	cd "${repo_dir:?}"
+	cd "${repo_dir:?}" || exit
 	echo "==> ${repo_name:?}: Installing"
 	exec ./install.sh
 }
