@@ -110,7 +110,10 @@ tmux_auto_attach() {
 		case "$(id -u)" in
 		0) ;;
 		*)
-			start-screen local
+			if [ -z "${STY-}" ] && [ -n "${SSH_TTY-}" ] &&
+			    command -v screen >/dev/null 2>&1; then
+				start-screen local
+			fi
 			;;
 		esac
 		return 0
